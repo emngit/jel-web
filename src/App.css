@@ -1,0 +1,353 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .inner-cover:hover .App-logo {
+    animation: App-logo-spin 5s ease-in-out;
+  }
+}
+
+.inner-cover{
+  cursor: url('./assets/images/portal-gun.cur'), auto;
+}
+
+.Typewriter{
+  color: black !important;
+  font-family: Helvetica Neue;
+  font-size: 2em;
+  font-stretch: condensed;
+  font-weight: bold;
+}
+.App-body {
+  /* background-color: #f7f4ef; 282c34; */
+  min-height: 100vh;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: #f7f4ef;
+}
+
+.App-body-container {
+  /* background-color: #f7f4ef; 282c34; */
+  min-height: 100vh;
+  display: inline-flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow {
+  margin-right: 0.2em;
+  border: solid #61dafb;
+  border-width: 0 0.2em 0.2em 0;
+  display: inline-block;
+  padding: 0.2em;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.App-link {
+  margin: 0.2em;
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* stylelint-disable property-no-vendor-prefix */
+
+/*
+ * Globals
+ */
+
+/* Links */
+a,
+a:focus,
+a:hover {
+  color: #fff;
+}
+
+/* Custom default button */
+.btn-default,
+.btn-default:hover,
+.btn-default:focus {
+  color: #333;
+  text-shadow: none; /* Prevent inheritance from `body` */
+  background-color: #fff;
+  border: 1px solid #fff;
+}
+
+
+/*
+ * Base structure
+ */
+
+html,
+body {
+  height: 100%;
+  background-color: #f7f4ef !important;
+}
+body {
+  color: #000 !important;
+  text-align: center;
+  text-shadow: 0 1px 2px #f7f4ef;
+}
+body {
+  /* font-family: "aeonikregular", sans-serif; */
+  font-family: 'Helvetica Neue', 'Helvetica', sans-serif !important;
+  color: #000;
+  font-size: 13px;
+  line-height: 16px;
+}
+
+/* Extra markup and styles for table-esque vertical and horizontal centering */
+.site-wrapper {
+  display: table;
+  width: 100%;
+  height: 100%; /* For at least Firefox */
+  min-height: 100%;
+  -webkit-box-shadow: inset 0 0 100px #f7f4ef;
+  box-shadow: inset 0 0 100px #f7f4ef;
+}
+.site-wrapper-inner {
+  display: table-cell;
+  vertical-align: top;
+}
+.cover-container {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Padding for spacing */
+.inner {
+  padding: 30px;
+}
+
+
+/*
+ * Header
+ */
+/* .masthead-brand {
+  width: 40;
+  height: 32;
+} */
+
+.navbar-brand {
+  color: #000;
+  transition: transform 0.2s ease-in-out
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar-brand {
+      transition: none
+  }
+}
+
+.navbar-brand:hover {
+  transform: rotate(-5deg) scale(1.1)
+}
+
+.masthead-nav > li {
+  display: inline-block;
+}
+.masthead-nav > li + li {
+  margin-left: 20px;
+}
+.masthead-nav > li > a {
+  padding-right: 0;
+  padding-left: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000; /* IE8 proofing */
+  color: rgba(0, 0, 0, .75);
+  border-bottom: 2px solid transparent;
+}
+.masthead-nav > li > a:hover,
+.masthead-nav > li > a:focus {
+  background-color: transparent;
+  border-bottom-color: #a9a9a9;
+  border-bottom-color: rgba(255, 255, 255, .25);
+}
+.masthead-nav > .active > a,
+.masthead-nav > .active > a:hover,
+.masthead-nav > .active > a:focus {
+  color: #000;
+  border-bottom-color: #fff;
+}
+
+@media (min-width: 768px) {
+  .masthead-brand {
+    float: left;
+  }
+  .masthead-nav {
+    float: right;
+  }
+}
+
+
+/*
+ * Cover
+ */
+
+.cover {
+  padding: 0 20px;
+}
+.cover .btn-lg {
+  padding: 10px 20px;
+  font-weight: 700;
+}
+
+
+/*
+ * Footer
+ */
+
+.mastfoot {
+  color: #000; /* IE8 proofing */
+  color: rgba(0, 0, 0, .5);
+}
+
+
+/*
+ * Affix and center
+ */
+
+@media (min-width: 768px) {
+  /* Pull out the header and footer */
+  .masthead {
+    position: fixed;
+    top: 0;
+  }
+  .mastfoot {
+    position: fixed;
+    bottom: 0;
+  }
+  .site-wrapper-inner {
+    vertical-align: middle; /* Start the vertical centering */
+  }
+  .masthead,
+  .mastfoot,
+  .cover-container {
+    width: 100%; /* Must be percentage or pixels for horizontal alignment */
+  }
+}
+.cusorSize {
+  /* font-size: 75px; Setting this to a ridiculous size as an example */
+  color: red;
+  font-weight: lighter;
+}
+
+/* 
+
+$$$$$$\                                                    $$$$$$\    $$\               $$\           
+\_$$  _|                                                  $$  __$$\   $$ |              $$ |          
+  $$ |  $$$$$$\$$$$\   $$$$$$\   $$$$$$\   $$$$$$\        $$ /  \__|$$$$$$\   $$\   $$\ $$ | $$$$$$\  
+  $$ |  $$  _$$  _$$\  \____$$\ $$  __$$\ $$  __$$\       \$$$$$$\  \_$$  _|  $$ |  $$ |$$ |$$  __$$\ 
+  $$ |  $$ / $$ / $$ | $$$$$$$ |$$ /  $$ |$$$$$$$$ |       \____$$\   $$ |    $$ |  $$ |$$ |$$$$$$$$ |
+  $$ |  $$ | $$ | $$ |$$  __$$ |$$ |  $$ |$$   ____|      $$\   $$ |  $$ |$$\ $$ |  $$ |$$ |$$   ____|
+$$$$$$\ $$ | $$ | $$ |\$$$$$$$ |\$$$$$$$ |\$$$$$$$\       \$$$$$$  |  \$$$$  |\$$$$$$$ |$$ |\$$$$$$$\ 
+\______|\__| \__| \__| \_______| \____$$ | \_______|       \______/    \____/  \____$$ |\__| \_______|
+                                $$\   $$ |                                    $$\   $$ |              
+                                \$$$$$$  |                                    \$$$$$$  |              
+                                 \______/                                      \______/               
+
+*/
+
+/* @media (min-width: 992px) {
+  .masthead,
+  .mastfoot,
+  .cover-container {
+    width: 700px;
+  }
+} */
+/* img {
+  display: block;
+} */
+
+/* .image-stack {
+  position: relative;
+  width: 100%;
+}
+
+.image-stack__item--bottom {
+  position: absolute;
+  margin-left:auto;
+  margin-right:auto;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.image-stack__item--top {
+  position: relative;
+  margin-left:auto;
+  margin-right:auto;
+} */
+
+.marker a{
+  text-decoration: none;
+}
+
+html, body {
+	background-image: linear-gradient(#DE8B45 1px, transparent 1px), linear-gradient(90deg, #DE8B45 1px, transparent 1px), linear-gradient(rgba(150, 150, 150, .3) 1px, transparent 1px), linear-gradient(90deg, rgba(150, 150, 150, .3) 1px, transparent 1px);
+	background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+	/* background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px; */
+}
+
+/* Marker styling */
+.marker {
+  position: relative;
+  margin: 0 40px;
+  color: #333;
+  text-decoration: none;
+  /* //line-height: 1em; */
+  & svg {
+    position: absolute;
+    left: 0;
+    top: -50%;
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto; 
+    pointer-events: none;   
+  }
+  & path {
+      transition: stroke-dashoffset 300ms linear;
+    stroke-width: 1.0;
+    stroke: darkgreen;
+    fill: none;
+    stroke-linecap: round;
+  }
+  &:hover path{
+    stroke-dashoffset: 0;
+  } 
+}
+/* 
+ $$$$$$\  $$\                     $$\                       $$\   $$\                                         
+$$  __$$\ \__|                    $$ |                      $$ |  $$ |                                        
+$$ /  \__|$$\  $$$$$$\   $$$$$$$\ $$ | $$$$$$\              $$ |  $$ | $$$$$$\ $$\    $$\  $$$$$$\   $$$$$$\  
+$$ |      $$ |$$  __$$\ $$  _____|$$ |$$  __$$\             $$$$$$$$ |$$  __$$\\$$\  $$  |$$  __$$\ $$  __$$\ 
+$$ |      $$ |$$ |  \__|$$ /      $$ |$$$$$$$$ |            $$  __$$ |$$ /  $$ |\$$\$$  / $$$$$$$$ |$$ |  \__|
+$$ |  $$\ $$ |$$ |      $$ |      $$ |$$   ____|            $$ |  $$ |$$ |  $$ | \$$$  /  $$   ____|$$ |      
+\$$$$$$  |$$ |$$ |      \$$$$$$$\ $$ |\$$$$$$$\             $$ |  $$ |\$$$$$$  |  \$  /   \$$$$$$$\ $$ |      
+ \______/ \__|\__|       \_______|\__| \_______|            \__|  \__| \______/    \_/     \_______|\__|                                                                                                             
+*/
+
+
+                                                                                                              
