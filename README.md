@@ -4,7 +4,7 @@ React JS John Emman Lanusga's Personal portfolio website.
 ![Profile Preview](https://github.com/user-attachments/assets/d4920dba-371c-4ff0-9168-dbc51a44bf86)
 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Portfolio site of mailto:emmanlanusga@gmail.com
 
 ## Available Scripts
 
