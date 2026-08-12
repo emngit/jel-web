@@ -1,76 +1,133 @@
-# Overview
+# jel-web — John Emman Lanusga's Portfolio
 
-React JS John Emman Lanusga's Personal portfolio website.
-![Profile Preview](https://github.com/user-attachments/assets/d4920dba-371c-4ff0-9168-dbc51a44bf86)
+Personal portfolio website for John Emman Lanusga — IBM Process Delivery Specialist, QA Analyst, Salesforce Certified Administrator, and full-stack developer.
 
+![Portfolio Preview](https://github.com/user-attachments/assets/d4920dba-371c-4ff0-9168-dbc51a44bf86)
 
-Portfolio site of mailto:emmanlanusga@gmail.com
+**Live at:** [emmanlanusga@gmail.com](mailto:emmanlanusga@gmail.com)
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Tech Stack
 
-### `npm start`
+| Layer | Technology |
+|---|---|
+| Framework | React 18 + JSX |
+| Build tool | Vite 8 |
+| Styling | Plain CSS (custom properties, grid, flexbox) |
+| Animation | CSS keyframes · Canvas 2D API · SVG filters |
+| Typewriter | `typewriter-effect` |
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Project Structure
 
-### `npm test`
+```
+jel-web/
+├── src/
+│   ├── App.jsx                  # Main single-page layout (all sections)
+│   ├── App.css                  # Global styles & design tokens
+│   ├── PortalGateway.jsx        # Interactive dimensional portal component
+│   ├── main.jsx                 # React entry point
+│   └── assets/
+│       └── images/
+│           ├── Kairos/          # Kairos project screenshots
+│           │   ├── JIRA-Priority.png
+│           │   └── Login-Page.png
+│           ├── Kada Tipon/      # Kada Tipon game screenshots
+│           │   ├── Kada-Tipon-Start.png
+│           │   └── Kada-Tipon-How-To.png
+│           ├── PORTAL.png       # Portal gateway source image
+│           ├── My_LOGO*.png     # Brand logo variants
+│           └── LANUSGA_JEL_CV.pdf
+├── index.html
+├── vite.config.js
+└── package.json
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Sections
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Section | Description |
+|---|---|
+| **Hero** | Name, title, typewriter role, CTA buttons |
+| **Projects & Outcomes** | Featured project cards with screenshot thumbnails and hover reveal |
+| **Skills & Tools** | 24-skill grid covering QA, languages, data, ops, and creative tools |
+| **Certifications** | Salesforce Certified Administrator badge |
+| **Experience** | Career timeline (IBM · Concentrix · Accenture · Hyundai · 3GX internship) |
+| **About + Portal** | Bio text alongside the interactive dimensional portal easter egg |
+| **Game** | Embedded Kada Tipon game (Construct, playable in-browser) |
+| **Contact** | Email CTA + social links (LinkedIn, Facebook, Instagram) |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Featured Components
 
-### `npm run eject`
+### `PortalGateway.jsx`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+An interactive Canvas 2D + SVG portal animation with:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Continuous rotation** via CSS `@keyframes portal-rotate` (18 s base, 5 s on hover)
+- **Breathing pulse** — subtle `scale(1) → scale(1.04)` every 5 s
+- **Orbital particles** — spawn on the portal rim (r ≈ 150 px), orbit at randomised speeds; `absorb` particles drift inward
+- **Ripple rings** — concentric rings expand from the portal edge, blend with the background grid
+- **Radial glow** — soft atmospheric halo, intensity tied to hover + scroll position
+- **SVG turbulence filter** (`feTurbulence` + `feDisplacementMap`) — liquid warp distortion on the portal image, animated continuously
+- **Mouse follow** — portal image tracks cursor up to ±15 px
+- **Click burst** — 0.8 s particle surge on click
+- **Scroll energy** — glow and particle rate increase as the user scrolls
+- **Easter egg** — every 30–60 s a QA-themed icon (bug · checkmark · Salesforce cloud · gear) fades in over the portal and disappears
+- **`prefers-reduced-motion`** — all animations and canvas disabled when the OS setting is on
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Project Cards
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Kairos** card: full-width horizontal layout (thumbnail 58%, body 42%)
+- **Kada Tipon** card: same horizontal layout
+- Thumbnail shows two screenshots side-by-side; on hover the second expands via flex transition
+- Fully responsive — stacks vertically at ≤ 900 px
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Experience (Resume 2026)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+| Period | Role | Company |
+|---|---|---|
+| July 2025 – Present | Process Delivery Specialist – Order To Cash | IBM, Naga City |
+| Nov 2024 – Jul 2025 | Advisor I | Concentrix, Naga City |
+| Jun 2022 – Jul 2024 | Application Development Associate | Accenture, Mandaluyong |
+| Dec 2021 – Apr 2022 | Digital Marketing Administrator | Hyundai Alabang (Naga) |
+| Jan 2020 – Mar 2020 | Junior Web Developer (Internship) | 3GX Computers & Solutions |
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Skills
 
-### Analyzing the Bundle Size
+`Salesforce` · `Manual Testing` · `Test Case Planning` · `Defect Management` · `Regression Testing` · `Jira` · `JavaScript` · `Python` · `Java` · `Apex` · `HTML/CSS` · `PHP` · `Node.js` · `C++` · `MySQL/SQL` · `Data Visualization` · `ER Modeling` · `Git` · `Agile/SDLC` · `Order To Cash (OTC)` · `Process Management` · `Adobe Illustrator` · `Adobe Photoshop` · `Adobe Premiere`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## Getting Started
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+# Install dependencies
+npm install
 
-### Advanced Configuration
+# Start dev server (http://localhost:5173)
+npm run dev
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+# Production build
+npm run build
 
-### Deployment
+# Preview production build locally
+npm run preview
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## Contact
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-"# master" 
-"# jel-web" 
+**John Emman Lanusga**
+- Email: [emmanlanusga@gmail.com](mailto:emmanlanusga@gmail.com)
+- LinkedIn: [linkedin.com/in/jelanusga](https://www.linkedin.com/in/jelanusga/)
+- Location: Naga City, Camarines Sur, Philippines
