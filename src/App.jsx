@@ -1,5 +1,22 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import KairosChat from './KairosChat.jsx';
+import galleryImg1  from './assets/images/Gallery/Random (1).jpeg';
+import galleryImg2  from './assets/images/Gallery/Random (1).jpg';
+import galleryImg3  from './assets/images/Gallery/Random (1).png';
+import galleryImg4  from './assets/images/Gallery/Random (2).jpg';
+import galleryImg5  from './assets/images/Gallery/Random (3).jpg';
+import galleryImg6  from './assets/images/Gallery/Random (4).jpg';
+import galleryImg7  from './assets/images/Gallery/Random (5).jpg';
+import galleryImg8  from './assets/images/Gallery/Random (6).jpg';
+import galleryImg9  from './assets/images/Gallery/Random (7).jpg';
+import galleryImg10 from './assets/images/Gallery/Random (8).jpg';
+import galleryImg11 from './assets/images/Gallery/Random (9).jpg';
+import galleryImg12 from './assets/images/Gallery/Random (10).jpg';
+import galleryImg13 from './assets/images/Gallery/Random (11).jpg';
+import galleryImg14 from './assets/images/Gallery/Random (12).jpg';
+import galleryImg15 from './assets/images/Gallery/Random (13).jpg';
+import galleryImg16 from './assets/images/Gallery/Random (14).jpg';
+import galleryImg17 from './assets/images/Gallery/Random (15).jpg';
 import logo from './assets/images/My_LOGO.png';
 import logoFace from './assets/images/My_LOGO_FINAL-for_DECALS.png';
 import portal from './assets/images/PORTAL.png';
@@ -119,47 +136,24 @@ const projects = [
 ];
 
 // --- Gallery data ───────────────────────────────────────────
-// Drop your sketch / photo imports here and add them to the array below.
-// Each entry: { src, title, caption }
-// Example (uncomment and add your import at the top):
-//   import mySketch from './assets/images/Sketches/sketch-01.jpg';
 const sketches = [
-  {
-    src: null,
-    title: 'Sketch #1',
-    caption: 'Add your sketch or photo here.',
-    placeholder: '✏️',
-  },
-  {
-    src: null,
-    title: 'Sketch #2',
-    caption: 'Replace src with your imported image.',
-    placeholder: '🎨',
-  },
-  {
-    src: null,
-    title: 'Photo #1',
-    caption: 'Photography or illustration.',
-    placeholder: '📷',
-  },
-  {
-    src: null,
-    title: 'Sketch #3',
-    caption: 'More of your work goes here.',
-    placeholder: '🖊️',
-  },
-  {
-    src: null,
-    title: 'Photo #2',
-    caption: 'Street, nature, portrait — whatever you like.',
-    placeholder: '🌿',
-  },
-  {
-    src: null,
-    title: 'Sketch #4',
-    caption: 'Fill this gallery with your creations.',
-    placeholder: '🖼️',
-  },
+  { src: galleryImg1,  title: 'Random #1' },
+  { src: galleryImg2,  title: 'Random #2' },
+  { src: galleryImg3,  title: 'Random #3' },
+  { src: galleryImg4,  title: 'Random #4' },
+  { src: galleryImg5,  title: 'Random #5' },
+  { src: galleryImg6,  title: 'Random #6' },
+  { src: galleryImg7,  title: 'Random #7' },
+  { src: galleryImg8,  title: 'Random #8' },
+  { src: galleryImg9,  title: 'Random #9' },
+  { src: galleryImg10, title: 'Random #10' },
+  { src: galleryImg11, title: 'Random #11' },
+  { src: galleryImg12, title: 'Random #12' },
+  { src: galleryImg13, title: 'Random #13' },
+  { src: galleryImg14, title: 'Random #14' },
+  { src: galleryImg15, title: 'Random #15' },
+  { src: galleryImg16, title: 'Random #16' },
+  { src: galleryImg17, title: 'Random #17' },
 ];
 
 // --- GallerySection ──────────────────────────────────────────
@@ -190,7 +184,7 @@ function GallerySection() {
   const item = active !== null ? sketches[active] : null;
 
   return (
-    <section className="gallery-section" aria-label="Sketches and Gallery">
+    <section id="gallery" className="gallery-section" aria-label="Sketches and Gallery">
       <div className="container">
         <p className="section-label">Creative</p>
         <h2 className="section-title">Sketches / Gallery</h2>
@@ -198,7 +192,6 @@ function GallerySection() {
           A personal collection of sketches, ideas, illustrations, and photography.
         </p>
 
-        {/* Gallery cards commented out — images not yet available
         <div className="gallery-grid">
           {sketches.map((s, i) => (
             <button
@@ -208,10 +201,7 @@ function GallerySection() {
               aria-label={`Open ${s.title}`}
             >
               <div className="gallery-card-thumb">
-                {s.src
-                  ? <img src={s.src} alt={s.title} loading="lazy" className="gallery-card-img" />
-                  : <span className="gallery-card-placeholder">{s.placeholder}</span>
-                }
+                <img src={s.src} alt={s.title} loading="lazy" className="gallery-card-img" />
               </div>
               <div className="gallery-card-footer">
                 <span className="gallery-card-title">{s.title}</span>
@@ -219,7 +209,6 @@ function GallerySection() {
             </button>
           ))}
         </div>
-        */}
       </div>
 
       {/* Lightbox */}
@@ -247,10 +236,7 @@ function GallerySection() {
             >›</button>
 
             <div className="gallery-lb-media">
-              {item.src
-                ? <img src={item.src} alt={item.title} className="gallery-lb-img" />
-                : <span className="gallery-lb-placeholder">{item.placeholder}</span>
-              }
+              <img src={item.src} alt={item.title} className="gallery-lb-img" />
             </div>
             <div className="gallery-lb-info">
               <p className="gallery-lb-title">{item.title}</p>
@@ -334,6 +320,7 @@ function App() {
               <li><a href="#skills">Skills</a></li>
               {/* <li><a href="#certs">Certifications</a></li> */}
               <li><a href="#experience">Experience</a></li>
+              <li><a href="#gallery">Gallery</a></li>
               <li><a href="#contact">Contact</a></li>
               <li>
                 <a
@@ -600,6 +587,15 @@ function App() {
                   className="social-link"
                 >
                   Instagram
+                  <span className="social-link-arrow" aria-hidden="true">↗</span>
+                </a>
+                <a
+                  href="https://www.tiktok.com/@emnswsw"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-link"
+                >
+                  TikTok
                   <span className="social-link-arrow" aria-hidden="true">↗</span>
                 </a>
                 <a
