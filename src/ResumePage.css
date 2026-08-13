@@ -186,6 +186,9 @@
 
 .rp-hero-photo-wrap {
   flex-shrink: 0;
+  position: relative;
+  width: 116px;
+  height: 116px;
 }
 
 .rp-hero-photo {
@@ -196,10 +199,31 @@
   object-position: center top;
   border: 3px solid var(--rp-border);
   display: block;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, opacity 0.35s ease;
 }
 
-.rp-hero-photo:hover {
+/* Base photo sits underneath */
+.rp-hero-photo--base {
+  position: relative;
+  z-index: 1;
+}
+
+/* Overlay photos are stacked on top, invisible by default */
+.rp-hero-photo--overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Visible state — smooth crossfade in */
+.rp-hero-photo--overlay.rp-hero-photo--visible {
+  opacity: 1;
+}
+
+/* Subtle scale on hover (applies to the whole wrap) */
+.rp-hero-photo-wrap:hover .rp-hero-photo {
   transform: scale(1.04);
   box-shadow: 0 0 0 4px rgba(127,140,152,0.18);
 }

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
-import badge from './assets/images/BADGE.jpg';
+import badge    from './assets/images/BADGE.jpg';
+import surprised from './assets/images/Suprised.png';
+import sleepy    from './assets/images/Sleepy.png';
 import logo from './assets/images/My_LOGO.png';
 import resumePdf from './assets/images/LANUSGA_JEL_CV.pdf';
 import './ResumePage.css';
@@ -178,6 +180,7 @@ export default function ResumePage({ onBack }) {
   const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 30 });
   const [scrolled, setScrolled] = useState(false);
   const [dark, setDark] = useState(false);
+  const [photoHovered, setPhotoHovered] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -227,8 +230,32 @@ export default function ResumePage({ onBack }) {
         animate="visible"
         variants={stagger}
       >
-        <motion.div className="rp-hero-photo-wrap" variants={fadeUp}>
-          <img src={badge} alt="John Emman Lanusga" className="rp-hero-photo" />
+        <motion.div
+          className="rp-hero-photo-wrap"
+          variants={fadeUp}
+          onMouseEnter={() => setPhotoHovered(true)}
+          onMouseLeave={() => setPhotoHovered(false)}
+        >
+          {/* Base photo */}
+          <img
+            src={badge}
+            alt="John Emman Lanusga"
+            className="rp-hero-photo rp-hero-photo--base"
+          />
+          {/* Hover: Surprised */}
+          <img
+            src={surprised}
+            alt=""
+            aria-hidden="true"
+            className={`rp-hero-photo rp-hero-photo--overlay rp-hero-photo--surprised${photoHovered && !dark ? ' rp-hero-photo--visible' : ''}`}
+          />
+          {/* Dark mode: Sleepy */}
+          <img
+            src={sleepy}
+            alt=""
+            aria-hidden="true"
+            className={`rp-hero-photo rp-hero-photo--overlay rp-hero-photo--sleepy${dark ? ' rp-hero-photo--visible' : ''}`}
+          />
         </motion.div>
 
         <motion.div className="rp-hero-identity" variants={fadeUp}>
