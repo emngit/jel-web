@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import logo from './assets/images/My_LOGO.png';
 import logoFace from './assets/images/My_LOGO_FINAL-for_DECALS.png';
 import portal from './assets/images/PORTAL.png';
@@ -10,33 +10,52 @@ import kadaTiponStart from './assets/images/Kada Tipon/Kada-Tipon-Start.png';
 import kadaTiponHowTo from './assets/images/Kada Tipon/Kada-Tipon-How-To.png';
 import './App.css';
 import Typewriter from 'typewriter-effect';
+import ResumePage from './ResumePage.jsx';
 
-/* ── Data ────────────────────────────────────────────────── */
+// --- DATA ──────────────────────────────────────────────────
+// Simple Icons CDN — for open-source tech logos
+const SI  = (slug, color) => `https://cdn.simpleicons.org/${slug}/${color}`;
+// Devicons CDN — for proprietary/brand logos removed from Simple Icons
+const DVI = (name, variant = 'original') =>
+  `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${name}/${name}-${variant}.svg`;
+
 const skills = [
-  { icon: '☁️', name: 'Salesforce',             type: 'Platform' },
-  { icon: '🧪', name: 'Manual Testing',          type: 'QA' },
-  { icon: '📋', name: 'Test Case Planning',       type: 'QA' },
-  { icon: '🔍', name: 'Defect Management',        type: 'QA' },
-  { icon: '🔁', name: 'Regression Testing',       type: 'QA' },
-  { icon: '🗂️', name: 'Jira',                    type: 'Tool' },
-  { icon: '🟨', name: 'JavaScript',              type: 'Language' },
-  { icon: '🐍', name: 'Python',                  type: 'Language' },
-  { icon: '☕', name: 'Java',                     type: 'Language' },
-  { icon: '🔵', name: 'Apex (Salesforce)',        type: 'Language' },
-  { icon: '🌐', name: 'HTML / CSS',              type: 'Web' },
-  { icon: '🐘', name: 'PHP',                     type: 'Language' },
-  { icon: '🟢', name: 'Node.js',                 type: 'Runtime' },
-  { icon: '💠', name: 'C++',                     type: 'Language' },
-  { icon: '🗄️', name: 'MySQL / SQL',             type: 'Database' },
-  { icon: '📊', name: 'Data Visualization',      type: 'Data' },
-  { icon: '🔗', name: 'ER Modeling',             type: 'Data' },
-  { icon: '🐙', name: 'Git',                     type: 'Version Control' },
-  { icon: '🔄', name: 'Agile / SDLC',            type: 'Methodology' },
-  { icon: '📦', name: 'Order To Cash (OTC)',      type: 'Operations' },
-  { icon: '⚙️', name: 'Process Management',       type: 'Operations' },
-  { icon: '🎨', name: 'Adobe Illustrator',        type: 'Creative' },
-  { icon: '🖼️', name: 'Adobe Photoshop',          type: 'Creative' },
-  { icon: '🎬', name: 'Adobe Premiere',           type: 'Creative' },
+  { img: DVI('salesforce'),                   name: 'Salesforce',           type: 'Platform' },
+  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>`,
+    name: 'Manual Testing', type: 'QA' },
+  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>`,
+    name: 'Test Case Planning', type: 'QA' },
+  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
+    name: 'Defect Management', type: 'QA' },
+  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>`,
+    name: 'Regression Testing', type: 'QA' },
+  { img: SI('jira', '0052CC'),                name: 'Jira',                 type: 'Tool' },
+  { img: SI('javascript', 'F7DF1E'),          name: 'JavaScript',           type: 'Language' },
+  { img: SI('python', '3776AB'),              name: 'Python',               type: 'Language' },
+  { img: DVI('java'),                         name: 'Java',                 type: 'Language' },
+  { img: DVI('salesforce'),                   name: 'Apex (Salesforce)',    type: 'Language' },
+  { img: SI('html5', 'E34F26'),               name: 'HTML / CSS',           type: 'Web' },
+  { img: SI('php', '777BB4'),                 name: 'PHP',                  type: 'Language' },
+  { img: SI('nodedotjs', '339933'),           name: 'Node.js',              type: 'Runtime' },
+  { img: SI('cplusplus', '00599C'),           name: 'C++',                  type: 'Language' },
+  { img: DVI('mysql'),                        name: 'MySQL / SQL',          type: 'Database' },
+  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#E97627" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+    name: 'Data Visualization', type: 'Data' },
+  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/></svg>`,
+    name: 'ER Modeling', type: 'Data' },
+  { img: SI('git', 'F05032'),                 name: 'Git',                  type: 'Version Control' },
+  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`,
+    name: 'Agile / SDLC', type: 'Methodology' },
+  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#0f62fe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`,
+    name: 'Order To Cash (OTC)', type: 'Operations' },
+  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+    name: 'Process Management', type: 'Operations' },
+  { img: SI('vuedotjs', '41B883'),            name: 'Vue.js',               type: 'Framework' },
+  { img: SI('react', '61DAFB'),               name: 'React',                type: 'Framework' },
+  { img: SI('postgresql', '336791'),          name: 'PostgreSQL',           type: 'Database' },
+  { img: DVI('illustrator'),                  name: 'Adobe Illustrator',    type: 'Creative' },
+  { img: DVI('photoshop'),                    name: 'Adobe Photoshop',      type: 'Creative' },
+  { img: DVI('premierepro'),                  name: 'Adobe Premiere',       type: 'Creative' },
 ];
 
 const certs = [
@@ -53,7 +72,7 @@ const timeline = [
     date: 'July 2025 – Present',
     role: 'Process Delivery Specialist – Order To Cash',
     company: 'IBM · 4F Jose Tan Bun Keng Bldg, Naga City',
-    desc: 'Responsible for executing daily process transactions and driving process and operational improvements that meet both client and IBM requirements. Applies skills in business operations, process management, compliance, and best-practice tools to support clients\u2019 core processes.',
+    desc: "Responsible for executing daily process transactions and driving process and operational improvements that meet both client and IBM requirements. Applies skills in business operations, process management, compliance, and best-practice tools to support clients' core processes.",
   },
   {
     date: 'November 2024 – July 2025',
@@ -77,7 +96,7 @@ const timeline = [
     date: 'January 2020 – March 2020',
     role: 'Junior Web Developer (Internship)',
     company: '3GX Computers & Solutions · Naga City',
-    desc: 'Maintained, documented, and resolved issues within the BullGuardPH application \u2014 the Philippines\u2019 official antivirus distributor. Utilized Laravel Framework with AJAX, plugins, and Git.',
+    desc: "Maintained, documented, and resolved issues within the BullGuardPH application — the Philippines' official antivirus distributor. Utilized Laravel Framework with AJAX, plugins, and Git.",
   },
 ];
 
@@ -85,7 +104,7 @@ const projects = [
   {
     images: [kairosPriority, kairosLogin],
     tag: 'Full-Stack App',
-    title: 'Kairos — Jira Copilot Assistant',
+    title: 'Kairos – Jira Copilot Assistant',
     desc: 'Internal IBM OTC team tool built with Vue.js 3 + FastAPI. Features a JIRA Standardizer, live Priority List enrichment, Resolve360 quality/RCA workflow (two-stage Compliance → EM approval), Monday.com workforce analytics, and an AI chat assistant powered by GitHub Copilot and IBM ICA.',
     outcome: 'IBM OTC Team · In Active Use',
   },
@@ -98,13 +117,10 @@ const projects = [
   },
 ];
 
-/* ── Component ───────────────────────────────────────────── */
-/* ── GameSection ─────────────────────────────────────────── */
+// --- GameSection ────────────────────────────────────────────
 function GameSection() {
   const [muted, setMuted] = useState(true);
 
-  // Re-keying the iframe forces a reload with the updated allow attribute,
-  // which is the only reliable way to toggle audio permission on an iframe.
   return (
     <section className="game-section" aria-label="2019 Game Project">
       <div className="container">
@@ -137,45 +153,84 @@ function GameSection() {
   );
 }
 
-
+// --- App ─────────────────────────────────────────────────────
 function App() {
+  const [page, setPage]         = useState('home');
+  const [typeKey, setTypeKey]   = useState(0);   // re-mount Typewriter on hover
+  const [badgeKey, setBadgeKey] = useState(0);   // re-mount badges on visual hover
+  const hoverCooldown           = useRef(false);
+
+  // Re-trigger typewriter on headline hover (with cooldown so it doesn't spam)
+  const handleHeadlineHover = () => {
+    if (hoverCooldown.current) return;
+    hoverCooldown.current = true;
+    setTypeKey((k) => k + 1);
+    setTimeout(() => { hoverCooldown.current = false; }, 2200);
+  };
+
+  if (page === 'resume') {
+    return <ResumePage onBack={() => { setPage('home'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />;
+  }
+
   return (
     <div className="site-wrapper">
 
-      {/* ── Navbar ── */}
+      {/* -- NAV -- */}
       <header className="masthead">
         <div className="masthead-inner">
           <a href="#" className="navbar-brand" aria-label="JEL Home">
-            <img src={logo} alt="JEL logo" style={{ height: 36, width: 52 }} />
+            <img src={logo} alt="JEL logo" style={{ height: 48, width: 70 }} />
           </a>
           <nav aria-label="Main navigation">
             <ul className="masthead-nav">
               <li><a href="#work">Work</a></li>
               <li><a href="#skills">Skills</a></li>
-              <li><a href="#certs">Certifications</a></li>
+              {/* <li><a href="#certs">Certifications</a></li> */}
               <li><a href="#experience">Experience</a></li>
               <li><a href="#contact">Contact</a></li>
-              <li><a href={resume} target="_blank" rel="noreferrer" className="nav-cta">Resume</a></li>
+              <li>
+                <a
+                  href="#"
+                  className="nav-cta"
+                  onClick={(e) => { e.preventDefault(); setPage('resume'); window.scrollTo({ top: 0, behavior: 'instant' }); }}
+                >
+                  Resume
+                </a>
+              </li>
             </ul>
           </nav>
         </div>
       </header>
 
-      {/* ── Hero ── */}
+      {/* -- HERO -- */}
       <section className="hero" aria-label="Introduction">
         <div className="hero-inner">
 
-          {/* Left */}
+          {/* -- HERO LEFT -- */}
           <div className="hero-left">
             <span className="hero-label">
               <span className="hero-label-dot" aria-hidden="true" />
               QA Analyst &amp; Automation
             </span>
 
-            <h1 className="hero-headline">
-              Ensuring quality.<br />
-              Building <em>confidence.</em><br />
-              Improving experiences.
+            <h1 className="hero-headline" onMouseEnter={handleHeadlineHover}>
+              <Typewriter
+                key={typeKey}
+                options={{
+                  cursor: '',
+                  delay: 38,
+                  deleteSpeed: Infinity,
+                }}
+                onInit={(tw) => {
+                  tw
+                    .typeString('Ensuring quality.')
+                    .pauseFor(120)
+                    .typeString('<br />Building <em>confidence.</em>')
+                    .pauseFor(120)
+                    .typeString('<br />Improving experiences.')
+                    .start();
+                }}
+              />
             </h1>
 
             <p className="hero-sub">
@@ -185,31 +240,38 @@ function App() {
 
             <div className="hero-actions">
               <a href="#work" className="btn-primary">View Projects →</a>
-              <a href={resume} target="_blank" rel="noreferrer" className="btn-secondary">
-                Download Resume
+              <a
+                href="#"
+                className="btn-secondary"
+                onClick={(e) => { e.preventDefault(); setPage('resume'); window.scrollTo({ top: 0, behavior: 'instant' }); }}
+              >
+                View Resume
               </a>
             </div>
           </div>
 
-          {/* Right */}
+          {/* -- HERO RIGHT -- */}
           <div className="hero-right">
-            <div className="hero-visual">
+            <div
+              className="hero-visual"
+              onMouseEnter={() => setBadgeKey((k) => k + 1)}
+            >
               <img src={logoFace} alt="John Emman Lanusga" className="hero-logo-img" />
 
-              <div className="floating-badges" aria-hidden="true">
-                <div className="badge badge--sf">
+              <div className="floating-badges" aria-hidden="true" key={badgeKey}>
+                <div className="badge badge--sf" style={{ animationDelay: '0.05s' }}>
                   <span className="badge-dot" style={{ background: '#0176D3' }} />
                   Salesforce
                 </div>
-                <div className="badge badge--test">
+                <div className="badge badge--test" style={{ animationDelay: '0.25s' }}>
                   <span className="badge-dot" style={{ background: '#7BCB6D' }} />
                   Testing
                 </div>
-                <div className="badge badge--qa">
+                <div className="badge badge--qa" style={{ animationDelay: '0.15s' }}>
                   <span className="badge-dot" style={{ background: '#e05c2a' }} />
                   Quality
                 </div>
-                <div className="badge badge--auto">
+                <div className="badge badge--auto" style={{ animationDelay: '0s' }}>
                   <span className="badge-dot" style={{ background: '#9b59b6' }} />
                   Automation
                 </div>
@@ -220,7 +282,7 @@ function App() {
         </div>
       </section>
 
-      {/* ── Projects ── */}
+      {/* -- PROJECTS -- */}
       <section id="work" className="section" aria-label="Featured Projects">
         <div className="container">
           <p className="section-label">Featured Work</p>
@@ -248,7 +310,7 @@ function App() {
         </div>
       </section>
 
-      {/* ── Skills ── */}
+      {/* -- SKILLS -- */}
       <section id="skills" className="section" aria-label="Skills and Tools">
         <div className="container">
           <p className="section-label">Capabilities</p>
@@ -259,7 +321,11 @@ function App() {
           <div className="skills-grid">
             {skills.map((s) => (
               <div key={s.name} className="skill-card">
-                <div className="skill-icon" role="img" aria-label={s.name}>{s.icon}</div>
+                 <div className="skill-icon" aria-label={s.name}>
+                   {s.img
+                     ? <img src={s.img} alt={s.name} width="32" height="32" loading="lazy" />
+                     : <span dangerouslySetInnerHTML={{ __html: s.svg }} />}
+                 </div>
                 <div className="skill-name">{s.name}</div>
                 <div className="skill-type">{s.type}</div>
               </div>
@@ -268,7 +334,7 @@ function App() {
         </div>
       </section>
 
-      {/* ── Certifications ── */}
+      {/* -- CERTIFICATIONS (commented out) --
       <section id="certs" className="section" aria-label="Certifications">
         <div className="container">
           <p className="section-label">Credentials</p>
@@ -290,8 +356,9 @@ function App() {
           </div>
         </div>
       </section>
+      */}
 
-      {/* ── Experience ── */}
+      {/* -- EXPERIENCE -- */}
       <section id="experience" className="section" aria-label="Experience">
         <div className="container">
           <p className="section-label">Career</p>
@@ -310,7 +377,7 @@ function App() {
         </div>
       </section>
 
-      {/* ── About (Portal easter egg) ── */}
+      {/* -- ABOUT -- */}
       <section className="section" aria-label="About">
         <div className="container">
           <div className="about-grid">
@@ -323,7 +390,7 @@ function App() {
                 Detail-oriented. Systematic. Creative.
               </h2>
               <p className="section-sub" style={{ maxWidth: '100%' }}>
-                I'm John Emman Lanusga — a Philippine-based QA Analyst with a passion for building
+                I'm John Emman Lanusga – a Philippine-based QA Analyst with a passion for building
                 reliable software. As a Certified Salesforce Administrator and Test Analyst, I bridge
                 the gap between technical execution and business value, ensuring every release ships
                 with confidence.
@@ -333,10 +400,10 @@ function App() {
         </div>
       </section>
 
-      {/* ── Game ── */}
+      {/* -- GAME -- */}
       <GameSection />
 
-      {/* ── Contact ── */}
+      {/* -- CONTACT -- */}
       <section id="contact" className="section" aria-label="Contact">
         <div className="container">
           <p className="section-label">Get in Touch</p>
@@ -399,7 +466,7 @@ function App() {
         </div>
       </section>
 
-      {/* ── Footer ── */}
+      {/* -- FOOTER -- */}
       <footer className="mastfoot">
         <p>
           Portfolio <a href="/">site</a> of{' '}

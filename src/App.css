@@ -160,17 +160,22 @@ img { display: block; max-width: 100%; }
   flex-shrink: 0;
 }
 
+/* ─── Hero headline (Typewriter renders characters; always visible) ── */
 .hero-headline {
   font-size: clamp(2.4rem, 5vw, 4rem);
   font-weight: 800;
   line-height: 1.08;
   letter-spacing: -0.03em;
   color: var(--ink);
+  cursor: default;
+  min-height: 4.5em; /* prevent layout jump while typing */
 }
 .hero-headline em {
   font-style: normal;
   color: var(--blue);
 }
+/* Typewriter cursor — hidden (we pass cursor:'') */
+.hero-headline .Typewriter__cursor { display: none; }
 
 .hero-sub {
   font-size: 16px;
@@ -233,7 +238,24 @@ img { display: block; max-width: 100%; }
   box-shadow: var(--shadow-lg);
 }
 
-/* Floating badges */
+/* ─── Badge center-in animation ─────────────────────────── */
+/* Scale+fade from centre of the badge's own box — no translate offset needed */
+@keyframes badge-center-in {
+  0%   { opacity: 0; transform: scale(0.4); }
+  70%  { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes badge-hover-in {
+  0%   { transform: scale(1); box-shadow: var(--shadow-md); }
+  60%  { transform: scale(1.1); box-shadow: 0 8px 28px rgba(17,17,17,0.18); }
+  100% { transform: scale(1.05); box-shadow: 0 6px 20px rgba(17,17,17,0.14); }
+}
+@keyframes badge-hover-out {
+  from { transform: scale(1.05); }
+  to   { transform: scale(1); }
+}
+
 .floating-badges {
   position: absolute;
   inset: 0;
@@ -254,6 +276,14 @@ img { display: block; max-width: 100%; }
   font-weight: 700;
   color: var(--ink);
   white-space: nowrap;
+  pointer-events: auto;
+  /* start invisible; animation fills opacity/transform */
+  opacity: 0;
+  animation: badge-center-in 0.55s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  transform-origin: center center;
+}
+.badge:hover {
+  animation: badge-hover-in 0.3s ease forwards;
 }
 .badge-dot {
   width: 8px; height: 8px;
@@ -461,8 +491,20 @@ img { display: block; max-width: 100%; }
 .skill-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
 
 .skill-icon {
-  font-size: 1.5rem;
-  margin-bottom: 0.6rem;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.skill-icon svg,
+.skill-icon img {
+  width: 32px;
+  height: 32px;
+  display: block;
+  flex-shrink: 0;
 }
 
 .skill-name {
@@ -536,15 +578,21 @@ img { display: block; max-width: 100%; }
 }
 
 /* ─── Timeline ───────────────────────────────────────────── */
+/*
+  Layout math:
+    --tl-offset: total left padding of .timeline
+    --tl-line:   position of the vertical line within .timeline
+    gap between date text and dot = --tl-offset - --tl-line = 40px
+*/
 .timeline {
   margin-top: 3rem;
   position: relative;
-  padding-left: 2rem;
+  padding-left: 260px;   /* date col (240px) + 20px gap before line */
 }
 .timeline::before {
   content: '';
   position: absolute;
-  left: 0; top: 0; bottom: 0;
+  left: 240px; top: 0; bottom: 0;
   width: 2px;
   background: linear-gradient(to bottom, var(--blue), var(--green));
   border-radius: 2px;
@@ -552,14 +600,33 @@ img { display: block; max-width: 100%; }
 
 .timeline-item {
   position: relative;
-  padding: 0 0 3rem 2.5rem;
+  padding: 0 0 3.5rem 2.75rem;
 }
 .timeline-item:last-child { padding-bottom: 0; }
 
+/* Date label sits to the left of the vertical line */
+.timeline-date {
+  position: absolute;
+  left: -260px;
+  width: 240px;
+  top: 0.1rem;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: right;
+  padding-right: 1.75rem;   /* gap between text and the line */
+  line-height: 1.45;
+  white-space: nowrap;      /* keep on one line */
+}
+
 .timeline-dot {
   position: absolute;
-  left: -2.65rem;
-  top: 0.3rem;
+  /* line is at left:240px in .timeline; item starts at 260px → line at -20px from item.
+     dot is 12px wide → left = -20px - 6px = -26px                                     */
+  left: -26px;
+  top: 0.25rem;
   width: 12px; height: 12px;
   border-radius: 50%;
   background: var(--blue);
@@ -567,20 +634,12 @@ img { display: block; max-width: 100%; }
   box-shadow: 0 0 0 2px var(--blue);
 }
 
-.timeline-date {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  margin-bottom: 0.35rem;
-}
-
 .timeline-role {
   font-size: 17px;
   font-weight: 800;
   color: var(--ink);
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.2rem;
+  line-height: 1.3;
 }
 
 .timeline-company {
@@ -591,9 +650,10 @@ img { display: block; max-width: 100%; }
 }
 
 .timeline-desc {
-  font-size: 13px;
-  line-height: 1.7;
+  font-size: 13.5px;
+  line-height: 1.75;
   color: var(--ink-muted);
+  max-width: 640px;
 }
 
 /* ─── About / Portal ─────────────────────────────────────── */
@@ -698,6 +758,8 @@ img { display: block; max-width: 100%; }
   .portal-gateway           { animation: none; }
   .portal-img.App-logo      { animation: none; filter: drop-shadow(0 0 28px rgba(74,222,128,0.50)); }
   .portal-canvas            { display: none; }
+  .badge                    { opacity: 1; animation: none; }
+  .badge:hover              { animation: none; transform: none; }
 }
 
 /* ─── Contact ────────────────────────────────────────────── */
@@ -866,6 +928,34 @@ img { display: block; max-width: 100%; }
     justify-content: flex-start;
   }
   .project-card:first-child .project-title { font-size: 18px; }
+}
+
+@media (max-width: 760px) {
+  /* Collapse timeline to a simple left-lined layout */
+  .timeline {
+    padding-left: 2.5rem;
+  }
+  .timeline::before {
+    left: 0;
+  }
+  .timeline-date {
+    position: static;
+    left: auto;
+    width: auto;
+    text-align: left;
+    padding-right: 0;
+    white-space: normal;
+    margin-bottom: 0.4rem;
+  }
+  /* timeline padding-left: 2.5rem; line at left: 0
+     item box starts at 2.5rem → line is at -2.5rem from item
+     dot (12px) centre on line: left = -2.5rem - 6px               */
+  .timeline-dot {
+    left: calc(-2.5rem - 6px);
+  }
+  .timeline-desc {
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 600px) {
