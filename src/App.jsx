@@ -1,4 +1,5 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import KairosChat from './KairosChat.jsx';
 import logo from './assets/images/My_LOGO.png';
 import logoFace from './assets/images/My_LOGO_FINAL-for_DECALS.png';
 import portal from './assets/images/PORTAL.png';
@@ -116,6 +117,152 @@ const projects = [
     outcome: 'ADNU DCS–CS Week Booth',
   },
 ];
+
+// --- Gallery data ───────────────────────────────────────────
+// Drop your sketch / photo imports here and add them to the array below.
+// Each entry: { src, title, caption }
+// Example (uncomment and add your import at the top):
+//   import mySketch from './assets/images/Sketches/sketch-01.jpg';
+const sketches = [
+  {
+    src: null,
+    title: 'Sketch #1',
+    caption: 'Add your sketch or photo here.',
+    placeholder: '✏️',
+  },
+  {
+    src: null,
+    title: 'Sketch #2',
+    caption: 'Replace src with your imported image.',
+    placeholder: '🎨',
+  },
+  {
+    src: null,
+    title: 'Photo #1',
+    caption: 'Photography or illustration.',
+    placeholder: '📷',
+  },
+  {
+    src: null,
+    title: 'Sketch #3',
+    caption: 'More of your work goes here.',
+    placeholder: '🖊️',
+  },
+  {
+    src: null,
+    title: 'Photo #2',
+    caption: 'Street, nature, portrait — whatever you like.',
+    placeholder: '🌿',
+  },
+  {
+    src: null,
+    title: 'Sketch #4',
+    caption: 'Fill this gallery with your creations.',
+    placeholder: '🖼️',
+  },
+];
+
+// --- GallerySection ──────────────────────────────────────────
+function GallerySection() {
+  const [active, setActive] = useState(null); // index of open lightbox item
+
+  const open  = useCallback((i) => setActive(i), []);
+  const close = useCallback(() => setActive(null), []);
+
+  // Keyboard: Escape → close, Arrow keys → prev/next
+  useEffect(() => {
+    if (active === null) return;
+    const handler = (e) => {
+      if (e.key === 'Escape')     close();
+      if (e.key === 'ArrowRight') setActive((i) => (i + 1) % sketches.length);
+      if (e.key === 'ArrowLeft')  setActive((i) => (i - 1 + sketches.length) % sketches.length);
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [active, close]);
+
+  // Lock body scroll when lightbox is open
+  useEffect(() => {
+    document.body.style.overflow = active !== null ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [active]);
+
+  const item = active !== null ? sketches[active] : null;
+
+  return (
+    <section className="gallery-section" aria-label="Sketches and Gallery">
+      <div className="container">
+        <p className="section-label">Creative</p>
+        <h2 className="section-title">Sketches / Gallery</h2>
+        <p className="section-sub">
+          A personal collection of sketches, ideas, illustrations, and photography.
+        </p>
+
+        {/* Gallery cards commented out — images not yet available
+        <div className="gallery-grid">
+          {sketches.map((s, i) => (
+            <button
+              key={i}
+              className="gallery-card"
+              onClick={() => open(i)}
+              aria-label={`Open ${s.title}`}
+            >
+              <div className="gallery-card-thumb">
+                {s.src
+                  ? <img src={s.src} alt={s.title} loading="lazy" className="gallery-card-img" />
+                  : <span className="gallery-card-placeholder">{s.placeholder}</span>
+                }
+              </div>
+              <div className="gallery-card-footer">
+                <span className="gallery-card-title">{s.title}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+        */}
+      </div>
+
+      {/* Lightbox */}
+      {item && (
+        <div
+          className="gallery-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={item.title}
+          onClick={close}
+        >
+          <div className="gallery-lightbox-inner" onClick={(e) => e.stopPropagation()}>
+            <button className="gallery-lb-close" onClick={close} aria-label="Close">✕</button>
+
+            {/* Prev / Next */}
+            <button
+              className="gallery-lb-arrow gallery-lb-arrow--prev"
+              onClick={() => setActive((i) => (i - 1 + sketches.length) % sketches.length)}
+              aria-label="Previous"
+            >‹</button>
+            <button
+              className="gallery-lb-arrow gallery-lb-arrow--next"
+              onClick={() => setActive((i) => (i + 1) % sketches.length)}
+              aria-label="Next"
+            >›</button>
+
+            <div className="gallery-lb-media">
+              {item.src
+                ? <img src={item.src} alt={item.title} className="gallery-lb-img" />
+                : <span className="gallery-lb-placeholder">{item.placeholder}</span>
+              }
+            </div>
+            <div className="gallery-lb-info">
+              <p className="gallery-lb-title">{item.title}</p>
+              {item.caption && <p className="gallery-lb-caption">{item.caption}</p>}
+              <p className="gallery-lb-counter">{active + 1} / {sketches.length}</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
 
 // --- GameSection ────────────────────────────────────────────
 function GameSection() {
@@ -403,6 +550,9 @@ function App() {
       {/* -- GAME -- */}
       <GameSection />
 
+      {/* -- GALLERY -- */}
+      <GallerySection />
+
       {/* -- CONTACT -- */}
       <section id="contact" className="section" aria-label="Contact">
         <div className="container">
@@ -474,6 +624,9 @@ function App() {
           {' '}· John Emman Lanusga · Philippines
         </p>
       </footer>
+
+      {/* -- KAIROS CHAT -- */}
+      <KairosChat />
 
     </div>
   );

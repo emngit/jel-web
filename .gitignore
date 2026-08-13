@@ -21,3 +21,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# env files with secrets
+.env
+
+# build output — never commit (may contain baked-in secrets)
+/dist
