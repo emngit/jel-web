@@ -115,28 +115,19 @@ function renderMd(text) {
     .replace(/\n/g, '<br />');
 }
 
-// ── GitHub Copilot call ───────────────────────────────────────────────────────
-async function callCopilot(messages, token, model = 'gpt-4o') {
-  const res = await fetch('https://api.githubcopilot.com/chat/completions', {
+// ── Kairos API call — proxied through /api/chat (token stays server-side) ─────
+async function callCopilot(messages, model = 'gpt-4o') {
+  const res = await fetch('/api/chat', {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-      'Editor-Version': 'vscode/1.89.0',
-      'Copilot-Integration-Id': 'vscode-chat',
-    },
-    body: JSON.stringify({ model, messages, max_tokens: 1024, temperature: 0.7 }),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages, model }),
   });
-  if (!res.ok) {
-    const err = await res.text().catch(() => res.statusText);
-    throw new Error(`Copilot API ${res.status}: ${err}`);
-  }
   const data = await res.json();
-  return data.choices?.[0]?.message?.content ?? '(empty response)';
+  if (!res.ok) throw new Error(data.error ?? `API ${res.status}`);
+  return data.content;
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
-const COPILOT_TOKEN = import.meta.env.VITE_COPILOT_TOKEN;
 
 export default function KairosChat() {
   const [open, setOpen]      = useState(false);
@@ -210,7 +201,7 @@ export default function KairosChat() {
         ...msgsRef.current.slice(-10).map(m => ({ role: m.role, content: m.content })),
         { role: 'user', content: text },
       ];
-      const reply = await callCopilot(history, COPILOT_TOKEN);
+      const reply = await callCopilot(history);
       addMsg('assistant', reply);
       mascotRef.current?.setMood(inferMood(reply));
       if (!open) setUnread(u => u + 1);

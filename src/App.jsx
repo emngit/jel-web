@@ -346,9 +346,9 @@ function App() {
 
   // ── Visitor counter ────────────────────────────────────────
   useEffect(() => {
-    fetch('https://api.countapi.xyz/hit/emmanlanusga.github.io/visits')
+    fetch('https://api.counterapi.dev/v1/emmanlanusga/visits/up')
       .then((r) => r.json())
-      .then((d) => setVisitors(d.value))
+      .then((d) => setVisitors(d.count))
       .catch(() => {});
   }, []);
 
