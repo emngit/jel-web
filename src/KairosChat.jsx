@@ -352,7 +352,7 @@ export default function KairosChat() {
             </div>
             <div className="kc-header-status">
               <span className={`kc-status-dot${liveMode ? ' kc-status-dot--live' : ''}`} />
-              {liveMode ? 'Live · Chatting now' : 'Microsoft Copilot · Portfolio'}
+              {liveMode ? 'Live · Chatting now' : 'GitHub Copilot · Portfolio'}
             </div>
           </div>
         </div>
@@ -494,7 +494,7 @@ export default function KairosChat() {
       </div>
 
       <div className="kc-footer">
-        {liveMode ? 'Live chat · John Emman Lanusga' : 'Powered by Microsoft Copilot · Portfolio'}
+        {liveMode ? 'Live chat · John Emman Lanusga' : 'Powered by GitHub Copilot · Portfolio'}
       </div>
     </>
   );

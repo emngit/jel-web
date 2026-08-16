@@ -3,6 +3,7 @@ import AdminPanel from './AdminPanel.jsx';
 import DarkVeil from './DarkVeil.jsx';
 import Particles from './Particles.jsx';
 import KairosChat from './KairosChat.jsx';
+import SpotlightCard from './SpotlightCard.jsx';
 import galleryImg1  from './assets/images/Gallery/Random (1).jpeg';
 import galleryImg2  from './assets/images/Gallery/Random (1).jpg';
 import galleryImg3  from './assets/images/Gallery/Random (1).png';
@@ -137,6 +138,12 @@ const projects = [
     tag: 'Full-Stack App',
     title: 'Kairos – Jira Copilot Assistant',
     desc: 'Internal IBM OTC team tool built with Vue.js 3 + FastAPI. Features a JIRA Standardizer, live Priority List enrichment, Resolve360 quality/RCA workflow (two-stage Compliance → EM approval), Monday.com workforce analytics, and an AI chat assistant powered by GitHub Copilot and IBM ICA.',
+    tech: [
+      { name: 'Vue.js 3', logo: SI('vuedotjs', '41B883') },
+      { name: 'FastAPI', logo: SI('fastapi', '009688') },
+      { name: 'Jira', logo: SI('jira', '0052CC') },
+      { name: 'GitHub Copilot', logo: SI('githubcopilot', '24292e') },
+    ],
     outcome: 'IBM OTC Team · In Active Use',
   },
   {
@@ -144,6 +151,11 @@ const projects = [
     tag: 'Game Dev',
     title: 'Kada Tipon Game',
     desc: 'A 2D running game where you, as a student, collect and save coins while avoiding obstacles (expenses) within a time limit. Presented at ADNU DCS–CS Week.',
+    tech: [
+      { name: 'HTML5', logo: SI('html5', 'E34F26') },
+      { name: 'CSS3', logo: SI('css3', '1572B6') },
+      { name: 'Construct', logo: SI('construct3', 'E34F26') },
+    ],
     outcome: 'ADNU DCS–CS Week Booth',
   },
 ];
@@ -592,6 +604,16 @@ function App() {
                   <span className="project-tag">{p.tag}</span>
                   <h3 className="project-title">{p.title}</h3>
                   <p className="project-desc">{p.desc}</p>
+                  {p.tech && (
+                    <div className="project-tech">
+                      {p.tech.map((t) => (
+                        <span key={t.name} className="project-tech-badge">
+                          <img src={t.logo} alt="" className="project-tech-icon" />
+                          {t.name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                   <p className="project-outcome">✦ {p.outcome}</p>
                 </div>
               </article>
@@ -619,7 +641,7 @@ function App() {
           </p>
           <div className="skills-grid">
             {skills.map((s) => (
-              <div key={s.name} className="skill-card">
+              <SpotlightCard key={s.name} className="skill-card" spotlightColor="var(--skill-spotlight)">
                  <div className="skill-icon" aria-label={s.name}>
                    {s.img
                      ? <img src={s.img} alt={s.name} width="32" height="32" loading="lazy" />
@@ -627,7 +649,7 @@ function App() {
                  </div>
                 <div className="skill-name">{s.name}</div>
                 <div className="skill-type">{s.type}</div>
-              </div>
+              </SpotlightCard>
             ))}
           </div>
         </div>

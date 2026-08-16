@@ -19,6 +19,7 @@
   --shadow-sm:  0 1px 4px rgba(17,17,17,0.06);
   --shadow-md:  0 4px 24px rgba(17,17,17,0.09);
   --shadow-lg:  0 12px 48px rgba(17,17,17,0.12);
+  --skill-spotlight: rgba(1, 118, 211, 0.08);
 }
 
 /* ─── Dark Mode Tokens ───────────────────────────────────── */
@@ -36,6 +37,7 @@
   --shadow-sm:  0 1px 4px rgba(0,0,0,0.4);
   --shadow-md:  0 4px 24px rgba(0,0,0,0.5);
   --shadow-lg:  0 12px 48px rgba(0,0,0,0.6);
+  --skill-spotlight: rgba(1, 118, 211, 0.16);
 }
 
 html { scroll-behavior: smooth; }
@@ -688,6 +690,47 @@ img { display: block; max-width: 100%; }
   margin-bottom: 1.25rem;
 }
 
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+}
+
+.project-tech-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  background: rgba(17, 17, 17, 0.04);
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .project-tech-badge {
+  background: rgba(240, 240, 238, 0.06);
+}
+
+.project-tech-badge:hover {
+  background: rgba(17, 17, 17, 0.08);
+  color: var(--ink);
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .project-tech-badge:hover {
+  background: rgba(240, 240, 238, 0.12);
+}
+
+.project-tech-icon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+}
+
 .project-outcome {
   font-size: 12px;
   font-weight: 700;
@@ -714,6 +757,20 @@ img { display: block; max-width: 100%; }
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .skill-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+
+/* SpotlightCard integration overrides */
+.skill-card.card-spotlight {
+  border-radius: var(--radius-md) !important;
+  border: 1px solid var(--border) !important;
+  background: rgba(248, 248, 246, 0.9) !important;
+  padding: 1.25rem !important;
+  overflow: hidden;
+  position: relative;
+}
+
+[data-theme="dark"] .skill-card.card-spotlight {
+  background: rgba(18,18,18,0.82) !important;
+}
 
 .skill-icon {
   width: 32px;
