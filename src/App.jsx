@@ -132,6 +132,131 @@ const timeline = [
   },
 ];
 
+function TiosShowcase() {
+  const [path, setPath] = useState(null); // null | 'tiyo' | 'rico'
+  const [income, setIncome] = useState(30000);
+
+  // Core Formulas
+  const emergencyFund = income * 4;
+  const investmentMin = income * 0.10;
+  const maxExpenses = income * 0.55;
+  const freedomNumber = income * 200;
+
+  if (!path) {
+    return (
+      <div className="tios-wrap tios-onboarding">
+        <div className="tios-brainstorming-badge">Brainstorming... (Concept Only)</div>
+        <h4 className="tios-onboarding-title">TIOS</h4>
+        <p className="tios-onboarding-tagline">Track It. Own It. Save It.</p>
+        <p className="tios-onboarding-prompt">What's your money goal?</p>
+        <div className="tios-onboarding-choices">
+          <button className="tios-choice-card" onClick={() => setPath('tiyo')}>
+            <span className="tios-choice-animal">Carabao</span>
+            <div className="tios-choice-body">
+              <strong>Tiyo the Carabao Path</strong>
+              <span>"Protect first. Grow second."</span>
+              <span className="tios-choice-btn">Build My Foundation</span>
+            </div>
+          </button>
+          <button className="tios-choice-card" onClick={() => setPath('rico')}>
+            <span className="tios-choice-animal">Fox</span>
+            <div className="tios-choice-body">
+              <strong>Rico the Fox Path</strong>
+              <span>"Make money work for you."</span>
+              <span className="tios-choice-btn">Build My Wealth</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="tios-wrap tios-dashboard">
+      <div className="tios-header">
+        <span className="tios-dashboard-title">
+          {path === 'tiyo' ? 'Tiyo the Carabao Path (Concept)' : 'Rico the Fox Path (Concept)'}
+        </span>
+        <button className="tios-reset-btn" onClick={() => setPath(null)}>Reset</button>
+      </div>
+
+      <div className="tios-calc">
+        <div className="tios-input-group">
+          <label htmlFor="tios-income">Monthly Income:</label>
+          <div className="tios-input-row">
+            <span>₱</span>
+            <input
+              id="tios-income"
+              type="number"
+              value={income}
+              onChange={(e) => setIncome(Math.max(0, parseInt(e.target.value) || 0))}
+              className="tios-input"
+            />
+          </div>
+        </div>
+
+        <div className="tios-formula-grid">
+          <div className="tios-formula-item">
+            <span className="tios-formula-label">Emergency Fund</span>
+            <strong className="tios-formula-val">₱{emergencyFund.toLocaleString()}</strong>
+          </div>
+          <div className="tios-formula-item">
+            <span className="tios-formula-label">Min Investment</span>
+            <strong className="tios-formula-val">₱{investmentMin.toLocaleString()}</strong>
+          </div>
+          <div className="tios-formula-item">
+            <span className="tios-formula-label">Max Expenses</span>
+            <strong className="tios-formula-val">₱{maxExpenses.toLocaleString()}</strong>
+          </div>
+          <div className="tios-formula-item">
+            <span className="tios-formula-label">Freedom Number</span>
+            <strong className="tios-formula-val">₱{freedomNumber.toLocaleString()}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div className="tios-bottom-section">
+        <div className="tios-bubble-row">
+          <p className="tios-bubble-text">
+            {path === 'tiyo' ? (
+              <>
+                <strong>Tiyo the Carabao:</strong> Great job. Your emergency fund now covers 4 months of expenses. You're building peace of mind.
+              </>
+            ) : (
+              <>
+                <strong>Rico the Fox:</strong> Nice. You invested ₱{investmentMin.toLocaleString()} today. Assets create options. Keep building.
+              </>
+            )}
+          </p>
+        </div>
+
+        <div className="tios-gamified">
+          <span className="tios-gamified-title">
+            {path === 'tiyo' ? 'Tiyo Village' : 'Rico City'}
+          </span>
+          <div className="tios-gamified-badges">
+            {path === 'tiyo' ? (
+              <>
+                <span className="tios-g-badge tios-g-badge--on">House</span>
+                <span className="tios-g-badge tios-g-badge--on">Garden</span>
+                <span className="tios-g-badge">Well</span>
+                <span className="tios-g-badge">Town Hall</span>
+              </>
+            ) : (
+              <>
+                <span className="tios-g-badge tios-g-badge--on">Workstation</span>
+                <span className="tios-g-badge tios-g-badge--on">Business</span>
+                <span className="tios-g-badge">Asset Tower</span>
+                <span className="tios-g-badge">Freedom Tower</span>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const projects = [
   {
     images: [kairosPriority, kairosLogin],
@@ -157,6 +282,14 @@ const projects = [
       { name: 'Construct', logo: SI('construct3', 'E34F26') },
     ],
     outcome: 'ADNU DCS–CS Week Booth',
+  },
+  {
+    images: [],
+    isCustomVisual: true,
+    tag: 'Fintech & Game (Brainstorming)',
+    title: 'TIOS – Track It. Own It. Save It.',
+    desc: 'Inspired by "Rich Dad, Poor Dad", TIOS is a gamified wealth-planning concept (still an idea, not yet implemented). Users choose their financial path—the security-focused Tiyo the Carabao Path (building a village) or the growth-focused Rico the Fox Path (building a high-asset city) to track budgets, complete unique missions, and build financial intelligence.',
+    outcome: 'Brainstorming...',
   },
 ];
 
@@ -610,9 +743,13 @@ function App() {
             {projects.map((p) => (
               <article key={p.title} className="project-card">
                 <div className="project-thumb--screenshots">
-                  {p.images.map((src, i) => (
-                    <img key={i} src={src} alt={`${p.title} screenshot ${i + 1}`} className="project-thumb-img" />
-                  ))}
+                  {p.isCustomVisual ? (
+                    <TiosShowcase />
+                  ) : (
+                    p.images.map((src, i) => (
+                      <img key={i} src={src} alt={`${p.title} screenshot ${i + 1}`} className="project-thumb-img" />
+                    ))
+                  )}
                 </div>
                 <div className="project-body">
                   <span className="project-tag">{p.tag}</span>
