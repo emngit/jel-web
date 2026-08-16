@@ -358,6 +358,20 @@ function App() {
   const [badgeKey, setBadgeKey] = useState(0);
   const [visitors, setVisitors] = useState(null);
   const hoverCooldown           = useRef(false);
+  const [showScrollUp, setShowScrollUp] = useState(false);
+
+  // ── Scroll-to-top handler ───────────────────────────────────────────────
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollUp(window.scrollY > 300);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // ── Visitor counter (proxied via /api/visitors to avoid CORS) ─────────────
   useEffect(() => {
@@ -887,9 +901,20 @@ function App() {
       // | $$  $$  | $$__  $$  | $$  | $$__  $$| $$  | $$ \____  $$      | $$      | $$__  $$| $$__  $$   | $$   
       // | $$\  $$ | $$  | $$  | $$  | $$  \ $$| $$  | $$ /$$  \ $$      | $$    $$| $$  | $$| $$  | $$   | $$   
       // | $$ \  $$| $$  | $$ /$$$$$$| $$  | $$|  $$$$$$/|  $$$$$$/      |  $$$$$$/| $$  | $$| $$  | $$   | $$   
-      // |__/  \__/|__/  |__/|______/|__/  |__/ \______/  \______/        \______/ |__/  |__/|__/  |__/   |__/        
+      // |__/  \__/|__/  |__/|______/|__/  |__/ \______/  \______/        \______/ |__/  |__/|__/  |__/   |__/
       */}
       <KairosChat />
+
+      {/* ── Scroll to Top button ── */}
+      <button
+        className={`scroll-up-btn${showScrollUp ? ' scroll-up-btn--visible' : ''}`}
+        onClick={scrollToTop}
+        aria-label="Scroll to top"
+      >
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="18 15 12 9 6 15" />
+        </svg>
+      </button>
 
     </div>
   );

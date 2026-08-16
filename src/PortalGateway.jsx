@@ -17,11 +17,11 @@ function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
 /* ── Particle ──────────────────────────────────────────────── */
 class Particle {
-  constructor(cx, cy, energy = 1) { this.reset(cx, cy, energy); }
-  reset(cx, cy, energy = 1) {
+  constructor(cx, cy, scale = 1, energy = 1) { this.reset(cx, cy, scale, energy); }
+  reset(cx, cy, scale = 1, energy = 1) {
     const angle = rand(0, Math.PI * 2);
-    // orbit radius: just outside the portal image (portal ~150px radius)
-    this.orbitRadius = rand(155, 185) * Math.min(energy, 1.4);
+    // orbit radius: just outside the portal image (portal ~150px radius at base scale)
+    this.orbitRadius = rand(155, 185) * scale * Math.min(energy, 1.4);
     this.orbitAngle  = angle;
     this.orbitSpeed  = rand(0.006, 0.018) * (Math.random() > 0.5 ? 1 : -1);
     this.cx   = cx;
@@ -30,19 +30,19 @@ class Particle {
     this.y    = cy + Math.sin(angle) * this.orbitRadius;
     this.life  = rand(0.6, 1);
     this.decay = rand(0.004, 0.014);
-    this.size  = rand(1.2, 3.5);
+    this.size  = rand(1.2, 3.5) * scale;
     this.type  = Math.random() > 0.25 ? 'orbit' : 'absorb';
     if (this.type === 'absorb') {
       // drifts inward toward the centre
-      this.vx = Math.cos(angle + Math.PI) * rand(0.5, 1.5);
-      this.vy = Math.sin(angle + Math.PI) * rand(0.5, 1.5);
+      this.vx = Math.cos(angle + Math.PI) * rand(0.5, 1.5) * scale;
+      this.vy = Math.sin(angle + Math.PI) * rand(0.5, 1.5) * scale;
     }
   }
-  update() {
+  update(scale = 1) {
     if (this.type === 'orbit') {
       this.orbitAngle  += this.orbitSpeed;
-      this.orbitRadius += rand(-0.3, 0.3);
-      this.orbitRadius  = clamp(this.orbitRadius, 148, 200);
+      this.orbitRadius += rand(-0.3, 0.3) * scale;
+      this.orbitRadius  = clamp(this.orbitRadius, 148 * scale, 200 * scale);
       this.x = this.cx + Math.cos(this.orbitAngle) * this.orbitRadius;
       this.y = this.cy + Math.sin(this.orbitAngle) * this.orbitRadius;
     } else {
@@ -71,13 +71,13 @@ class Particle {
 
 /* ── Ripple ────────────────────────────────────────────────── */
 class Ripple {
-  constructor(cx, cy) {
+  constructor(cx, cy, scale = 1) {
     this.cx = cx; this.cy = cy;
-    this.r     = 148;
+    this.r     = 148 * scale;
     this.life  = 1;
     this.decay = rand(0.005, 0.011);
   }
-  update() { this.r += 0.9; this.life -= this.decay; }
+  update(scale = 1) { this.r += 0.9 * scale; this.life -= this.decay; }
   draw(ctx) {
     if (this.life <= 0) return;
     ctx.save();
@@ -116,6 +116,9 @@ export default function PortalGateway({ portalSrc }) {
     const now = performance.now() / 1000;
     const st  = s.current;
 
+    /* Base design is 460px container. Calculate scale multiplier. */
+    const scale = W / 460;
+
     ctx.clearRect(0, 0, W, H);
 
     const energy = 1
@@ -125,23 +128,23 @@ export default function PortalGateway({ portalSrc }) {
 
     /* spawn particles */
     if (Math.random() < 0.22 + energy * 0.10) {
-      st.particles.push(new Particle(cx, cy, energy * 0.8));
+      st.particles.push(new Particle(cx, cy, scale, energy * 0.8));
     }
     /* spawn ripples */
     st.rippleT++;
     if (st.rippleT > (st.hovered ? 40 : 90)) {
-      st.ripples.push(new Ripple(cx, cy));
+      st.ripples.push(new Ripple(cx, cy, scale));
       st.rippleT = 0;
     }
     /* click burst */
     if (st.clicked) {
       const el = now - st.clickT;
-      if (el < 0.8) { if (Math.random() < 0.55) st.particles.push(new Particle(cx, cy, energy)); }
+      if (el < 0.8) { if (Math.random() < 0.55) st.particles.push(new Particle(cx, cy, scale, energy)); }
       else           { st.clicked = false; }
     }
 
     /* ── Outer soft glow — pure radial, fully transparent at edge ── */
-    const glowR = 148 + Math.sin(now * 0.8) * 5;
+    const glowR = (148 + Math.sin(now * 0.8) * 5) * scale;
     const gStr  = st.hovered
       ? 0.30 + st.scrollE * 0.1
       : 0.14 + st.scrollE * 0.08;
@@ -157,16 +160,16 @@ export default function PortalGateway({ portalSrc }) {
 
     /* ── Ripples ── */
     st.ripples = st.ripples.filter(r => r.life > 0);
-    st.ripples.forEach(r => { r.update(); r.draw(ctx); });
+    st.ripples.forEach(r => { r.update(scale); r.draw(ctx); });
 
     /* ── Particles — clip to annular region so they never bleed inside the image ── */
     st.particles = st.particles.filter(p => p.life > 0);
-    st.particles.forEach(p => { p.update(); p.draw(ctx); });
+    st.particles.forEach(p => { p.update(scale); p.draw(ctx); });
 
     /* ── Hover sparks on the portal rim ── */
     if (st.hovered && Math.random() < 0.35) {
       const a  = rand(0, Math.PI * 2);
-      const r  = rand(148, 165);
+      const r  = rand(148, 165) * scale;
       const sx = cx + Math.cos(a) * r;
       const sy = cy + Math.sin(a) * r;
       ctx.save();

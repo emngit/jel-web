@@ -541,7 +541,7 @@ export default function ResumePage({ onBack }) {
       */}
       <footer className="rp-footer">
         <p>
-          John Emman Lanusga · QA Analyst · Naga City, Philippines ·{' '}
+          John Emman Lanusga · Automation · Naga City, Philippines ·{' '}
           <a href="mailto:emmanlanusga@gmail.com">emmanlanusga@gmail.com</a>
         </p>
       </footer>
