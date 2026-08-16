@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import kairosLogo from './assets/images/logo-2.png';
+import jelAvatar from './assets/images/My_LOGO-face.png';
 import KairosMascot from './KairosMascot.jsx';
 import BorderGlow from './BorderGlow.jsx';
 import SpotlightCard from './SpotlightCard.jsx';
@@ -94,12 +95,25 @@ INSTRUCTIONS:
 const GREETING =
   `Hi! I'm **Kairos** 👋\n\nI'm the AI assistant on John Emman's portfolio. Ask me anything about him:\n• His experience & career\n• Skills & tools\n• Projects he's built\n• How to get in touch\n\nWhat would you like to know?`;
 
+const LIVE_GREETING =
+  `Hey! 👋 **John Emman is online right now!**\n\nYou're now chatting directly with him — not the AI. Feel free to say hi or ask him anything directly!`;
+
 const SUGGESTIONS = [
   "What is John Emman's current role?",
   "What projects has he built?",
   "What are his top skills?",
   "How can I contact him?",
 ];
+
+// ── Generate a stable session ID for this browser tab ────────────────────────
+function getSessionId() {
+  let id = sessionStorage.getItem('kc-session');
+  if (!id) {
+    id = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    sessionStorage.setItem('kc-session', id);
+  }
+  return id;
+}
 
 // ── Minimal markdown renderer ─────────────────────────────────────────────────
 function renderMd(text) {
@@ -115,7 +129,7 @@ function renderMd(text) {
     .replace(/\n/g, '<br />');
 }
 
-// ── Kairos API call — proxied through /api/chat (token stays server-side) ─────
+// ── Kairos AI API call — proxied through /api/chat ────────────────────────────
 async function callCopilot(messages, model = 'gpt-4o') {
   const res = await fetch('/api/chat', {
     method: 'POST',
@@ -127,27 +141,58 @@ async function callCopilot(messages, model = 'gpt-4o') {
   return data.content;
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+// ── Live chat helpers ─────────────────────────────────────────────────────────
+async function fetchOnlineStatus() {
+  try {
+    const res = await fetch('/api/status');
+    const data = await res.json();
+    return data.online === true;
+  } catch {
+    return false;
+  }
+}
 
+async function postLiveMessage(session, role, text) {
+  await fetch('/api/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ session, role, text }),
+  });
+}
+
+async function fetchLiveMessages(session) {
+  const res = await fetch(`/api/messages?session=${session}`);
+  const data = await res.json();
+  return data.messages ?? [];
+}
+
+// ── Component ─────────────────────────────────────────────────────────────────
 export default function KairosChat() {
-  const [open, setOpen]      = useState(false);
-  const [messages, setMsgs]  = useState([
+  const [open, setOpen]         = useState(false);
+  const [messages, setMsgs]     = useState([
     { role: 'assistant', content: GREETING },
   ]);
-  const [draft, setDraft]    = useState('');
-  const [thinking, setThink] = useState(false);
-  const [unread, setUnread]  = useState(0);
-  const [isDark, setIsDark]  = useState(
+  const [draft, setDraft]       = useState('');
+  const [thinking, setThink]    = useState(false);
+  const [unread, setUnread]     = useState(0);
+  const [isDark, setIsDark]     = useState(
     () => document.documentElement.getAttribute('data-theme') === 'dark'
   );
 
-  const msgRef    = useRef(null);
-  const inputRef  = useRef(null);
-  const mascotRef = useRef(null);
-  const draftRef  = useRef(draft);
-  const msgsRef   = useRef(messages);
-  draftRef.current = draft;
-  msgsRef.current  = messages;
+  // ── Online / live-chat state ──────────────────────────────────────────────
+  const [jelOnline, setJelOnline]     = useState(false);
+  const [liveMode, setLiveMode]       = useState(false);   // true once visitor enters live chat
+  const [liveMsgCount, setLiveMsgCnt] = useState(0);       // track last-seen count for polling
+
+  const sessionId   = useRef(getSessionId());
+  const pollRef     = useRef(null);
+  const msgRef      = useRef(null);
+  const inputRef    = useRef(null);
+  const mascotRef   = useRef(null);
+  const draftRef    = useRef(draft);
+  const msgsRef     = useRef(messages);
+  draftRef.current  = draft;
+  msgsRef.current   = messages;
 
   function inferMood(text) {
     const t = text.toLowerCase();
@@ -165,6 +210,7 @@ export default function KairosChat() {
     });
   }, []);
 
+  // ── Dark-mode observer ────────────────────────────────────────────────────
   useEffect(() => {
     const observer = new MutationObserver(() => {
       setIsDark(document.documentElement.getAttribute('data-theme') === 'dark');
@@ -172,6 +218,40 @@ export default function KairosChat() {
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     return () => observer.disconnect();
   }, []);
+
+  // ── Poll JEL's online status every 30 s ──────────────────────────────────
+  useEffect(() => {
+    let alive = true;
+    async function check() {
+      const online = await fetchOnlineStatus();
+      if (alive) setJelOnline(online);
+    }
+    check();
+    const id = setInterval(check, 30_000);
+    return () => { alive = false; clearInterval(id); };
+  }, []);
+
+  // ── Live-chat message polling (every 3 s when in live mode) ──────────────
+  useEffect(() => {
+    if (!liveMode) { clearInterval(pollRef.current); return; }
+
+    async function poll() {
+      const msgs = await fetchLiveMessages(sessionId.current);
+      setMsgs(prev => {
+        // Only update if there are new messages from JEL
+        if (msgs.length > prev.length) {
+          const newMsgs = msgs.map(m => ({ role: m.role, content: m.text }));
+          if (!open) setUnread(u => u + (msgs.length - prev.length));
+          return newMsgs;
+        }
+        return prev;
+      });
+    }
+
+    poll();
+    pollRef.current = setInterval(poll, 3_000);
+    return () => clearInterval(pollRef.current);
+  }, [liveMode, open]);
 
   useEffect(() => { if (open) { setUnread(0); setTimeout(() => inputRef.current?.focus(), 80); } }, [open]);
   useEffect(() => { scrollBottom(); }, [messages, thinking]);
@@ -184,11 +264,20 @@ export default function KairosChat() {
   const addMsg = (role, content) =>
     setMsgs(prev => [...prev, { role, content }]);
 
+  // ── Enter live-chat mode ──────────────────────────────────────────────────
+  const enterLiveMode = useCallback(async () => {
+    setLiveMode(true);
+    setMsgs([{ role: 'assistant', content: LIVE_GREETING }]);
+    // Seed the Redis thread with the greeting so admin sees context
+    await postLiveMessage(sessionId.current, 'assistant', LIVE_GREETING);
+    mascotRef.current?.setMood('excited');
+  }, []);
+
+  // ── Send message ──────────────────────────────────────────────────────────
   const send = useCallback(async () => {
     const text = draftRef.current.trim();
     if (!text || thinking) return;
     setDraft('');
-    // reset textarea height
     if (inputRef.current) { inputRef.current.style.height = 'auto'; }
 
     addMsg('user', text);
@@ -196,22 +285,29 @@ export default function KairosChat() {
     mascotRef.current?.setMood('thinking');
 
     try {
-      const history = [
-        { role: 'system', content: KAIROS_SYSTEM_PROMPT },
-        ...msgsRef.current.slice(-10).map(m => ({ role: m.role, content: m.content })),
-        { role: 'user', content: text },
-      ];
-      const reply = await callCopilot(history);
-      addMsg('assistant', reply);
-      mascotRef.current?.setMood(inferMood(reply));
-      if (!open) setUnread(u => u + 1);
+      if (liveMode) {
+        // Live mode: store in Redis, JEL will reply from admin panel
+        await postLiveMessage(sessionId.current, 'user', text);
+        // Show a waiting indicator in the bubble list (handled by polling)
+      } else {
+        // AI mode: call Copilot
+        const history = [
+          { role: 'system', content: KAIROS_SYSTEM_PROMPT },
+          ...msgsRef.current.slice(-10).map(m => ({ role: m.role, content: m.content })),
+          { role: 'user', content: text },
+        ];
+        const reply = await callCopilot(history);
+        addMsg('assistant', reply);
+        mascotRef.current?.setMood(inferMood(reply));
+        if (!open) setUnread(u => u + 1);
+      }
     } catch (err) {
       addMsg('assistant', `⚠️ ${err.message}`);
       mascotRef.current?.setMood('sad');
     } finally {
       setThink(false);
     }
-  }, [thinking, open]);
+  }, [thinking, open, liveMode]);
 
   const sendSuggestion = (s) => {
     draftRef.current = s;
@@ -220,7 +316,7 @@ export default function KairosChat() {
   };
 
   const clearChat = () => {
-    setMsgs([{ role: 'assistant', content: GREETING }]);
+    setMsgs([{ role: 'assistant', content: liveMode ? LIVE_GREETING : GREETING }]);
     setUnread(0);
   };
 
@@ -228,22 +324,51 @@ export default function KairosChat() {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
   };
 
-  // Reusable inner chat content
+  // ── Online banner (shown above input when JEL is online but not in live mode) ──
+  const onlineBanner = jelOnline && !liveMode && (
+    <div className="kc-online-banner">
+      <span className="kc-online-banner-dot" />
+      <span>John Emman is online!</span>
+      <button className="kc-online-banner-btn" onClick={enterLiveMode}>
+        Talk to him →
+      </button>
+    </div>
+  );
+
+  // ── Reusable inner chat content ───────────────────────────────────────────
   const chatContent = (
     <>
       {/* Header */}
       <div className="kc-header">
         <div className="kc-header-left">
-          <img src={kairosLogo} className="kc-logo" alt="Kairos" />
+          <img
+            src={liveMode ? jelAvatar : kairosLogo}
+            className="kc-logo"
+            alt={liveMode ? 'JEL' : 'Kairos'}
+          />
           <div>
-            <div className="kc-header-name">Kairos</div>
+            <div className="kc-header-name">
+              {liveMode ? 'John Emman' : 'Kairos'}
+            </div>
             <div className="kc-header-status">
-              <span className="kc-status-dot" />
-              Microsoft Copilot · Portfolio
+              <span className={`kc-status-dot${liveMode ? ' kc-status-dot--live' : ''}`} />
+              {liveMode ? 'Live · Chatting now' : 'Microsoft Copilot · Portfolio'}
             </div>
           </div>
         </div>
         <div className="kc-header-actions">
+          {liveMode && (
+            <button
+              className="kc-icon-btn kc-icon-btn--ai"
+              title="Switch back to AI"
+              onClick={() => { setLiveMode(false); setMsgs([{ role: 'assistant', content: GREETING }]); }}
+            >
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" width="14" height="14">
+                <circle cx="10" cy="10" r="8" />
+                <path d="M7 10h6M10 7l3 3-3 3" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          )}
           <button className="kc-icon-btn" title="Clear conversation" onClick={clearChat}>
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" width="14" height="14">
               <path d="M3 5h14M8 5V3h4v2M6 5l1 12h6l1-12" strokeLinecap="round" strokeLinejoin="round" />
@@ -257,6 +382,14 @@ export default function KairosChat() {
         </div>
       </div>
 
+      {/* Live mode notice bar */}
+      {liveMode && (
+        <div className="kc-live-bar">
+          <span className="kc-live-bar-dot" />
+          You are chatting live with John Emman
+        </div>
+      )}
+
       {/* Messages — wrapped in SpotlightCard in dark mode */}
       {isDark ? (
         <SpotlightCard
@@ -266,7 +399,13 @@ export default function KairosChat() {
           <div ref={msgRef} className="kc-messages-inner">
             {messages.map((m, i) => (
               <div key={i} className={`kc-msg-row ${m.role === 'user' ? 'kc-row-user' : 'kc-row-ai'}`}>
-                {m.role === 'assistant' && <img src={kairosLogo} className="kc-avatar" alt="Kairos" />}
+                {m.role === 'assistant' && (
+                  <img
+                    src={liveMode ? jelAvatar : kairosLogo}
+                    className="kc-avatar"
+                    alt={liveMode ? 'JEL' : 'Kairos'}
+                  />
+                )}
                 <div
                   className={`kc-bubble ${m.role === 'user' ? 'kc-bubble-user' : 'kc-bubble-ai'}`}
                   dangerouslySetInnerHTML={{ __html: renderMd(m.content) }}
@@ -275,7 +414,11 @@ export default function KairosChat() {
             ))}
             {thinking && (
               <div className="kc-msg-row kc-row-ai">
-                <img src={kairosLogo} className="kc-avatar" alt="Kairos" />
+                <img
+                  src={liveMode ? jelAvatar : kairosLogo}
+                  className="kc-avatar"
+                  alt={liveMode ? 'JEL' : 'Kairos'}
+                />
                 <div className="kc-bubble kc-bubble-ai kc-thinking"><span /><span /><span /></div>
               </div>
             )}
@@ -285,24 +428,37 @@ export default function KairosChat() {
         <div className="kc-messages" ref={msgRef}>
           {messages.map((m, i) => (
             <div key={i} className={`kc-msg-row ${m.role === 'user' ? 'kc-row-user' : 'kc-row-ai'}`}>
-              {m.role === 'assistant' && <img src={kairosLogo} className="kc-avatar" alt="Kairos" />}
+              {m.role === 'assistant' && (
+                <img
+                  src={liveMode ? jelAvatar : kairosLogo}
+                  className="kc-avatar"
+                  alt={liveMode ? 'JEL' : 'Kairos'}
+                />
+              )}
               <div
                 className={`kc-bubble ${m.role === 'user' ? 'kc-bubble-user' : 'kc-bubble-ai'}`}
                 dangerouslySetInnerHTML={{ __html: renderMd(m.content) }}
               />
             </div>
           ))}
-          {thinking && (
+          {thinking && !liveMode && (
             <div className="kc-msg-row kc-row-ai">
               <img src={kairosLogo} className="kc-avatar" alt="Kairos" />
+              <div className="kc-bubble kc-bubble-ai kc-thinking"><span /><span /><span /></div>
+            </div>
+          )}
+          {/* Live mode: waiting for JEL to type */}
+          {liveMode && thinking && (
+            <div className="kc-msg-row kc-row-ai">
+              <img src={jelAvatar} className="kc-avatar" alt="JEL" />
               <div className="kc-bubble kc-bubble-ai kc-thinking"><span /><span /><span /></div>
             </div>
           )}
         </div>
       )}
 
-      {/* Suggestion chips */}
-      {messages.length === 1 && !thinking && (
+      {/* Suggestion chips (AI mode only, first message) */}
+      {messages.length === 1 && !thinking && !liveMode && (
         <div className="kc-suggestions">
           {SUGGESTIONS.map(s => (
             <button key={s} className="kc-chip" onClick={() => sendSuggestion(s)}>{s}</button>
@@ -310,12 +466,15 @@ export default function KairosChat() {
         </div>
       )}
 
+      {/* Online banner */}
+      {onlineBanner}
+
       {/* Input row */}
       <div className="kc-input-row">
         <textarea
           ref={inputRef}
           className="kc-input"
-          placeholder="Ask Kairos…"
+          placeholder={liveMode ? 'Message John Emman…' : 'Ask Kairos…'}
           rows={1}
           value={draft}
           onChange={e => setDraft(e.target.value)}
@@ -334,7 +493,9 @@ export default function KairosChat() {
         </button>
       </div>
 
-      <div className="kc-footer">Powered by Microsoft Copilot · Portfolio</div>
+      <div className="kc-footer">
+        {liveMode ? 'Live chat · John Emman Lanusga' : 'Powered by Microsoft Copilot · Portfolio'}
+      </div>
     </>
   );
 
@@ -353,10 +514,10 @@ export default function KairosChat() {
               backgroundColor="#0d0f1a"
               borderRadius={16}
               glowRadius={32}
-              glowColor="220 70 75"
+              glowColor={liveMode ? '120 200 80' : '220 70 75'}
               glowIntensity={0.85}
               coneSpread={20}
-              colors={['#6366f1', '#3b5bdb', '#818cf8']}
+              colors={liveMode ? ['#16a34a', '#22c55e', '#4ade80'] : ['#6366f1', '#3b5bdb', '#818cf8']}
               edgeSensitivity={25}
               animated
             >
@@ -365,7 +526,7 @@ export default function KairosChat() {
               </div>
             </BorderGlow>
           ) : (
-            <div className="kc-window" role="dialog" aria-label="Kairos AI Chat">
+            <div className={`kc-window${liveMode ? ' kc-window--live' : ''}`} role="dialog" aria-label="Kairos AI Chat">
               {chatContent}
             </div>
           )}
@@ -375,9 +536,9 @@ export default function KairosChat() {
       {/* ── FAB ── */}
       <div className="kc-root">
         <button
-          className={`kc-fab${open ? ' kc-fab-open' : ''}`}
+          className={`kc-fab${open ? ' kc-fab-open' : ''}${jelOnline && !open ? ' kc-fab--online' : ''}`}
           onClick={() => setOpen(o => !o)}
-          title={open ? 'Close chat' : 'Chat with Kairos'}
+          title={open ? 'Close chat' : jelOnline ? 'John Emman is online!' : 'Chat with Kairos'}
           aria-label="Toggle Kairos chat"
         >
           {open
@@ -387,6 +548,8 @@ export default function KairosChat() {
             : <img src={kairosLogo} className="kc-fab-logo" alt="Kairos" />
           }
         </button>
+        {/* Online presence dot on FAB */}
+        {jelOnline && !open && <span className="kc-fab-online-dot" title="JEL is online" />}
         {unread > 0 && !open && (
           <span className="kc-badge">{unread}</span>
         )}

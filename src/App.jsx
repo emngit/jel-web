@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import AdminPanel from './AdminPanel.jsx';
 import DarkVeil from './DarkVeil.jsx';
 import Particles from './Particles.jsx';
 import KairosChat from './KairosChat.jsx';
@@ -338,7 +339,9 @@ function GameSection() {
 // | $$  | $$| $$      | $$      
 // |__/  |__/|__/      |__/     
 function App() {
-  const [page, setPage]         = useState('home');
+  const [page, setPage]         = useState(
+    () => new URLSearchParams(window.location.search).has('admin') ? 'admin' : 'home'
+  );
   const [typeKey, setTypeKey]   = useState(0);
   const [badgeKey, setBadgeKey] = useState(0);
   const [visitors, setVisitors] = useState(null);
@@ -383,6 +386,10 @@ function App() {
 
   if (page === 'resume') {
     return <ResumePage onBack={() => { setPage('home'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />;
+  }
+
+  if (page === 'admin') {
+    return <AdminPanel />;
   }
 
   return (
