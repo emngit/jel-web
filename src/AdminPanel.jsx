@@ -1,39 +1,43 @@
 import { useState, useEffect, useRef } from 'react';
 import kairosLogo from './assets/images/logo-2.png';
 
-const ADMIN_SECRET = import.meta.env.VITE_ADMIN_SECRET ?? '';
+const BUNDLED_SECRET = import.meta.env.VITE_ADMIN_SECRET ?? '';
 
-async function apiStatus() {
-  const res = await fetch('/api/status', { headers: { 'x-admin-secret': ADMIN_SECRET } });
+// All API helpers accept the runtime secret so it works whether
+// VITE_ADMIN_SECRET was baked in at build time or typed by the user at login.
+async function apiStatus(secret) {
+  const res = await fetch('/api/status', { headers: { 'x-admin-secret': secret } });
   return res.json();
 }
 
-async function apiSetOnline(online) {
+async function apiSetOnline(online, secret) {
   const res = await fetch('/api/status', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-admin-secret': ADMIN_SECRET },
+    headers: { 'Content-Type': 'application/json', 'x-admin-secret': secret },
     body: JSON.stringify({ online }),
   });
   return res.json();
 }
 
-async function apiSessions() {
-  const res = await fetch('/api/sessions', { headers: { 'x-admin-secret': ADMIN_SECRET } });
+async function apiSessions(secret) {
+  const res = await fetch('/api/sessions', { headers: { 'x-admin-secret': secret } });
   return res.json();
 }
 
-async function apiReply(session, text) {
+async function apiReply(session, text, secret) {
   const res = await fetch('/api/messages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ session, role: 'assistant', text, secret: ADMIN_SECRET }),
+    body: JSON.stringify({ session, role: 'assistant', text, secret }),
   });
   return res.json();
 }
 
 export default function AdminPanel() {
-  const [authed, setAuthed]       = useState(!!ADMIN_SECRET);
-  const [secretInput, setSecret]  = useState('');
+  // runtimeSecret: use baked-in env var if available, otherwise what the user typed
+  const [runtimeSecret, setRuntimeSecret] = useState(BUNDLED_SECRET);
+  const [authed, setAuthed]               = useState(!!BUNDLED_SECRET);
+  const [secretInput, setSecret]          = useState('');
   const [online, setOnline]       = useState(false);
   const [toggling, setToggling]   = useState(false);
   const [sessions, setSessions]   = useState([]);
@@ -43,25 +47,25 @@ export default function AdminPanel() {
   const pollRef                   = useRef(null);
 
   // ── Fetch status + sessions ───────────────────────────────────────────────
-  async function refresh() {
+  async function refresh(secret) {
     try {
-      const [st, se] = await Promise.all([apiStatus(), apiSessions()]);
+      const [st, se] = await Promise.all([apiStatus(secret), apiSessions(secret)]);
       setOnline(st.online ?? false);
       setSessions(se.sessions ?? []);
     } catch { /* ignore */ }
   }
 
   useEffect(() => {
-    if (!authed) return;
-    refresh();
-    pollRef.current = setInterval(refresh, 5_000);
+    if (!authed || !runtimeSecret) return;
+    refresh(runtimeSecret);
+    pollRef.current = setInterval(() => refresh(runtimeSecret), 5_000);
     return () => clearInterval(pollRef.current);
-  }, [authed]);
+  }, [authed, runtimeSecret]);
 
   // ── Toggle online status ──────────────────────────────────────────────────
   async function toggleOnline() {
     setToggling(true);
-    const result = await apiSetOnline(!online);
+    const result = await apiSetOnline(!online, runtimeSecret);
     if (result.online !== undefined) setOnline(result.online);
     setToggling(false);
   }
@@ -72,7 +76,7 @@ export default function AdminPanel() {
     const text = reply.trim();
     if (!text || !activeId) return;
     setSending(true);
-    await apiReply(activeId, text);
+    await apiReply(activeId, text, runtimeSecret);
     setReply('');
     await refresh();
     setSending(false);
@@ -87,7 +91,13 @@ export default function AdminPanel() {
         <div className="ap-gate-card">
           <img src={kairosLogo} alt="Kairos" className="ap-gate-logo" />
           <h2 className="ap-gate-title">Admin Access</h2>
-          <form onSubmit={e => { e.preventDefault(); if (secretInput) setAuthed(true); }}>
+          <form onSubmit={e => {
+            e.preventDefault();
+            if (secretInput) {
+              setRuntimeSecret(secretInput);
+              setAuthed(true);
+            }
+          }}>
             <input
               type="password"
               className="ap-gate-input"
