@@ -335,7 +335,7 @@ img { display: block; max-width: 100%; }
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 5rem 2rem 4rem;
+  padding: 2.5rem 2rem 2rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
@@ -1340,11 +1340,17 @@ img { display: block; max-width: 100%; }
 .mastfoot {
   margin-top: auto;
   padding: 1.75rem 2rem;
-  text-align: center;
   font-size: 12px;
   color: var(--ink-faint);
   border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
+.mastfoot p { margin: 0; text-align: center; }
+.mastfoot-visitors { margin-left: auto; white-space: nowrap; }
 .mastfoot a { color: var(--ink-muted); transition: color 0.2s; }
 .mastfoot a:hover { color: var(--ink); }
 

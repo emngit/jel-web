@@ -341,7 +341,16 @@ function App() {
   const [page, setPage]         = useState('home');
   const [typeKey, setTypeKey]   = useState(0);
   const [badgeKey, setBadgeKey] = useState(0);
+  const [visitors, setVisitors] = useState(null);
   const hoverCooldown           = useRef(false);
+
+  // ── Visitor counter ────────────────────────────────────────
+  useEffect(() => {
+    fetch('https://api.countapi.xyz/hit/emmanlanusga.github.io/visits')
+      .then((r) => r.json())
+      .then((d) => setVisitors(d.value))
+      .catch(() => {});
+  }, []);
 
   // ── Dark mode + diagonal wipe ──────────────────────────────
   const [dark, setDark]           = useState(false);
@@ -832,8 +841,13 @@ function App() {
         <p>
           Portfolio <a href="/">site</a> of{' '}
           <a href="mailto:emmanlanusga@gmail.com">emmanlanusga@gmail.com</a>
-          {' '}· John Emman Lanusga · Philippines
+          {' '}· <strong>John Emman Lanusga</strong> · Philippines
         </p>
+        {visitors !== null && (
+          <p className="mastfoot-visitors">
+            <strong>{visitors.toLocaleString()} Visitors</strong>
+          </p>
+        )}
       </footer>
 
       {/* 
