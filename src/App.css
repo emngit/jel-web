@@ -334,7 +334,7 @@ img { display: block; max-width: 100%; }
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 4rem 2rem;
+  padding: 5.5rem 2rem 4rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
