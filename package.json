@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@upstash/redis": "^1.38.2",
     "framer-motion": "^13.1.0",
     "ogl": "^1.0.11",
     "react": "^18.3.1",
