@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import kairosLogo from './assets/images/logo-2.png';
 
-const BUNDLED_SECRET = import.meta.env.VITE_ADMIN_SECRET ?? '';
+// Never bake the secret into the client bundle — always prompt at login.
+const BUNDLED_SECRET = '';
 
-// All API helpers accept the runtime secret so it works whether
-// VITE_ADMIN_SECRET was baked in at build time or typed by the user at login.
+// All API helpers accept the runtime secret typed at the gate.
 async function apiStatus(secret) {
   const res = await fetch('/api/status', { headers: { 'x-admin-secret': secret } });
   return res.json();
@@ -34,9 +34,9 @@ async function apiReply(session, text, secret) {
 }
 
 export default function AdminPanel() {
-  // runtimeSecret: use baked-in env var if available, otherwise what the user typed
-  const [runtimeSecret, setRuntimeSecret] = useState(BUNDLED_SECRET);
-  const [authed, setAuthed]               = useState(!!BUNDLED_SECRET);
+  // runtimeSecret: always set from what the user types at the gate
+  const [runtimeSecret, setRuntimeSecret] = useState('');
+  const [authed, setAuthed]               = useState(false);
   const [secretInput, setSecret]          = useState('');
   const [online, setOnline]       = useState(false);
   const [toggling, setToggling]   = useState(false);
