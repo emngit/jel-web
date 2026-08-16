@@ -344,11 +344,11 @@ function App() {
   const [visitors, setVisitors] = useState(null);
   const hoverCooldown           = useRef(false);
 
-  // ── Visitor counter ────────────────────────────────────────
+  // ── Visitor counter (proxied via /api/visitors to avoid CORS) ─────────────
   useEffect(() => {
-    fetch('https://api.counterapi.dev/v1/emmanlanusga/visits/up')
+    fetch('/api/visitors')
       .then((r) => r.json())
-      .then((d) => setVisitors(d.count))
+      .then((d) => { if (d.count !== null) setVisitors(d.count); })
       .catch(() => {});
   }, []);
 
