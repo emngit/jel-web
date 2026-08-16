@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import DarkVeil from './DarkVeil.jsx';
+import Particles from './Particles.jsx';
 import KairosChat from './KairosChat.jsx';
 import galleryImg1  from './assets/images/Gallery/Random (1).jpeg';
 import galleryImg2  from './assets/images/Gallery/Random (1).jpg';
@@ -18,7 +20,9 @@ import galleryImg15 from './assets/images/Gallery/Random (13).jpg';
 import galleryImg16 from './assets/images/Gallery/Random (14).jpg';
 import galleryImg17 from './assets/images/Gallery/Random (15).jpg';
 import logo from './assets/images/My_LOGO.png';
+import logoWhite from './assets/images/My_LOGO-white.png';
 import logoFace from './assets/images/My_LOGO_FINAL-for_DECALS.png';
+import logoFaceWhite from './assets/images/My_LOGO_FINAL-for_DECALS-white-contrast.png';
 import portal from './assets/images/PORTAL.png';
 import resume from './assets/images/LANUSGA_JEL_CV.pdf';
 import PortalGateway from './PortalGateway.jsx';
@@ -26,6 +30,7 @@ import kairosPriority from './assets/images/Kairos/JIRA-Priority.png';
 import kairosLogin from './assets/images/Kairos/Login-Page.png';
 import kadaTiponStart from './assets/images/Kada Tipon/Kada-Tipon-Start.png';
 import kadaTiponHowTo from './assets/images/Kada Tipon/Kada-Tipon-How-To.png';
+import Stack from './Stack.jsx';
 import './App.css';
 import Typewriter from 'typewriter-effect';
 import ResumePage from './ResumePage.jsx';
@@ -179,7 +184,7 @@ const sketches = [
 // |  $$$$$$/| $$  | $$| $$$$$$$$| $$$$$$$$| $$$$$$$$| $$  | $$    | $$          |  $$$$$$/| $$$$$$$$|  $$$$$$/   | $$    /$$$$$$|  $$$$$$/| $$ \  $$
 //  \______/ |__/  |__/|________/|________/|________/|__/  |__/    |__/           \______/ |________/ \______/    |__/   |______/ \______/ |__/  \__/
 function GallerySection() {
-  const [active, setActive] = useState(null); // index of open lightbox item
+  const [active, setActive] = useState(null);
 
   const open  = useCallback((i) => setActive(i), []);
   const close = useCallback(() => setActive(null), []);
@@ -207,28 +212,38 @@ function GallerySection() {
   return (
     <section id="gallery" className="gallery-section" aria-label="Sketches and Gallery">
       <div className="container">
-        <p className="section-label">Creative</p>
-        <h2 className="section-title">Sketches / Gallery</h2>
-        <p className="section-sub">
-          A personal collection of sketches, ideas, illustrations, and photography.
-        </p>
+        <div className="gallery-stack-layout">
+          {/* Left 70% — description */}
+          <div className="gallery-stack-info">
+            <p className="section-label">Creative</p>
+            <h2 className="section-title">Sketches / Gallery</h2>
+            <p className="section-sub">
+              A personal collection of sketches, ideas, illustrations, and photography.
+            </p>
+            <p className="gallery-stack-hint">Drag or click a card to flip through</p>
+          </div>
 
-        <div className="gallery-grid">
-          {sketches.map((s, i) => (
-            <button
-              key={i}
-              className="gallery-card"
-              onClick={() => open(i)}
-              aria-label={`Open ${s.title}`}
-            >
-              <div className="gallery-card-thumb">
-                <img src={s.src} alt={s.title} loading="lazy" className="gallery-card-img" />
-              </div>
-              <div className="gallery-card-footer">
-                <span className="gallery-card-title">{s.title}</span>
-              </div>
-            </button>
-          ))}
+          {/* Right 30% — Stack */}
+          <div className="gallery-stack-visual">
+            <Stack
+              randomRotation={true}
+              sensitivity={180}
+              sendToBackOnClick={true}
+              autoplay={true}
+              autoplayDelay={2500}
+              pauseOnHover={true}
+              cards={sketches.map((s, i) => (
+                <img
+                  key={i}
+                  src={s.src}
+                  alt={s.title}
+                  loading="lazy"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  onClick={() => open(i)}
+                />
+              ))}
+            />
+          </div>
         </div>
       </div>
 
@@ -324,9 +339,30 @@ function GameSection() {
 // |__/  |__/|__/      |__/     
 function App() {
   const [page, setPage]         = useState('home');
-  const [typeKey, setTypeKey]   = useState(0);   // re-mount Typewriter on hover
-  const [badgeKey, setBadgeKey] = useState(0);   // re-mount badges on visual hover
+  const [typeKey, setTypeKey]   = useState(0);
+  const [badgeKey, setBadgeKey] = useState(0);
   const hoverCooldown           = useRef(false);
+
+  // ── Dark mode + diagonal wipe ──────────────────────────────
+  const [dark, setDark]           = useState(false);
+  const [wipeState, setWipeState] = useState('hidden'); // 'hidden' | 'in' | 'out'
+
+  const toggleDark = () => {
+    // 1. Show the overlay covering the screen (wipe-in = full cover)
+    setWipeState('in');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        // 2. On next frame flip the theme under the overlay
+        const next = !dark;
+        setDark(next);
+        document.documentElement.setAttribute('data-theme', next ? 'dark' : 'light');
+        // 3. Sweep the overlay away diagonally (wipe-out)
+        setWipeState('out');
+        // 4. Hide overlay completely after animation ends
+        setTimeout(() => setWipeState('hidden'), 700);
+      });
+    });
+  };
 
   // Re-trigger typewriter on headline hover (with cooldown so it doesn't spam)
   const handleHeadlineHover = () => {
@@ -343,6 +379,36 @@ function App() {
   return (
     <div className="site-wrapper">
 
+      {/* ── DarkVeil WebGL background ── */}
+      <div className="darkveil-bg">
+        <DarkVeil
+          hueShift={200}
+          speed={0.35}
+          warpAmount={0.5}
+          noiseIntensity={0.04}
+          scanlineIntensity={0.12}
+          scanlineFrequency={800}
+          resolutionScale={0.6}
+        />
+        <Particles
+          particleColors={['#a78bfa', '#818cf8', '#ffffff']}
+          particleCount={180}
+          particleSpread={12}
+          speed={0.08}
+          particleBaseSize={80}
+          moveParticlesOnHover={true}
+          particleHoverFactor={0.6}
+          alphaParticles={true}
+          sizeRandomness={0.8}
+          disableRotation={false}
+        />
+      </div>
+
+      {/* ── Diagonal wipe overlay ── */}
+      {wipeState !== 'hidden' && (
+        <div className={`wipe-overlay ${wipeState === 'out' ? 'wipe-out' : ''}`} aria-hidden="true" />
+      )}
+
       {/*
       //  /$$   /$$  /$$$$$$  /$$    /$$
       // | $$$ | $$ /$$__  $$| $$   | $$
@@ -356,7 +422,7 @@ function App() {
       <header className="masthead">
         <div className="masthead-inner">
           <a href="#" className="navbar-brand" aria-label="JEL Home">
-            <img src={logo} alt="JEL logo" style={{ height: 48, width: 70 }} />
+            <img src={dark ? logoWhite : logo} alt="JEL logo" style={{ height: 48, width: 70 }} />
           </a>
           <nav aria-label="Main navigation">
             <ul className="masthead-nav">
@@ -374,6 +440,18 @@ function App() {
                 >
                   Resume
                 </a>
+              </li>
+              <li>
+                <button
+                  className="dm-toggle"
+                  onClick={toggleDark}
+                  aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+                  title={dark ? 'Light mode' : 'Dark mode'}
+                >
+                  <span className="dm-toggle-thumb">
+                    {dark ? '☀' : '☾'}
+                  </span>
+                </button>
               </li>
             </ul>
           </nav>
@@ -443,7 +521,7 @@ function App() {
               className="hero-visual"
               onMouseEnter={() => setBadgeKey((k) => k + 1)}
             >
-              <img src={logoFace} alt="John Emman Lanusga" className="hero-logo-img" />
+              <img src={dark ? logoFaceWhite : logoFace} alt="John Emman Lanusga" className="hero-logo-img" />
 
               <div className="floating-badges" aria-hidden="true" key={badgeKey}>
                 <div className="badge badge--sf" style={{ animationDelay: '0.05s' }}>
@@ -489,7 +567,7 @@ function App() {
           <div className="projects-grid">
             {projects.map((p) => (
               <article key={p.title} className="project-card">
-                <div className="project-thumb project-thumb--screenshots">
+                <div className="project-thumb--screenshots">
                   {p.images.map((src, i) => (
                     <img key={i} src={src} alt={`${p.title} screenshot ${i + 1}`} className="project-thumb-img" />
                   ))}

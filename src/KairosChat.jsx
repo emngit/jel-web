@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import kairosLogo from './assets/images/logo-2.png';
 import KairosMascot from './KairosMascot.jsx';
+import BorderGlow from './BorderGlow.jsx';
+import SpotlightCard from './SpotlightCard.jsx';
 
 // ── Personal knowledge — injected into every system prompt ────────────────────
 const KAIROS_SYSTEM_PROMPT = `You are Kairos, an AI assistant on the personal portfolio website of John Emman Lanusga.
@@ -144,6 +146,9 @@ export default function KairosChat() {
   const [draft, setDraft]    = useState('');
   const [thinking, setThink] = useState(false);
   const [unread, setUnread]  = useState(0);
+  const [isDark, setIsDark]  = useState(
+    () => document.documentElement.getAttribute('data-theme') === 'dark'
+  );
 
   const msgRef    = useRef(null);
   const inputRef  = useRef(null);
@@ -167,6 +172,14 @@ export default function KairosChat() {
     requestAnimationFrame(() => {
       if (msgRef.current) msgRef.current.scrollTop = msgRef.current.scrollHeight;
     });
+  }, []);
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.getAttribute('data-theme') === 'dark');
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => { if (open) { setUnread(0); setTimeout(() => inputRef.current?.focus(), 80); } }, [open]);
@@ -224,6 +237,116 @@ export default function KairosChat() {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
   };
 
+  // Reusable inner chat content
+  const chatContent = (
+    <>
+      {/* Header */}
+      <div className="kc-header">
+        <div className="kc-header-left">
+          <img src={kairosLogo} className="kc-logo" alt="Kairos" />
+          <div>
+            <div className="kc-header-name">Kairos</div>
+            <div className="kc-header-status">
+              <span className="kc-status-dot" />
+              Microsoft Copilot · Portfolio
+            </div>
+          </div>
+        </div>
+        <div className="kc-header-actions">
+          <button className="kc-icon-btn" title="Clear conversation" onClick={clearChat}>
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" width="14" height="14">
+              <path d="M3 5h14M8 5V3h4v2M6 5l1 12h6l1-12" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <button className="kc-icon-btn" title="Close" onClick={() => setOpen(false)}>
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" width="13" height="13">
+              <path d="M4 4l12 12M16 4L4 16" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Messages — wrapped in SpotlightCard in dark mode */}
+      {isDark ? (
+        <SpotlightCard
+          className="kc-messages kc-messages-spotlight"
+          spotlightColor="rgba(99, 102, 241, 0.18)"
+        >
+          <div ref={msgRef} className="kc-messages-inner">
+            {messages.map((m, i) => (
+              <div key={i} className={`kc-msg-row ${m.role === 'user' ? 'kc-row-user' : 'kc-row-ai'}`}>
+                {m.role === 'assistant' && <img src={kairosLogo} className="kc-avatar" alt="Kairos" />}
+                <div
+                  className={`kc-bubble ${m.role === 'user' ? 'kc-bubble-user' : 'kc-bubble-ai'}`}
+                  dangerouslySetInnerHTML={{ __html: renderMd(m.content) }}
+                />
+              </div>
+            ))}
+            {thinking && (
+              <div className="kc-msg-row kc-row-ai">
+                <img src={kairosLogo} className="kc-avatar" alt="Kairos" />
+                <div className="kc-bubble kc-bubble-ai kc-thinking"><span /><span /><span /></div>
+              </div>
+            )}
+          </div>
+        </SpotlightCard>
+      ) : (
+        <div className="kc-messages" ref={msgRef}>
+          {messages.map((m, i) => (
+            <div key={i} className={`kc-msg-row ${m.role === 'user' ? 'kc-row-user' : 'kc-row-ai'}`}>
+              {m.role === 'assistant' && <img src={kairosLogo} className="kc-avatar" alt="Kairos" />}
+              <div
+                className={`kc-bubble ${m.role === 'user' ? 'kc-bubble-user' : 'kc-bubble-ai'}`}
+                dangerouslySetInnerHTML={{ __html: renderMd(m.content) }}
+              />
+            </div>
+          ))}
+          {thinking && (
+            <div className="kc-msg-row kc-row-ai">
+              <img src={kairosLogo} className="kc-avatar" alt="Kairos" />
+              <div className="kc-bubble kc-bubble-ai kc-thinking"><span /><span /><span /></div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Suggestion chips */}
+      {messages.length === 1 && !thinking && (
+        <div className="kc-suggestions">
+          {SUGGESTIONS.map(s => (
+            <button key={s} className="kc-chip" onClick={() => sendSuggestion(s)}>{s}</button>
+          ))}
+        </div>
+      )}
+
+      {/* Input row */}
+      <div className="kc-input-row">
+        <textarea
+          ref={inputRef}
+          className="kc-input"
+          placeholder="Ask Kairos…"
+          rows={1}
+          value={draft}
+          onChange={e => setDraft(e.target.value)}
+          onKeyDown={onKeyDown}
+          onInput={autoResize}
+        />
+        <button
+          className="kc-send-btn"
+          disabled={!draft.trim() || thinking}
+          onClick={send}
+          title="Send (Enter)"
+        >
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+            <path d="M2.94 17.05l14.58-7.07a.5.5 0 000-.9L2.94 2.01a.5.5 0 00-.7.54l1.2 5.22a.5.5 0 00.43.39l7.43.83a.1.1 0 010 .2l-7.43.83a.5.5 0 00-.43.39l-1.2 5.23a.5.5 0 00.7.54z" />
+          </svg>
+        </button>
+      </div>
+
+      <div className="kc-footer">Powered by Microsoft Copilot · Portfolio</div>
+    </>
+  );
+
   return (
     <>
       {/* ── Mascot + Chat window side-by-side ── */}
@@ -232,96 +355,29 @@ export default function KairosChat() {
           <div className="kc-mascot-panel">
             <KairosMascot ref={mascotRef} idleDelay={4000} />
           </div>
-          <div className="kc-window" role="dialog" aria-label="Kairos AI Chat">
 
-          {/* Header */}
-          <div className="kc-header">
-            <div className="kc-header-left">
-              <img src={kairosLogo} className="kc-logo" alt="Kairos" />
-              <div>
-                <div className="kc-header-name">Kairos</div>
-                <div className="kc-header-status">
-                  <span className="kc-status-dot" />
-                  Microsoft Copilot · Portfolio
-                </div>
+          {isDark ? (
+            <BorderGlow
+              className="kc-window"
+              backgroundColor="#0d0f1a"
+              borderRadius={16}
+              glowRadius={32}
+              glowColor="220 70 75"
+              glowIntensity={0.85}
+              coneSpread={20}
+              colors={['#6366f1', '#3b5bdb', '#818cf8']}
+              edgeSensitivity={25}
+              animated
+            >
+              <div role="dialog" aria-label="Kairos AI Chat" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                {chatContent}
               </div>
-            </div>
-            <div className="kc-header-actions">
-              {/* Clear */}
-              <button className="kc-icon-btn" title="Clear conversation" onClick={clearChat}>
-                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" width="14" height="14">
-                  <path d="M3 5h14M8 5V3h4v2M6 5l1 12h6l1-12" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-              {/* Close */}
-              <button className="kc-icon-btn" title="Close" onClick={() => setOpen(false)}>
-                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" width="13" height="13">
-                  <path d="M4 4l12 12M16 4L4 16" strokeLinecap="round" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          {/* Messages */}
-          <div className="kc-messages" ref={msgRef}>
-            {messages.map((m, i) => (
-              <div key={i} className={`kc-msg-row ${m.role === 'user' ? 'kc-row-user' : 'kc-row-ai'}`}>
-                {m.role === 'assistant' && (
-                  <img src={kairosLogo} className="kc-avatar" alt="Kairos" />
-                )}
-                <div
-                  className={`kc-bubble ${m.role === 'user' ? 'kc-bubble-user' : 'kc-bubble-ai'}`}
-                  dangerouslySetInnerHTML={{ __html: renderMd(m.content) }}
-                />
-              </div>
-            ))}
-
-            {/* Typing dots */}
-            {thinking && (
-              <div className="kc-msg-row kc-row-ai">
-                <img src={kairosLogo} className="kc-avatar" alt="Kairos" />
-                <div className="kc-bubble kc-bubble-ai kc-thinking">
-                  <span /><span /><span />
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Suggestion chips — first message only */}
-          {messages.length === 1 && !thinking && (
-            <div className="kc-suggestions">
-              {SUGGESTIONS.map(s => (
-                <button key={s} className="kc-chip" onClick={() => sendSuggestion(s)}>{s}</button>
-              ))}
+            </BorderGlow>
+          ) : (
+            <div className="kc-window" role="dialog" aria-label="Kairos AI Chat">
+              {chatContent}
             </div>
           )}
-
-          {/* Input row */}
-          <div className="kc-input-row">
-            <textarea
-              ref={inputRef}
-              className="kc-input"
-              placeholder="Ask Kairos…"
-              rows={1}
-              value={draft}
-              onChange={e => setDraft(e.target.value)}
-              onKeyDown={onKeyDown}
-              onInput={autoResize}
-            />
-            <button
-              className="kc-send-btn"
-              disabled={!draft.trim() || thinking}
-              onClick={send}
-              title="Send (Enter)"
-            >
-              <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-                <path d="M2.94 17.05l14.58-7.07a.5.5 0 000-.9L2.94 2.01a.5.5 0 00-.7.54l1.2 5.22a.5.5 0 00.43.39l7.43.83a.1.1 0 010 .2l-7.43.83a.5.5 0 00-.43.39l-1.2 5.23a.5.5 0 00.7.54z" />
-              </svg>
-            </button>
-          </div>
-
-          <div className="kc-footer">Powered by Microsoft Copilot · Portfolio</div>
-          </div>
         </div>
       )}
 
