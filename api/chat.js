@@ -27,9 +27,18 @@ module.exports = async function handler(req, res) {
     });
     if (!tokenRes.ok) {
       const err = await tokenRes.text().catch(() => tokenRes.statusText);
-      return res.status(502).json({ error: `Copilot token exchange ${tokenRes.status}: ${err}` });
+      return res.status(502).json({ error: `Copilot token exchange ${tokenRes.status}: token may be expired or invalid.` });
     }
-    const { token } = await tokenRes.json();
+    const tokenBody = await tokenRes.text();
+    let token;
+    try {
+      token = JSON.parse(tokenBody).token;
+    } catch {
+      return res.status(502).json({ error: `Copilot token exchange returned non-JSON response. Token may be expired.` });
+    }
+    if (!token) {
+      return res.status(502).json({ error: `Copilot token exchange succeeded but returned no token.` });
+    }
 
     // Step 2: call the Copilot completions API with the short-lived token
     const chatRes = await fetch('https://api.githubcopilot.com/chat/completions', {
