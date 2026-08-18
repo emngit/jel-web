@@ -162,6 +162,12 @@ function renderMd(text) {
     .replace(/^[-•] (.+)$/gm, '<li>$1</li>')
     .replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>')
     .replace(/((<li>[^]*?<\/li>\n?)+)/g, '<ul>$1</ul>')
+    // Markdown links [text](url)
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+    // Bare URLs
+    .replace(/(^|[\s(>])((https?:\/\/)[^\s<)"]+)/g, '$1<a href="$2" target="_blank" rel="noopener noreferrer">$2</a>')
+    // Email addresses
+    .replace(/(^|[\s(>])([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/g, '$1<a href="mailto:$2">$2</a>')
     .replace(/\n/g, '<br />');
 }
 
