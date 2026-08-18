@@ -3,7 +3,8 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 import badge    from './assets/images/BADGE.jpg';
 import surprised from './assets/images/Suprised.png';
 import sleepy    from './assets/images/Sleepy.png';
-import logo from './assets/images/My_LOGO.png';
+import logoDark  from './assets/images/My_LOGO-white.png';
+import logoLight from './assets/images/My_LOGO.png';
 import resumePdf from './assets/images/LANUSGA_JEL_CV.pdf';
 import './ResumePage.css';
 
@@ -233,7 +234,7 @@ export default function ResumePage({ onBack }) {
       <header className={`rp-nav${scrolled ? ' rp-nav--scrolled' : ''}`}>
         <div className="rp-nav-inner">
           <a href="#" className="rp-nav-brand" aria-label="JEL Home" onClick={(e) => { e.preventDefault(); onBack(); }}>
-            <img src={logo} alt="JEL logo" style={{ height: 38, width: 56 }} />
+            <img src={dark ? logoDark : logoLight} alt="JEL logo" style={{ height: 38, width: 56 }} />
           </a>
           <nav className="rp-nav-links" aria-label="Resume navigation">
             <a href="#summary">Summary</a>
