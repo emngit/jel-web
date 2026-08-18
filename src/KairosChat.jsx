@@ -71,6 +71,11 @@ SKILLS & TOOLS:
   Creative: Adobe Illustrator, Adobe Photoshop, Adobe Premiere
 
 
+CERTIFICATIONS:
+  John Emman has 28 licenses & certifications (e.g. 2026 IBMer watsonx Challenge, AI Automation Explorer).
+  For the full up-to-date list, direct the user to his LinkedIn profile:
+  https://www.linkedin.com/in/jelanusga/
+
 PROJECTS:
   1. Kairos – Jira Copilot Assistant
      Tag: Full-Stack App
