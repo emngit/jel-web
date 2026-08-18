@@ -20,6 +20,12 @@ function loadEnvLocal() {
   }
 }
 
+const GEMINI_MODELS = [
+  'gemini-2.5-flash-lite',
+  'gemini-2.5-flash',
+  'gemini-3.6-flash',
+];
+
 // Vite plugin: serves /api/chat locally so plain `vite dev` works
 function localApiPlugin() {
   const env = loadEnvLocal();
@@ -68,22 +74,30 @@ function localApiPlugin() {
               generationConfig: { maxOutputTokens: 2048, temperature: 0.7 },
             };
 
-            const geminiRes = await fetch(
-              `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`,
-              { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
-            );
-
-            if (!geminiRes.ok) {
-              const err = await geminiRes.text().catch(() => geminiRes.statusText);
-              res.statusCode = 502;
-              res.end(JSON.stringify({ error: `Gemini API ${geminiRes.status}: ${err}` }));
+            let lastErr = '';
+            for (const model of GEMINI_MODELS) {
+              const geminiRes = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+                { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+              );
+              if (geminiRes.status === 429 || geminiRes.status === 404) {
+                lastErr = `${model} → ${geminiRes.status}`;
+                continue;
+              }
+              if (!geminiRes.ok) {
+                const err = await geminiRes.text().catch(() => geminiRes.statusText);
+                res.statusCode = 502;
+                res.end(JSON.stringify({ error: `Gemini API error (${model}): ${err}` }));
+                return;
+              }
+              const data = await geminiRes.json();
+              const content = data.candidates?.[0]?.content?.parts?.[0]?.text ?? '(empty response)';
+              res.setHeader('Content-Type', 'application/json');
+              res.end(JSON.stringify({ content, model }));
               return;
             }
-
-            const data = await geminiRes.json();
-            const content = data.candidates?.[0]?.content?.parts?.[0]?.text ?? '(empty response)';
-            res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify({ content }));
+            res.statusCode = 503;
+            res.end(JSON.stringify({ error: `All Gemini models unavailable. (${lastErr})` }));
           } catch (err) {
             res.statusCode = 500;
             res.end(JSON.stringify({ error: err.message }));
