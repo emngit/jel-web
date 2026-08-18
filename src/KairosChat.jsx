@@ -15,7 +15,7 @@ ABOUT JOHN EMMAN LANUSGA:
   Location: Naga City, Camarines Sur, Philippines
   Email: emmanlanusga@gmail.com
   LinkedIn: https://www.linkedin.com/in/jelanusga/
-  Role: QA Analyst & Automation Engineer | Certified Salesforce Administrator
+  Role: QA Analyst & Automation Engineer
 
 CURRENT ROLE:
   • Process Delivery Specialist – Order To Cash at IBM (July 2025 – Present)
@@ -70,8 +70,6 @@ SKILLS & TOOLS:
   Operations: Order To Cash (OTC), Process Management
   Creative: Adobe Illustrator, Adobe Photoshop, Adobe Premiere
 
-// CERTIFICATIONS:
-//   • Salesforce Certified Administrator (SCA) — Salesforce, June 2024
 
 PROJECTS:
   1. Kairos – Jira Copilot Assistant
@@ -110,7 +108,7 @@ CONTACT:
 
 ABOUT HIM:
   John Emman is a detail-oriented, systematic, and creative QA Analyst with a passion for building
-  reliable software. As a Certified Salesforce Administrator and Test Analyst, he bridges the gap
+  reliable software. As a Test Analyst, he bridges the gap
   between technical execution and business value, ensuring every release ships with confidence.
   He is Philippine-based, specialising in Salesforce testing, quality assurance, and user experience
   optimisation.
