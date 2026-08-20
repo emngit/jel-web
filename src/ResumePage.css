@@ -132,24 +132,9 @@
 
 .rp-nav-links a:hover { color: var(--rp-ink); }
 
-/* ── Theme toggle button ── */
-.rp-theme-btn {
-  flex-shrink: 0;
-  background: none;
-  border: 1px solid var(--rp-border);
-  border-radius: 8px;
-  padding: 6px 10px;
-  font-size: 14px;
-  line-height: 1;
-  color: var(--rp-ink-muted);
-  cursor: pointer;
-  transition: border-color 0.2s, color 0.2s, background 0.2s;
-}
-
-.rp-theme-btn:hover {
-  border-color: var(--rp-border-hover);
-  color: var(--rp-ink);
-  background: var(--rp-bg-subtle);
+/* ── Theme toggle button — reuse global .dm-toggle pill ── */
+.rp-nav-inner .dm-toggle {
+  margin-left: 0;
 }
 
 /* ── Back button ── */

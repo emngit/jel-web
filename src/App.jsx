@@ -601,7 +601,11 @@ function App() {
   };
 
   if (page === 'resume') {
-    return <ResumePage onBack={() => { setPage('home'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />;
+    return <ResumePage
+      dark={dark}
+      onToggleDark={toggleDark}
+      onBack={() => { setPage('home'); window.scrollTo({ top: 0, behavior: 'instant' }); }}
+    />;
   }
 
   if (page === 'project') {

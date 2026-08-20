@@ -184,11 +184,10 @@ function SectionHeader({ label, title }) {
 // | $$ \/  | $$| $$  | $$ /$$$$$$| $$ \  $$
 // |__/     |__/|__/  |__/|______/|__/  \__/
  */
-export default function ResumePage({ onBack }) {
+export default function ResumePage({ onBack, dark, onToggleDark }) {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 30 });
   const [scrolled, setScrolled] = useState(false);
-  const [dark, setDark] = useState(false);
   const [photoHovered, setPhotoHovered] = useState(false);
 
   useEffect(() => {
@@ -244,12 +243,12 @@ export default function ResumePage({ onBack }) {
             <a href="#certifications">Certifications</a>
           </nav>
           <button
-            className="rp-theme-btn"
-            onClick={() => setDark((d) => !d)}
+            className="dm-toggle"
+            onClick={onToggleDark}
             aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
             title={dark ? 'Light mode' : 'Dark mode'}
           >
-            {dark ? '☀' : '☾'}
+            <span className="dm-toggle-thumb">{dark ? '☀' : '☾'}</span>
           </button>
           <button className="rp-back-btn" onClick={onBack} aria-label="Back to portfolio">
             ← Portfolio

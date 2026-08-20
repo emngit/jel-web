@@ -24,6 +24,7 @@
   flex-direction: column;
   position: relative;
   z-index: 0;
+  /* Do NOT put overflow-x:hidden here — it breaks the thumbstrip scroll */
   transition: background 0.25s, color 0.25s;
   animation: pp-enter 0.30s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -48,7 +49,6 @@
 /* ── HEADER BAR ─────────────────────────────────────── */
 .pp-header {
   width: 100%;
-  height: 60px;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
@@ -56,23 +56,28 @@
   position: sticky;
   top: 0;
   z-index: 100;
+  box-sizing: border-box;
 }
 
 .pp-header-inner {
   max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
-  height: 100%;
-  padding: 0 24px;
+  min-height: 56px;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 10px;
+  box-sizing: border-box;
 }
 
 .pp-header-title {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  /* grow to fill available space, but shrink when tight */
+  flex: 1 1 0;
   min-width: 0;
   overflow: hidden;
 }
@@ -90,10 +95,11 @@
   border: 1px solid rgba(1, 118, 211, 0.18);
   border-radius: 999px;
   padding: 0.2rem 0.65rem;
+  /* hide on very small screens via media query */
 }
 
 .pp-header-name {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--ink);
   white-space: nowrap;
@@ -101,6 +107,7 @@
   text-overflow: ellipsis;
   margin: 0;
   line-height: 1.2;
+  min-width: 0;
 }
 
 /* Header right-side action group */
@@ -116,13 +123,13 @@
   margin-left: 0;
 }
 
-/* Back button — matches .rp-back-btn / nav-cta pill style */
+/* Back button */
 .pp-back-btn {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 0.45rem 1.1rem;
+  padding: 0.4rem 1rem;
   background: none;
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -147,16 +154,22 @@
 /* ── MAIN CONTENT ───────────────────────────────────── */
 .pp-main {
   flex: 1;
-  padding: 20px 24px 48px;
+  padding: 16px 16px 48px;
+  box-sizing: border-box;
+  width: 100%;
+  /* Clamp horizontal blowout here — NOT on .pp-root so thumbstrip can scroll */
+  overflow-x: hidden;
 }
 
 .pp-content {
   max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 70fr 30fr;
   gap: 14px;
   align-items: start;
+  box-sizing: border-box;
 }
 
 /* ── LEFT COLUMN ────────────────────────────────────── */
@@ -164,6 +177,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0; /* prevent flex child from overflowing */
 }
 
 /* Media Viewer */
@@ -218,7 +232,11 @@
 .pp-thumbstrip {
   display: flex;
   gap: 6px;
+  /* Allow scrolling within the strip — do NOT add overflow-x:hidden to any ancestor */
   overflow-x: auto;
+  overflow-y: visible;
+  width: 100%;
+  min-width: 0;
   padding-bottom: 4px;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
@@ -265,8 +283,10 @@
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
+  /* Keep overflow:hidden to maintain border-radius clipping on cover image */
   overflow: hidden;
   box-shadow: var(--shadow-md);
+  min-width: 0;
 }
 
 /* Cover Image */
@@ -361,7 +381,7 @@
 
 .pp-meta-row {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   padding: 7px 0;
   border-bottom: 1px solid var(--border);
@@ -381,6 +401,7 @@
   color: var(--ink-muted);
   text-align: right;
   font-weight: 500;
+  word-break: break-word;
 }
 
 .pp-meta-value--highlight {
@@ -405,7 +426,7 @@
   margin-top: 6px;
 }
 
-/* Tag pills — match .project-tech-badge exactly */
+/* Tag pills */
 .pp-tag {
   display: inline-flex;
   align-items: center;
@@ -418,6 +439,9 @@
   background: rgba(17, 17, 17, 0.04);
   border: 1px solid var(--border);
   transition: all 0.2s ease;
+  /* Prevent tags from ever growing wider than the column */
+  max-width: 100%;
+  overflow: hidden;
 }
 
 [data-theme="dark"] .pp-tag {
@@ -435,8 +459,13 @@
 }
 
 .pp-tag-icon {
-  width: 12px;
-  height: 12px;
+  /* Hard-clamp icon size — prevents CDN SVGs from rendering at native size */
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px;
+  min-height: 12px;
+  max-width: 12px;
+  max-height: 12px;
   object-fit: contain;
   display: block;
   flex-shrink: 0;
@@ -445,12 +474,14 @@
 /* ── KEY FEATURES SECTION ───────────────────────────── */
 .pp-features {
   max-width: 1280px;
+  width: 100%;
   margin: 20px auto 0;
   padding: 24px 28px;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
+  box-sizing: border-box;
 }
 
 .pp-features-heading {
@@ -578,31 +609,17 @@
   color: var(--ink-muted);
 }
 
-@media (max-width: 640px) {
-  .pp-feat-rules {
-    grid-template-columns: 1fr;
-  }
+/* ════════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════════ */
 
-  .pp-feat-tab-bar {
-    gap: 4px;
-  }
-
-  .pp-feat-tab {
-    font-size: 11px;
-    padding: 5px 11px;
-  }
-
-  .pp-features {
-    padding: 16px;
-  }
-}
-
-/* ── RESPONSIVE ─────────────────────────────────────── */
+/* Tablet (≤ 900px) — collapse two columns into one */
 @media (max-width: 900px) {
   .pp-content {
     grid-template-columns: 1fr;
   }
 
+  /* Sidebar card moves above the media viewer */
   .pp-right {
     order: -1;
   }
@@ -610,33 +627,119 @@
   .pp-cover {
     height: 110px;
   }
+
+  .pp-meta-row {
+    flex-wrap: wrap;
+  }
 }
 
-@media (max-width: 600px) {
+/* Large mobile (≤ 768px) */
+@media (max-width: 768px) {
   .pp-main {
-    padding: 12px 12px 32px;
-  }
-
-  .pp-header-inner {
-    padding: 0 12px;
-    gap: 8px;
-  }
-
-  .pp-header-name {
-    font-size: 13px;
-  }
-
-  .pp-back-btn {
-    font-size: 11px;
-    padding: 0.35rem 0.8rem;
+    padding: 12px 12px 40px;
   }
 
   .pp-content {
     gap: 10px;
   }
 
+  .pp-features {
+    padding: 16px 18px;
+  }
+
+  .pp-feat-rules {
+    grid-template-columns: 1fr;
+  }
+
+  .pp-feat-tab-bar {
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .pp-feat-tab {
+    font-size: 11px;
+    padding: 5px 11px;
+  }
+}
+
+/* Small mobile (≤ 480px) */
+@media (max-width: 480px) {
+  /* ── Header ── */
+  .pp-header-inner {
+    padding: 6px 12px;
+    gap: 6px;
+    min-height: 50px;
+  }
+
+  /* Hide category tag — saves ~70px for the title */
+  .pp-header-tag {
+    display: none;
+  }
+
+  .pp-header-name {
+    font-size: 14px;
+  }
+
+  .pp-header-actions {
+    gap: 6px;
+  }
+
+  .pp-back-btn {
+    font-size: 11px;
+    padding: 0.3rem 0.65rem;
+  }
+
+  /* ── Main ── */
+  .pp-main {
+    padding: 10px 10px 32px;
+  }
+
+  .pp-content {
+    gap: 8px;
+  }
+
+  /* ── Sidebar card ── */
+  .pp-cover {
+    height: 80px;
+  }
+
+  .pp-info-desc {
+    font-size: 13px;
+  }
+
+  .pp-meta-label,
+  .pp-meta-value {
+    font-size: 12px;
+  }
+
+  /* Stack label / value on very narrow screens */
+  .pp-meta-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+  }
+
+  .pp-meta-value {
+    text-align: left;
+  }
+
+  /* ── Thumbnail strip ── */
   .pp-thumb {
-    width: 80px;
-    height: 52px;
+    width: 76px;
+    height: 50px;
+  }
+
+  /* ── Features ── */
+  .pp-features {
+    padding: 12px 14px;
+    margin-top: 8px;
+  }
+
+  .pp-feat-desc {
+    font-size: 13px;
+  }
+
+  .pp-feat-rule-item {
+    padding: 10px 12px;
   }
 }
