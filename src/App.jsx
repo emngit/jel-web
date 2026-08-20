@@ -85,6 +85,7 @@ const skills = [
   { img: SI('vuedotjs', '41B883'),            name: 'Vue.js',               type: 'Framework' },
   { img: SI('react', '61DAFB'),               name: 'React',                type: 'Framework' },
   { img: SI('postgresql', '336791'),          name: 'PostgreSQL',           type: 'Database' },
+  { img: SI('sqlite', '003B57'),              name: 'SQLite',               type: 'Database' },
   { img: DVI('illustrator'),                  name: 'Adobe Illustrator',    type: 'Creative' },
   { img: DVI('photoshop'),                    name: 'Adobe Photoshop',      type: 'Creative' },
   { img: DVI('premierepro'),                  name: 'Adobe Premiere',       type: 'Creative' },
@@ -266,6 +267,7 @@ const projects = [
     tech: [
       { name: 'Vue.js 3', logo: SI('vuedotjs', '41B883') },
       { name: 'FastAPI', logo: SI('fastapi', '009688') },
+      { name: 'PostgreSQL', logo: SI('postgresql', '4169E1') },
       { name: 'Jira', logo: SI('jira', '0052CC') },
       { name: 'GitHub Copilot', logo: SI('githubcopilot', '24292e') },
     ],
