@@ -273,17 +273,18 @@ const projects = [
       { name: 'GitHub Copilot', logo: SI('githubcopilot', '24292e') },
     ],
     outcome: 'IBM OTC Team · In Active Use',
+    developers: ['John Emman Lanusga', 'Hannah Rodriguez'],
     featuresType: 'tabs',
     features: [
       {
         tab: 'JIRA Standardizer',
         use: 'Ticket Quality Control',
-        desc: 'Validates and standardizes JIRA ticket fields — summary, priority, assignee, and labels — against team conventions.',
+        desc: 'Validates and standardizes JIRA ticket fields - summary, priority, assignee, and labels - against team conventions.',
       },
       {
         tab: 'Priority List',
         use: 'Live Workload Enrichment',
-        desc: 'Uploads a CSV or XLSX exported from JIRA, cross-references each issue key against the live JIRA instance, and computes real-time Action Takens per assignee — giving team leads an instant workload snapshot.',
+        desc: 'Uploads a CSV or XLSX exported from JIRA, cross-references each issue key against the live JIRA instance, and computes real-time Action Takens per assignee - giving team leads an instant workload snapshot.',
       },
       {
         tab: 'Resolve360',
@@ -293,7 +294,7 @@ const projects = [
       {
         tab: 'Workforce Analytics',
         use: 'Monday.com Integration',
-        desc: 'Pulls headcount and task data from Monday.com boards to surface utilisation rates, bandwidth gaps, and team availability — presented as a dashboard for capacity planning.',
+        desc: 'Pulls headcount and task data from Monday.com boards to surface utilisation rates, bandwidth gaps, and team availability - presented as a dashboard for capacity planning.',
       },
       {
         tab: 'AI Assistant',
@@ -332,10 +333,10 @@ const projects = [
     outcome: 'Brainstorming...',
     featuresType: 'rules',
     features: [
-      { rule: 'Choose Your Path',   desc: 'Pick Tiyo the Carabao (security-first) or Rico the Fox (growth-first) — each path unlocks different missions and financial strategies.' },
+      { rule: 'Choose Your Path',   desc: 'Pick Tiyo the Carabao (security-first) or Rico the Fox (growth-first) - each path unlocks different missions and financial strategies.' },
       { rule: 'Track Income',       desc: 'Input your monthly income and TIOS auto-calculates your emergency fund target, minimum investment, max expense budget, and freedom number.' },
       { rule: 'Complete Missions',  desc: 'Earn badges by hitting financial milestones: filling your emergency fund, making your first investment, or cutting expenses below the cap.' },
-      { rule: 'Build Your World',   desc: 'Progress is visualised as a growing village (Carabao Path) or a high-asset city (Fox Path) — each milestone unlocks a new building.' },
+      { rule: 'Build Your World',   desc: 'Progress is visualised as a growing village (Carabao Path) or a high-asset city (Fox Path) - each milestone unlocks a new building.' },
     ],
   },
 ];

@@ -1,6 +1,14 @@
 import { useState } from 'react';
-import './ProjectPage.css';
+import './ProjectPage.css';                      
 
+//  /$$$$$$$$ /$$$$$$  /$$$$$$$   /$$$$$$ 
+// |__  $$__//$$__  $$| $$__  $$ /$$__  $$
+//    | $$  | $$  \ $$| $$  \ $$| $$  \__/
+//    | $$  | $$$$$$$$| $$$$$$$ |  $$$$$$ 
+//    | $$  | $$__  $$| $$__  $$ \____  $$
+//    | $$  | $$  | $$| $$  \ $$ /$$  \ $$
+//    | $$  | $$  | $$| $$$$$$$/|  $$$$$$/
+//    |__/  |__/  |__/|_______/  \______/ 
 // ─── Key Features: Tabs (web) ─────────────────────────────────────────────────
 function FeatureTabs({ features }) {
   const [active, setActive] = useState(0);
@@ -28,6 +36,14 @@ function FeatureTabs({ features }) {
   );
 }
 
+//  /$$$$$$$  /$$   /$$ /$$       /$$$$$$$$  /$$$$$$ 
+// | $$__  $$| $$  | $$| $$      | $$_____/ /$$__  $$
+// | $$  \ $$| $$  | $$| $$      | $$      | $$  \__/
+// | $$$$$$$/| $$  | $$| $$      | $$$$$   |  $$$$$$ 
+// | $$__  $$| $$  | $$| $$      | $$__/    \____  $$
+// | $$  \ $$| $$  | $$| $$      | $$       /$$  \ $$
+// | $$  | $$|  $$$$$$/| $$$$$$$$| $$$$$$$$|  $$$$$$/
+// |__/  |__/ \______/ |________/|________/ \______/ 
 // ─── Key Features: Rules (game / concept) ────────────────────────────────────
 function FeatureRules({ features }) {
   return (
@@ -65,7 +81,16 @@ export default function ProjectPage({ project, dark, onToggleDark, onBack }) {
   return (
     <div className={`pp-root${exiting ? ' pp-root--exit' : ''}`} data-theme={dark ? 'dark' : undefined}>
 
-      {/* ── HEADER BAR ────────────────────────────────────────── */}
+    {
+    //  /$$   /$$ /$$$$$$$$  /$$$$$$  /$$$$$$$  /$$$$$$$$ /$$$$$$$        /$$$$$$$   /$$$$$$  /$$$$$$$ 
+    // | $$  | $$| $$_____/ /$$__  $$| $$__  $$| $$_____/| $$__  $$      | $$__  $$ /$$__  $$| $$__  $$
+    // | $$  | $$| $$      | $$  \ $$| $$  \ $$| $$      | $$  \ $$      | $$  \ $$| $$  \ $$| $$  \ $$
+    // | $$$$$$$$| $$$$$   | $$$$$$$$| $$  | $$| $$$$$   | $$$$$$$/      | $$$$$$$ | $$$$$$$$| $$$$$$$/
+    // | $$__  $$| $$__/   | $$__  $$| $$  | $$| $$__/   | $$__  $$      | $$__  $$| $$__  $$| $$__  $$
+    // | $$  | $$| $$      | $$  | $$| $$  | $$| $$      | $$  \ $$      | $$  \ $$| $$  | $$| $$  \ $$
+    // | $$  | $$| $$$$$$$$| $$  | $$| $$$$$$$/| $$$$$$$$| $$  | $$      | $$$$$$$/| $$  | $$| $$  | $$
+    // |__/  |__/|________/|__/  |__/|_______/ |________/|__/  |__/      |_______/ |__/  |__/|__/  |__/                                                                                           
+    }
       <header className="pp-header">
         <div className="pp-header-inner">
           <div className="pp-header-title">
@@ -171,8 +196,12 @@ export default function ProjectPage({ project, dark, onToggleDark, onBack }) {
                 </span>
               </div>
               <div className="pp-meta-row">
-                <span className="pp-meta-label">Developer</span>
-                <span className="pp-meta-value pp-meta-value--me">John Emman Lanusga</span>
+                <span className="pp-meta-label">
+                  {project.developers && project.developers.length > 1 ? 'Developers' : 'Developer'}
+                </span>
+                <span className="pp-meta-value pp-meta-value--me">
+                  {(project.developers ?? ['John Emman Lanusga']).join(' · ')}
+                </span>
               </div>
             </div>
 
@@ -194,7 +223,16 @@ export default function ProjectPage({ project, dark, onToggleDark, onBack }) {
           </aside>
         </div>
 
-        {/* ── KEY FEATURES ──────────────────────────────────── */}
+        {
+        //  /$$   /$$ /$$$$$$$$ /$$     /$$       /$$$$$$$$ /$$$$$$$$  /$$$$$$  /$$$$$$$$ /$$   /$$ /$$$$$$$  /$$$$$$$$  /$$$$$$ 
+        // | $$  /$$/| $$_____/|  $$   /$$/      | $$_____/| $$_____/ /$$__  $$|__  $$__/| $$  | $$| $$__  $$| $$_____/ /$$__  $$
+        // | $$ /$$/ | $$       \  $$ /$$/       | $$      | $$      | $$  \ $$   | $$   | $$  | $$| $$  \ $$| $$      | $$  \__/
+        // | $$$$$/  | $$$$$     \  $$$$/        | $$$$$   | $$$$$   | $$$$$$$$   | $$   | $$  | $$| $$$$$$$/| $$$$$   |  $$$$$$ 
+        // | $$  $$  | $$__/      \  $$/         | $$__/   | $$__/   | $$__  $$   | $$   | $$  | $$| $$__  $$| $$__/    \____  $$
+        // | $$\  $$ | $$          | $$          | $$      | $$      | $$  | $$   | $$   | $$  | $$| $$  \ $$| $$       /$$  \ $$
+        // | $$ \  $$| $$$$$$$$    | $$          | $$      | $$$$$$$$| $$  | $$   | $$   |  $$$$$$/| $$  | $$| $$$$$$$$|  $$$$$$/
+        // |__/  \__/|________/    |__/          |__/      |________/|__/  |__/   |__/    \______/ |__/  |__/|________/ \______/ 
+        }
         {project.features && project.features.length > 0 && (
           <section className="pp-features">
             <h2 className="pp-features-heading">Key Features</h2>
