@@ -39,6 +39,9 @@ import kadaTiponStart    from './assets/images/Kada Tipon/Kada-Tipon-Start.png';
 import kadaTiponHowTo   from './assets/images/Kada Tipon/Kada-Tipon-How-To.png';
 import kadaTiponPlaying  from './assets/images/Kada Tipon/Kada-Tipon-Playing.png';
 import kadaTiponPlaying1 from './assets/images/Kada Tipon/Kada-Tipon-Playing-1.png';
+import tiosLogo          from './assets/images/Tios/TIOS-SAMPLE-LOGO.jpg';
+import tiosLogoHrzl      from './assets/images/Tios/TIOS-SAMPLE-LOGO-hrzl.png';
+import tiosLogoHrzlWhite from './assets/images/Tios/TIOS-SAMPLE-LOGO-hrzl-white.png';
 import Stack from './Stack.jsx';
 import './App.css';
 import Typewriter from 'typewriter-effect';
@@ -140,7 +143,7 @@ const timeline = [
   },
 ];
 
-function TiosShowcase() {
+function TiosShowcase({ dark }) {
   const [path, setPath] = useState(null); // null | 'tiyo' | 'rico'
   const [income, setIncome] = useState(30000);
 
@@ -154,7 +157,7 @@ function TiosShowcase() {
     return (
       <div className="tios-wrap tios-onboarding">
         <div className="tios-brainstorming-badge">Brainstorming... (Concept Only)</div>
-        <h4 className="tios-onboarding-title">TIOS</h4>
+        <img src={dark ? tiosLogoHrzlWhite : tiosLogoHrzl} alt="TIOS" className="tios-onboarding-logo" />
         <p className="tios-onboarding-tagline">Track It. Own It. Save It.</p>
         <p className="tios-onboarding-prompt">What's your money goal?</p>
         <div className="tios-onboarding-choices">
@@ -334,6 +337,7 @@ const projects = [
   {
     images: [],
     isCustomVisual: true,
+    logo: tiosLogo,
     tag: 'Fintech & Game (Brainstorming)',
     title: 'TIOS – Track It. Own It. Save It.',
     desc: 'Inspired by "Rich Dad, Poor Dad", TIOS is a gamified wealth-planning concept (still an idea, not yet implemented). Users choose their financial path—the security-focused Tiyo the Carabao Path (building a village) or the growth-focused Rico the Fox Path (building a high-asset city) to track budgets, complete unique missions, and build financial intelligence.',
@@ -865,7 +869,7 @@ function App() {
               <article key={p.title} className="project-card">
                 <div className="project-thumb--screenshots">
                   {p.isCustomVisual ? (
-                    <TiosShowcase />
+                    <TiosShowcase dark={dark} />
                   ) : (
                     p.images.slice(0, 2).map((src, i) => (
                       <img key={i} src={src} alt={`${p.title} screenshot ${i + 1}`} className="project-thumb-img" />

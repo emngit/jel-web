@@ -143,6 +143,12 @@ export default function ProjectPage({ project, dark, onToggleDark, onBack }) {
                   alt={`${project.title} screenshot ${active + 1}`}
                   className="pp-media-img"
                 />
+              ) : project.logo ? (
+                <img
+                  src={project.logo}
+                  alt={`${project.title} logo`}
+                  className="pp-media-logo"
+                />
               ) : (
                 <div className="pp-media-placeholder">
                   <div className="pp-media-placeholder-inner">
@@ -181,6 +187,8 @@ export default function ProjectPage({ project, dark, onToggleDark, onBack }) {
             <div className="pp-cover">
               {hasThumbs ? (
                 <img src={images[0]} alt={`${project.title} cover`} className="pp-cover-img" />
+              ) : project.logo ? (
+                <img src={project.logo} alt={`${project.title} logo`} className="pp-cover-logo" />
               ) : (
                 <div className="pp-cover-placeholder">
                   <span className="pp-cover-placeholder-text">{project.title}</span>
