@@ -526,14 +526,9 @@
 }
 
 .pp-feat-tab--active {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--bg);
-}
-
-[data-theme="dark"] .pp-feat-tab--active {
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--ink) !important;
+  border-color: var(--ink) !important;
+  color: var(--bg) !important;
 }
 
 .pp-feat-tab-body {
