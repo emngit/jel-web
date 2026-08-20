@@ -29,10 +29,16 @@ import logoFaceWhite from './assets/images/My_LOGO_FINAL-for_DECALS-white-contra
 import portal from './assets/images/PORTAL.png';
 import resume from './assets/images/LANUSGA_JEL_CV.pdf';
 import PortalGateway from './PortalGateway.jsx';
-import kairosPriority from './assets/images/Kairos/JIRA-Priority.png';
-import kairosLogin from './assets/images/Kairos/Login-Page.png';
-import kadaTiponStart from './assets/images/Kada Tipon/Kada-Tipon-Start.png';
-import kadaTiponHowTo from './assets/images/Kada Tipon/Kada-Tipon-How-To.png';
+import kairosPriority        from './assets/images/Kairos/JIRA-Priority.png';
+import kairosLogin           from './assets/images/Kairos/Login-Page.png';
+import kairosResolve360AI    from './assets/images/Kairos/Resolve360-AI-Investigation.jpeg';
+import kairosResolve360RCA   from './assets/images/Kairos/Resolve360-AI-RCA-Check-Apply.jpeg';
+import kairosResolve360Stats from './assets/images/Kairos/Resolve360-Analytics.png';
+import kairosResolve360CAPA  from './assets/images/Kairos/Resolve360-Auto-CAPA-Assignment.jpeg';
+import kadaTiponStart    from './assets/images/Kada Tipon/Kada-Tipon-Start.png';
+import kadaTiponHowTo   from './assets/images/Kada Tipon/Kada-Tipon-How-To.png';
+import kadaTiponPlaying  from './assets/images/Kada Tipon/Kada-Tipon-Playing.png';
+import kadaTiponPlaying1 from './assets/images/Kada Tipon/Kada-Tipon-Playing-1.png';
 import Stack from './Stack.jsx';
 import './App.css';
 import Typewriter from 'typewriter-effect';
@@ -261,7 +267,7 @@ function TiosShowcase() {
 
 const projects = [
   {
-    images: [kairosPriority, kairosLogin],
+    images: [kairosPriority, kairosLogin, kairosResolve360AI, kairosResolve360RCA, kairosResolve360Stats, kairosResolve360CAPA],
     tag: 'Full-Stack App',
     title: 'Kairos – Jira Copilot Assistant',
     desc: 'Internal IBM OTC team tool built with Vue.js 3 + FastAPI. Features a JIRA Standardizer, live Priority List enrichment, Resolve360 quality/RCA workflow (two-stage Compliance → EM approval), Monday.com workforce analytics, and an AI chat assistant powered by GitHub Copilot and IBM ICA.',
@@ -304,7 +310,7 @@ const projects = [
     ],
   },
   {
-    images: [kadaTiponStart, kadaTiponHowTo],
+    images: [kadaTiponStart, kadaTiponHowTo, kadaTiponPlaying, kadaTiponPlaying1],
     tag: 'Game Dev',
     title: 'Kada Tipon Game',
     desc: 'A 2D running game where you, as a student, collect and save coins while avoiding obstacles (expenses) within a time limit. Presented at ADNU DCS–CS Week.',
@@ -856,7 +862,7 @@ function App() {
                   {p.isCustomVisual ? (
                     <TiosShowcase />
                   ) : (
-                    p.images.map((src, i) => (
+                    p.images.slice(0, 2).map((src, i) => (
                       <img key={i} src={src} alt={`${p.title} screenshot ${i + 1}`} className="project-thumb-img" />
                     ))
                   )}
