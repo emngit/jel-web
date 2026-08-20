@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="648" height="217" viewBox="0 0 648 217">
+  <defs>
+    <!-- Gold gradient: light top → deep amber bottom -->
+    <linearGradient id="gold" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%"   stop-color="#f2be63"/>
+      <stop offset="100%" stop-color="#c47a2c"/>
+    </linearGradient>
+    <!-- Coin face gradient: bright centre highlight -->
+    <radialGradient id="coinFace" cx="42%" cy="38%" r="58%">
+      <stop offset="0%"   stop-color="#ffe97a"/>
+      <stop offset="60%"  stop-color="#f5c53f"/>
+      <stop offset="100%" stop-color="#c47a2c"/>
+    </radialGradient>
+    <!-- Coin edge/depth gradient -->
+    <linearGradient id="coinEdge" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%"   stop-color="#8b4f10"/>
+      <stop offset="40%"  stop-color="#d4891e"/>
+      <stop offset="100%" stop-color="#8b4f10"/>
+    </linearGradient>
+    <!-- Letter inner highlight -->
+    <linearGradient id="letterShine" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%"   stop-color="#f9d98a"/>
+      <stop offset="45%"  stop-color="#e8a832"/>
+      <stop offset="100%" stop-color="#b86820"/>
+    </linearGradient>
+    <!-- Drop shadow filter -->
+    <filter id="shadow" x="-8%" y="-8%" width="120%" height="120%">
+      <feDropShadow dx="3" dy="5" stdDeviation="3" flood-color="#3a1505" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f5f0df" rx="12"/>
+
+  <!-- ══ LETTER T ══ -->
+  <g filter="url(#shadow)">
+    <!-- Outline / dark stroke layer -->
+    <text x="8"  y="178" font-size="185" font-family="Arial Black, Arial" font-weight="900"
+          fill="#5a260f" stroke="#5a260f" stroke-width="18" stroke-linejoin="round"
+          paint-order="stroke">T</text>
+    <!-- Fill layer -->
+    <text x="8"  y="178" font-size="185" font-family="Arial Black, Arial" font-weight="900"
+          fill="url(#letterShine)">T</text>
+  </g>
+
+  <!-- ══ LETTER I ══ -->
+  <g filter="url(#shadow)">
+    <text x="148" y="178" font-size="185" font-family="Arial Black, Arial" font-weight="900"
+          fill="#5a260f" stroke="#5a260f" stroke-width="18" stroke-linejoin="round"
+          paint-order="stroke">I</text>
+    <text x="148" y="178" font-size="185" font-family="Arial Black, Arial" font-weight="900"
+          fill="url(#letterShine)">I</text>
+  </g>
+
+  <!-- ══ COIN (replaces O) ══ -->
+  <g filter="url(#shadow)">
+    <!-- Coin depth/edge (offset disc) -->
+    <ellipse cx="374" cy="112" rx="80" ry="80" fill="url(#coinEdge)" stroke="#5a260f" stroke-width="5"/>
+    <!-- Coin face -->
+    <ellipse cx="366" cy="106" rx="80" ry="80" fill="url(#coinFace)" stroke="#5a260f" stroke-width="5"/>
+    <!-- Inner ring -->
+    <ellipse cx="366" cy="106" rx="62" ry="62" fill="none" stroke="#c47a2c" stroke-width="4"/>
+    <!-- ₱ symbol -->
+    <text x="336" y="138" font-size="80" font-family="Arial Black, Arial" font-weight="900"
+          fill="#5a260f" stroke="#5a260f" stroke-width="6" stroke-linejoin="round"
+          paint-order="stroke">₱</text>
+    <text x="336" y="138" font-size="80" font-family="Arial Black, Arial" font-weight="900"
+          fill="#8b4f10">₱</text>
+  </g>
+
+  <!-- ══ LETTER S ══ -->
+  <g filter="url(#shadow)">
+    <text x="444" y="178" font-size="185" font-family="Arial Black, Arial" font-weight="900"
+          fill="#5a260f" stroke="#5a260f" stroke-width="18" stroke-linejoin="round"
+          paint-order="stroke">S</text>
+    <text x="444" y="178" font-size="185" font-family="Arial Black, Arial" font-weight="900"
+          fill="url(#letterShine)">S</text>
+  </g>
+</svg>
