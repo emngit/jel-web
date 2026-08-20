@@ -273,6 +273,34 @@ const projects = [
       { name: 'GitHub Copilot', logo: SI('githubcopilot', '24292e') },
     ],
     outcome: 'IBM OTC Team · In Active Use',
+    featuresType: 'tabs',
+    features: [
+      {
+        tab: 'JIRA Standardizer',
+        use: 'Ticket Quality Control',
+        desc: 'Validates and standardizes JIRA ticket fields — summary, priority, assignee, and labels — against team conventions.',
+      },
+      {
+        tab: 'Priority List',
+        use: 'Live Workload Enrichment',
+        desc: 'Uploads a CSV or XLSX exported from JIRA, cross-references each issue key against the live JIRA instance, and computes real-time Action Takens per assignee — giving team leads an instant workload snapshot.',
+      },
+      {
+        tab: 'Resolve360',
+        use: 'Quality & RCA Workflow',
+        desc: 'Two-stage approval flow: tickets requiring resolution first pass Compliance review, then escalate to EM sign-off. Tracks RCA notes, links evidence, and logs every approval action with timestamps.',
+      },
+      {
+        tab: 'Workforce Analytics',
+        use: 'Monday.com Integration',
+        desc: 'Pulls headcount and task data from Monday.com boards to surface utilisation rates, bandwidth gaps, and team availability — presented as a dashboard for capacity planning.',
+      },
+      {
+        tab: 'AI Assistant',
+        use: 'GitHub Copilot + IBM ICA',
+        desc: 'Embedded chat assistant trained on OTC process knowledge. Answers ticket-related questions, drafts summaries, suggests resolutions, and retrieves historical RCA patterns using GitHub Copilot and IBM ICA APIs.',
+      },
+    ],
   },
   {
     images: [kadaTiponStart, kadaTiponHowTo],
@@ -285,6 +313,15 @@ const projects = [
       { name: 'Construct', logo: SI('construct3', 'E34F26') },
     ],
     outcome: 'ADNU DCS–CS Week Booth',
+    featuresType: 'rules',
+    features: [
+      { rule: 'Objective',        desc: 'Collect and save money as much as possible within the given distance limit.' },
+      { rule: 'Controls',         desc: 'Use arrow keys (↑ ↓ ← →) for player movement. Press Esc to pause or unpause the game.' },
+      { rule: 'Bulastugan',       desc: 'A food cart obstacle - hitting it subtracts ₱5 from your savings.' },
+      { rule: 'Meta Cyberlounge', desc: 'A computer shop obstacle - hitting it subtracts ₱20 from your savings.' },
+      { rule: 'Yosi',             desc: 'A cigarette obstacle - hitting it subtracts ₱3 from your savings.' },
+      { rule: 'Zen Xtreme',       desc: 'A gaming lounge obstacle - hitting it subtracts ₱20 from your savings.' },
+    ],
   },
   {
     images: [],
@@ -293,6 +330,13 @@ const projects = [
     title: 'TIOS – Track It. Own It. Save It.',
     desc: 'Inspired by "Rich Dad, Poor Dad", TIOS is a gamified wealth-planning concept (still an idea, not yet implemented). Users choose their financial path—the security-focused Tiyo the Carabao Path (building a village) or the growth-focused Rico the Fox Path (building a high-asset city) to track budgets, complete unique missions, and build financial intelligence.',
     outcome: 'Brainstorming...',
+    featuresType: 'rules',
+    features: [
+      { rule: 'Choose Your Path',   desc: 'Pick Tiyo the Carabao (security-first) or Rico the Fox (growth-first) — each path unlocks different missions and financial strategies.' },
+      { rule: 'Track Income',       desc: 'Input your monthly income and TIOS auto-calculates your emergency fund target, minimum investment, max expense budget, and freedom number.' },
+      { rule: 'Complete Missions',  desc: 'Earn badges by hitting financial milestones: filling your emergency fund, making your first investment, or cutting expenses below the cap.' },
+      { rule: 'Build Your World',   desc: 'Progress is visualised as a growing village (Carabao Path) or a high-asset city (Fox Path) — each milestone unlocks a new building.' },
+    ],
   },
 ];
 

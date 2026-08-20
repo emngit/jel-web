@@ -1,6 +1,47 @@
 import { useState } from 'react';
 import './ProjectPage.css';
 
+// ─── Key Features: Tabs (web) ─────────────────────────────────────────────────
+function FeatureTabs({ features }) {
+  const [active, setActive] = useState(0);
+  const f = features[active];
+  return (
+    <div className="pp-feat-tabs">
+      <div className="pp-feat-tab-bar" role="tablist">
+        {features.map((feat, i) => (
+          <button
+            key={feat.tab}
+            role="tab"
+            aria-selected={i === active}
+            className={`pp-feat-tab${i === active ? ' pp-feat-tab--active' : ''}`}
+            onClick={() => setActive(i)}
+          >
+            {feat.tab}
+          </button>
+        ))}
+      </div>
+      <div className="pp-feat-tab-body" role="tabpanel">
+        <span className="pp-feat-use">{f.use}</span>
+        <p className="pp-feat-desc">{f.desc}</p>
+      </div>
+    </div>
+  );
+}
+
+// ─── Key Features: Rules (game / concept) ────────────────────────────────────
+function FeatureRules({ features }) {
+  return (
+    <ul className="pp-feat-rules">
+      {features.map((f) => (
+        <li key={f.rule} className="pp-feat-rule-item">
+          <span className="pp-feat-rule-label">{f.rule}</span>
+          <span className="pp-feat-rule-desc">{f.desc}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 // ─── Release date helper ──────────────────────────────────────────────────────
 const RELEASE_DATES = {
   'Kairos – Jira Copilot Assistant':    'July 2026',
@@ -152,6 +193,17 @@ export default function ProjectPage({ project, dark, onToggleDark, onBack }) {
 
           </aside>
         </div>
+
+        {/* ── KEY FEATURES ──────────────────────────────────── */}
+        {project.features && project.features.length > 0 && (
+          <section className="pp-features">
+            <h2 className="pp-features-heading">Key Features</h2>
+            {project.featuresType === 'tabs'
+              ? <FeatureTabs features={project.features} />
+              : <FeatureRules features={project.features} />
+            }
+          </section>
+        )}
       </main>
     </div>
   );

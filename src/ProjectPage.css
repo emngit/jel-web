@@ -442,6 +442,161 @@
   flex-shrink: 0;
 }
 
+/* ── KEY FEATURES SECTION ───────────────────────────── */
+.pp-features {
+  max-width: 1280px;
+  margin: 20px auto 0;
+  padding: 24px 28px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.pp-features-heading {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 16px;
+}
+
+/* ── Tabs layout (web projects) ─────────────────────── */
+.pp-feat-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pp-feat-tab-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.pp-feat-tab {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  white-space: nowrap;
+}
+
+.pp-feat-tab:hover {
+  border-color: var(--ink-muted);
+  color: var(--ink);
+}
+
+.pp-feat-tab--active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}
+
+[data-theme="dark"] .pp-feat-tab--active {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.pp-feat-tab-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: rgba(17, 17, 17, 0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  min-height: 90px;
+}
+
+[data-theme="dark"] .pp-feat-tab-body {
+  background: rgba(240, 240, 238, 0.03);
+}
+
+.pp-feat-use {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.pp-feat-desc {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+/* ── Rules layout (game / concept) ─────────────────── */
+.pp-feat-rules {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.pp-feat-rule-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  background: rgba(17, 17, 17, 0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.18s;
+}
+
+[data-theme="dark"] .pp-feat-rule-item {
+  background: rgba(240, 240, 238, 0.03);
+}
+
+.pp-feat-rule-item:hover {
+  border-color: var(--ink-muted);
+}
+
+.pp-feat-rule-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+.pp-feat-rule-desc {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ink-muted);
+}
+
+@media (max-width: 640px) {
+  .pp-feat-rules {
+    grid-template-columns: 1fr;
+  }
+
+  .pp-feat-tab-bar {
+    gap: 4px;
+  }
+
+  .pp-feat-tab {
+    font-size: 11px;
+    padding: 5px 11px;
+  }
+
+  .pp-features {
+    padding: 16px;
+  }
+}
+
 /* ── RESPONSIVE ─────────────────────────────────────── */
 @media (max-width: 900px) {
   .pp-content {
