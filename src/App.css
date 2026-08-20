@@ -1906,12 +1906,16 @@ img { display: block; max-width: 100%; }
   margin: 0.5rem 1.5rem 0;
   padding: 0.6rem 1rem;
   color: #fff !important;
-  background: var(--ink) !important;
+  background: #111111 !important;
   border-radius: 999px !important;
   text-align: center;
   width: calc(100% - 3rem);
 }
-.mobile-menu-cta:hover { opacity: 0.82 !important; background: var(--ink) !important; }
+[data-theme="dark"] .mobile-menu-cta {
+  background: #f0f0ee !important;
+  color: #111111 !important;
+}
+.mobile-menu-cta:hover { opacity: 0.82 !important; }
 
 @media (max-width: 600px) {
   .masthead-nav              { display: none; }
