@@ -492,6 +492,7 @@ function App() {
   const [visitors, setVisitors] = useState(null);
   const hoverCooldown           = useRef(false);
   const [showScrollUp, setShowScrollUp] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // ── Scroll-to-top handler ───────────────────────────────────────────────
   useEffect(() => {
@@ -557,7 +558,7 @@ function App() {
       {/* ── DarkVeil WebGL background ── */}
       <div className="darkveil-bg">
         <DarkVeil
-          hueShift={200}
+          hueShift={105}
           speed={0.35}
           warpAmount={0.5}
           noiseIntensity={0.04}
@@ -601,17 +602,17 @@ function App() {
           </a>
           <nav aria-label="Main navigation">
             <ul className="masthead-nav">
-              <li><a href="#work">Work</a></li>
-              <li><a href="#skills">Skills</a></li>
+              <li><a href="#work" onClick={() => setMenuOpen(false)}>Work</a></li>
+              <li><a href="#skills" onClick={() => setMenuOpen(false)}>Skills</a></li>
               {/* <li><a href="#certs">Certifications</a></li> */}
-              <li><a href="#experience">Experience</a></li>
-              <li><a href="#gallery">Gallery</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li><a href="#experience" onClick={() => setMenuOpen(false)}>Experience</a></li>
+              <li><a href="#gallery" onClick={() => setMenuOpen(false)}>Gallery</a></li>
+              <li><a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a></li>
               <li>
                 <a
                   href="#"
                   className="nav-cta"
-                  onClick={(e) => { e.preventDefault(); setPage('resume'); window.scrollTo({ top: 0, behavior: 'instant' }); }}
+                  onClick={(e) => { e.preventDefault(); setMenuOpen(false); setPage('resume'); window.scrollTo({ top: 0, behavior: 'instant' }); }}
                 >
                   Resume
                 </a>
@@ -630,7 +631,49 @@ function App() {
               </li>
             </ul>
           </nav>
+
+          {/* ── Mobile controls ── */}
+          <div className="masthead-mobile-controls">
+            <button
+              className="dm-toggle"
+              onClick={toggleDark}
+              aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+              title={dark ? 'Light mode' : 'Dark mode'}
+            >
+              <span className="dm-toggle-thumb">
+                {dark ? '☀' : '☾'}
+              </span>
+            </button>
+            <button
+              className="hamburger"
+              onClick={() => setMenuOpen((o) => !o)}
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={menuOpen}
+            >
+              <span className={`hamburger-line${menuOpen ? ' open' : ''}`} />
+              <span className={`hamburger-line${menuOpen ? ' open' : ''}`} />
+              <span className={`hamburger-line${menuOpen ? ' open' : ''}`} />
+            </button>
+          </div>
         </div>
+
+        {/* ── Mobile dropdown menu ── */}
+        {menuOpen && (
+          <div className="mobile-menu" role="menu">
+            <a href="#work"       className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Work</a>
+            <a href="#skills"     className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Skills</a>
+            <a href="#experience" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Experience</a>
+            <a href="#gallery"    className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Gallery</a>
+            <a href="#contact"    className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Contact</a>
+            <a
+              href="#"
+              className="mobile-menu-link mobile-menu-cta"
+              onClick={(e) => { e.preventDefault(); setMenuOpen(false); setPage('resume'); window.scrollTo({ top: 0, behavior: 'instant' }); }}
+            >
+              Resume
+            </a>
+          </div>
+        )}
       </header>
 
       {/* 
