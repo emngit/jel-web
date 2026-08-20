@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import AdminPanel from './AdminPanel.jsx';
+import ProjectPage from './ProjectPage.jsx';
 import DarkVeil from './DarkVeil.jsx';
 import Particles from './Particles.jsx';
 import KairosChat from './KairosChat.jsx';
@@ -495,6 +496,8 @@ function App() {
   const hoverCooldown           = useRef(false);
   const [showScrollUp, setShowScrollUp] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const savedScrollY = useRef(0);
 
   // ── Scroll-to-top handler ───────────────────────────────────────────────
   useEffect(() => {
@@ -548,6 +551,23 @@ function App() {
 
   if (page === 'resume') {
     return <ResumePage onBack={() => { setPage('home'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />;
+  }
+
+  if (page === 'project') {
+    return (
+      <ProjectPage
+        project={selectedProject}
+        dark={dark}
+        onToggleDark={toggleDark}
+        onBack={() => {
+          setPage('home');
+          // Restore the scroll position the user was at before opening
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: savedScrollY.current, behavior: 'instant' });
+          });
+        }}
+      />
+    );
   }
 
   if (page === 'admin') {
@@ -811,6 +831,17 @@ function App() {
                     </div>
                   )}
                   <p className="project-outcome">✦ {p.outcome}</p>
+                  <button
+                    className="project-view-btn"
+                    onClick={() => {
+                      savedScrollY.current = window.scrollY;
+                      setSelectedProject(p);
+                      setPage('project');
+                      window.scrollTo({ top: 0, behavior: 'instant' });
+                    }}
+                  >
+                    View Details →
+                  </button>
                 </div>
               </article>
             ))}
