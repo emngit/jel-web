@@ -313,6 +313,7 @@ const projects = [
     images: [kadaTiponStart, kadaTiponHowTo, kadaTiponPlaying, kadaTiponPlaying1],
     tag: 'Game Dev',
     title: 'Kada Tipon Game',
+    demoUrl: '#game',
     desc: 'A 2D running game where you, as a student, collect and save coins while avoiding obstacles (expenses) within a time limit. Presented at ADNU DCS–CS Week.',
     tech: [
       { name: 'HTML5', logo: SI('html5', 'E34F26') },
@@ -498,7 +499,7 @@ function GameSection() {
   const [muted, setMuted] = useState(true);
 
   return (
-    <section className="game-section" aria-label="2019 Game Project">
+    <section id="game" className="game-section" aria-label="2019 Game Project">
       <div className="container">
         <div className="game-section-header">
           <div>

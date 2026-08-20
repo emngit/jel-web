@@ -78,6 +78,20 @@ export default function ProjectPage({ project, dark, onToggleDark, onBack }) {
     setTimeout(onBack, 280);
   };
 
+  const handleDemo = () => {
+    if (!project.demoUrl) return;
+    setExiting(true);
+    setTimeout(() => {
+      onBack();
+      // After navigation lands on home, scroll to the anchor
+      requestAnimationFrame(() => {
+        const id = project.demoUrl.replace('#', '');
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }, 280);
+  };
+
   return (
     <div className={`pp-root${exiting ? ' pp-root--exit' : ''}`} data-theme={dark ? 'dark' : undefined}>
 
@@ -217,6 +231,15 @@ export default function ProjectPage({ project, dark, onToggleDark, onBack }) {
                     </span>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* Demo Button */}
+            {project.demoUrl && (
+              <div className="pp-demo-section">
+                <button className="pp-demo-btn" onClick={handleDemo}>
+                  ▶ Play Demo
+                </button>
               </div>
             )}
 

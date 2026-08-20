@@ -417,6 +417,40 @@
 /* Tags Section */
 .pp-tags-section {
   padding: 12px 16px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Demo Button */
+.pp-demo-section {
+  padding: 14px 16px 16px;
+}
+
+.pp-demo-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  border: none;
+  background: var(--green);
+  color: #0a1a07;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: opacity 0.18s, transform 0.15s;
+}
+
+.pp-demo-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.pp-demo-btn:active {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .pp-tags {
