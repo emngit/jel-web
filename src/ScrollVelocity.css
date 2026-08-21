@@ -1,3 +1,17 @@
+@font-face {
+  font-family: 'Megazoid';
+  src: url('/src/assets/font/Megazoid-Regular-Testing.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Megazoid';
+  src: url('/src/assets/font/Megazoid-Italic-Testing.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+}
+
 .sv-strip {
   background: var(--ink);
   color: var(--bg);
@@ -16,10 +30,10 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Megazoid', var(--font);
   font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
+  font-weight: 400;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   line-height: 1;
   /* ensure inline images align with text cap-height */

@@ -301,7 +301,46 @@ img { display: block; max-width: 100%; }
   display: block;
   transition: transform 0.25s ease, opacity 0.25s ease;
 }
-.navbar-brand:hover { transform: rotate(-4deg) scale(1.08); opacity: 0.75; }
+/* .navbar-brand:hover { opacity: 0.75; } */
+
+/* ─── Megazoid logo ──────────────────────────────────────── */
+@font-face {
+  font-family: 'Megazoid';
+  src: url('/src/assets/font/Megazoid-Fill-Testing.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+.megazoid-logo {
+  display: inline-flex;
+  align-items: flex-end;
+  font-family: 'Megazoid', sans-serif;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #C6D93D;
+  /* solid dark block shadow, offset bottom-right */
+  text-shadow:
+    3px  0px 0 #111,
+    0px  3px 0 #111,
+    3px  3px 0 #111,
+    4px  1px 0 #111,
+    1px  4px 0 #111,
+    4px  4px 0 #111,
+    5px  2px 0 #111,
+    2px  5px 0 #111,
+    5px  5px 0 #111;
+  user-select: none;
+  white-space: nowrap;
+}
+
+
+.megazoid-logo__char {
+  display: inline-block;
+  will-change: transform;
+}
 
 .masthead-nav {
   display: flex;

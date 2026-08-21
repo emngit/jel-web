@@ -722,7 +722,27 @@ function App() {
       <header className="masthead">
         <div className="masthead-inner">
           <a href="#" className="navbar-brand" aria-label="JEL Home">
-            <img src={dark ? logoWhite : logo} alt="JEL logo" style={{ height: 48, width: 70 }} />
+            {/* <img src={dark ? logoWhite : logo} alt="JEL logo" style={{ height: 48, width: 70 }} /> */}
+            <motion.span
+              className="megazoid-logo"
+              aria-label="J.EMMAN"
+              initial="rest"
+              whileHover="hover"
+              animate="rest"
+            >
+              {'J.EMMAN'.split('').map((char, i) => (
+                <motion.span
+                  key={i}
+                  className="megazoid-logo__char"
+                  variants={{
+                    rest:  { y: 0 },
+                    hover: { y: -6, transition: { delay: i * 0.04, duration: 0.22, ease: 'easeOut' } },
+                  }}
+                >
+                  {char}
+                </motion.span>
+              ))}
+            </motion.span>
           </a>
           <nav aria-label="Main navigation">
             <ul className="masthead-nav">
