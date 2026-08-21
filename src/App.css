@@ -336,6 +336,13 @@ img { display: block; max-width: 100%; }
 .hero {
   padding-top: 64px;
   display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+.hero-content {
+  flex: 1;
+  display: flex;
   align-items: center;
 }
 
@@ -375,22 +382,44 @@ img { display: block; max-width: 100%; }
   flex-shrink: 0;
 }
 
-/* ─── Hero headline (Typewriter renders characters; always visible) ── */
+/* ─── Hero headline ─────────────────────────────────────────────────── */
 .hero-headline {
   font-size: clamp(2.4rem, 5vw, 4rem);
   font-weight: 800;
-  line-height: 1.08;
+  line-height: 1.15;
   letter-spacing: -0.03em;
   color: var(--ink);
   cursor: default;
-  min-height: 4.5em; /* prevent layout jump while typing */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
-.hero-headline em {
-  font-style: normal;
-  color: var(--blue);
+
+/* Each line is a block-level split container.
+   padding-bottom gives descenders (g, y, p) room to render. */
+.hero-headline-line {
+  display: block !important;
+  padding-bottom: 0.12em;
 }
-/* Typewriter cursor — hidden (we pass cursor:'') */
-.hero-headline .Typewriter__cursor { display: none; }
+
+/* "confidence." — white text inside the blue badge */
+.hero-headline-line--blue {
+  color: #ffffff;
+}
+
+/* Outer pill wrapper — blue background badge */
+.hero-headline-confidence-wrap {
+  display: inline-block;
+  background: var(--blue);
+  border-radius: 10px;
+  padding: 0.04em 0.22em 0.14em;
+  line-height: inherit;
+  overflow: visible;
+}
+
+[data-theme="dark"] .hero-headline-confidence-wrap {
+  background: var(--blue);
+}
 
 .hero-sub {
   font-size: 16px;
@@ -439,9 +468,23 @@ img { display: block; max-width: 100%; }
 .hero-right {
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 1.5rem;
 }
+.hero-fullname {
+  width: 100%;
+  max-width: 480px;
+  font-size: clamp(1.6rem, 3.8vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  cursor: default;
+  white-space: nowrap;
+}
+
 
 .hero-visual {
   position: relative;
@@ -534,6 +577,9 @@ img { display: block; max-width: 100%; }
   line-height: 1.15;
   color: var(--ink);
   margin-bottom: 1rem;
+  /* SplitText sets inline-block — override so heading stays block-level */
+  display: block !important;
+  white-space: normal !important;
 }
 
 .section-sub {
@@ -1789,9 +1835,13 @@ img { display: block; max-width: 100%; }
 
 /* ─── Responsive ─────────────────────────────────────────── */
 @media (max-width: 900px) {
-  .hero               { min-height: unset; align-items: flex-start; padding-top: 64px; }
+  .hero               { min-height: 100svh; padding-top: 64px; }
   .hero-inner        { grid-template-columns: 1fr; text-align: center; padding: 2rem 1.5rem 2.5rem; }
   .hero-left         { align-items: center; }
+  /* Headline: keep flex but centre its children */
+  .hero-headline     { align-items: center; }
+  /* Confidence badge: stays inline-block, centred by parent flex */
+  .hero-headline-confidence-wrap { align-self: center; }
   .hero-label        { align-self: center; }
   .hero-sub          { max-width: 100%; }
   .hero-right        { order: -1; }

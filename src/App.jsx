@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import AdminPanel from './AdminPanel.jsx';
 import ProjectPage from './ProjectPage.jsx';
 import DarkVeil from './DarkVeil.jsx';
@@ -42,9 +43,11 @@ import kadaTiponPlaying1 from './assets/images/Kada Tipon/Kada-Tipon-Playing-1.p
 import tiosLogo          from './assets/images/Tios/TIOS-SAMPLE-LOGO.jpg';
 import tiosLogoHrzl      from './assets/images/Tios/TIOS-SAMPLE-LOGO-hrzl.png';
 import tiosLogoHrzlWhite from './assets/images/Tios/TIOS-SAMPLE-LOGO-hrzl-white.png';
+import spaceCat           from './assets/images/SPACE-CAT.png';
 import Stack from './Stack.jsx';
 import './App.css';
-import Typewriter from 'typewriter-effect';
+import SplitText from './SplitText.jsx';
+import ScrollVelocity from './ScrollVelocity.jsx';
 import ResumePage from './ResumePage.jsx';
 
 //  /$$$$$$$   /$$$$$$  /$$$$$$$$ /$$$$$$ 
@@ -421,7 +424,7 @@ function GallerySection() {
           {/* Left 70% — description */}
           <div className="gallery-stack-info">
             <p className="section-label">Creative</p>
-            <h2 className="section-title">Sketches / Gallery</h2>
+            <SectionHeading text="Sketches / Gallery" />
             <p className="section-sub">
               A personal collection of sketches, ideas, illustrations, and photography.
             </p>
@@ -508,7 +511,7 @@ function GameSection() {
         <div className="game-section-header">
           <div>
             <p className="section-label">2019 Project</p>
-            <h2 className="section-title">Game Development &amp; Design Class</h2>
+            <SectionHeading text="Game Development & Design Class" />
           </div>
           <button
             className="game-mute-btn"
@@ -538,15 +541,54 @@ function GameSection() {
 //  /$$__  $$| $$__  $$| $$__  $$
 // | $$  \ $$| $$  \ $$| $$  \ $$
 // | $$$$$$$$| $$$$$$$/| $$$$$$$/
-// | $$__  $$| $$____/ | $$____/ 
-// | $$  | $$| $$      | $$      
-// | $$  | $$| $$      | $$      
-// |__/  |__/|__/      |__/     
+// | $$__  $$| $$____/ | $$____/
+// | $$  | $$| $$      | $$
+// | $$  | $$| $$      | $$
+// |__/  |__/|__/      |__/
+
+// ─── Section heading with SplitText scroll-triggered animation ───────────────
+function SectionHeading({ text }) {
+  return (
+    <SplitText
+      tag="h2"
+      text={text}
+      className="section-title"
+      splitType="words"
+      delay={60}
+      duration={0.6}
+      ease="power3.out"
+      from={{ opacity: 0, y: 28 }}
+      to={{ opacity: 1, y: 0 }}
+      threshold={0.15}
+      rootMargin="-40px"
+      textAlign="left"
+    />
+  );
+}
+
+// ─── Shared Framer Motion variants (same as ResumePage) ──────────────────────
+const fadeUp = {
+  hidden:  { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+};
+const stagger = {
+  visible: { transition: { staggerChildren: 0.09 } },
+};
+
 function App() {
   const [page, setPage]         = useState(
     () => new URLSearchParams(window.location.search).has('admin') ? 'admin' : 'home'
   );
-  const [typeKey, setTypeKey]   = useState(0);
+  const [typeKey, setTypeKey]   = useState(0); // kept for hover cooldown logic
+  // Tracks whether viewport is ≤ 900px for responsive SplitText textAlign
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 900);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 900px)');
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+  const headlineAlign = isMobile ? 'center' : 'left';
   const [badgeKey, setBadgeKey] = useState(0);
   const [visitors, setVisitors] = useState(null);
   const hoverCooldown           = useRef(false);
@@ -769,6 +811,7 @@ function App() {
       // |__/  |__/|________/|__/  |__/ \______/       
       */}
       <section className="hero" aria-label="Introduction">
+        <div className="hero-content">
         <div className="hero-inner">
 
           {/* -- HERO LEFT -- */}
@@ -778,23 +821,67 @@ function App() {
               QA Analyst &amp; Automation
             </span>
 
-            <h1 className="hero-headline" onMouseEnter={handleHeadlineHover}>
-              <Typewriter
-                key={typeKey}
-                options={{
-                  cursor: '',
-                  delay: 38,
-                  deleteSpeed: Infinity,
-                }}
-                onInit={(tw) => {
-                  tw
-                    .typeString('Ensuring quality.')
-                    .pauseFor(120)
-                    .typeString('<br />Building <em>confidence.</em>')
-                    .pauseFor(120)
-                    .typeString('<br />Improving experiences.')
-                    .start();
-                }}
+            <h1 className="hero-headline">
+              <SplitText
+                key={`line1-${typeKey}`}
+                tag="span"
+                text="Ensuring quality."
+                className="hero-headline-line"
+                splitType="chars"
+                delay={18}
+                duration={0.55}
+                ease="power3.out"
+                from={{ opacity: 0, y: 36 }}
+                to={{ opacity: 1, y: 0 }}
+                threshold={0.1}
+                rootMargin="0px"
+                textAlign={headlineAlign}
+              />
+              <SplitText
+                key={`line2a-${typeKey}`}
+                tag="span"
+                text="Building "
+                className="hero-headline-line"
+                splitType="chars"
+                delay={18}
+                duration={0.55}
+                ease="power3.out"
+                from={{ opacity: 0, y: 36 }}
+                to={{ opacity: 1, y: 0 }}
+                threshold={0.1}
+                rootMargin="0px"
+                textAlign={headlineAlign}
+              /><span className="hero-headline-confidence-wrap">
+                <SplitText
+                  key={`line2b-${typeKey}`}
+                  tag="span"
+                  text="confidence."
+                  className="hero-headline-line hero-headline-line--blue"
+                  splitType="chars"
+                  delay={18}
+                  duration={0.55}
+                  ease="power3.out"
+                  from={{ opacity: 0, y: 36 }}
+                  to={{ opacity: 1, y: 0 }}
+                  threshold={0.1}
+                  rootMargin="0px"
+                  textAlign={headlineAlign}
+                />
+              </span>
+              <SplitText
+                key={`line3-${typeKey}`}
+                tag="span"
+                text="Improving experiences."
+                className="hero-headline-line"
+                splitType="chars"
+                delay={18}
+                duration={0.55}
+                ease="power3.out"
+                from={{ opacity: 0, y: 36 }}
+                to={{ opacity: 1, y: 0 }}
+                threshold={0.1}
+                rootMargin="0px"
+                textAlign={headlineAlign}
               />
             </h1>
 
@@ -842,13 +929,29 @@ function App() {
                 </div>
               </div>
             </div>
+
+            <p className="hero-fullname">John Emman Lanusga</p>
           </div>
 
         </div>
+        </div>
+
+        {/* ── Marquee separator ─────────────────────────────────────── */}
+        <div className="sv-strip">
+          <ScrollVelocity
+            texts={[
+              <>QA Analyst <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span> Automation <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span> Quality Assurance <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span> Jira <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span> Process Improvement <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span></>,
+            ]}
+            velocity={60}
+            numCopies={4}
+            parallaxClassName="parallax"
+            scrollerClassName="scroller"
+          />
+        </div>
       </section>
 
-      {/* 
-      //  /$$$$$$$  /$$$$$$$   /$$$$$$     /$$$$$ /$$$$$$$$  /$$$$$$  /$$$$$$$$ /$$$$$$ 
+      {/*
+      //  /$$$$$$$  /$$$$$$$   /$$$$$$     /$$$$$ /$$$$$$$$  /$$$$$$  /$$$$$$$$ /$$$$$$
       // | $$__  $$| $$__  $$ /$$__  $$   |__  $$| $$_____/ /$$__  $$|__  $$__//$$__  $$
       // | $$  \ $$| $$  \ $$| $$  \ $$      | $$| $$      | $$  \__/   | $$  | $$  \__/
       // | $$$$$$$/| $$$$$$$/| $$  | $$      | $$| $$$$$   | $$         | $$  |  $$$$$$ 
@@ -857,16 +960,19 @@ function App() {
       // | $$      | $$  | $$|  $$$$$$/|  $$$$$$/| $$$$$$$$|  $$$$$$/   | $$  |  $$$$$$/
       // |__/      |__/  |__/ \______/  \______/ |________/ \______/    |__/   \______/       
       */}
-      <section id="work" className="section" aria-label="Featured Projects">
+      <motion.section
+        id="work" className="section" aria-label="Featured Projects"
+        initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.08 }} variants={stagger}
+      >
         <div className="container">
-          <p className="section-label">Featured Work</p>
-          <h2 className="section-title">Projects &amp; Outcomes</h2>
-          <p className="section-sub">
+          <motion.p className="section-label" variants={fadeUp}>Featured Work</motion.p>
+          <SectionHeading text="Projects & Outcomes" />
+          <motion.p className="section-sub" variants={fadeUp}>
             A selection of quality engineering work across Salesforce, API testing, and process improvement.
-          </p>
+          </motion.p>
           <div className="projects-grid">
             {projects.map((p) => (
-              <article key={p.title} className="project-card">
+              <motion.article key={p.title} className="project-card" variants={fadeUp}>
                 <div className="project-thumb--screenshots">
                   {p.isCustomVisual ? (
                     <TiosShowcase dark={dark} />
@@ -903,11 +1009,11 @@ function App() {
                     View Details →
                   </button>
                 </div>
-              </article>
+              </motion.article>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* 
       //   /$$$$$$  /$$   /$$ /$$$$$$ /$$       /$$        /$$$$$$ 
@@ -919,28 +1025,33 @@ function App() {
       // |  $$$$$$/| $$ \  $$ /$$$$$$| $$$$$$$$| $$$$$$$$|  $$$$$$/
       //  \______/ |__/  \__/|______/|________/|________/ \______/       
       */}
-      <section id="skills" className="section" aria-label="Skills and Tools">
+      <motion.section
+        id="skills" className="section" aria-label="Skills and Tools"
+        initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.08 }} variants={stagger}
+      >
         <div className="container">
-          <p className="section-label">Capabilities</p>
-          <h2 className="section-title">Skills &amp; Tools</h2>
-          <p className="section-sub">
+          <motion.p className="section-label" variants={fadeUp}>Capabilities</motion.p>
+          <SectionHeading text="Skills & Tools" />
+          <motion.p className="section-sub" variants={fadeUp}>
             Core competencies spanning QA methodologies, Salesforce administration, and test tooling.
-          </p>
+          </motion.p>
           <div className="skills-grid">
             {skills.map((s) => (
-              <SpotlightCard key={s.name} className="skill-card" spotlightColor="var(--skill-spotlight)">
-                 <div className="skill-icon" aria-label={s.name}>
-                   {s.img
-                     ? <img src={s.img} alt={s.name} width="32" height="32" loading="lazy" />
-                     : <span dangerouslySetInnerHTML={{ __html: s.svg }} />}
-                 </div>
-                <div className="skill-name">{s.name}</div>
-                <div className="skill-type">{s.type}</div>
-              </SpotlightCard>
+              <motion.div key={s.name} variants={fadeUp}>
+                <SpotlightCard className="skill-card" spotlightColor="var(--skill-spotlight)">
+                  <div className="skill-icon" aria-label={s.name}>
+                    {s.img
+                      ? <img src={s.img} alt={s.name} width="32" height="32" loading="lazy" />
+                      : <span dangerouslySetInnerHTML={{ __html: s.svg }} />}
+                  </div>
+                  <div className="skill-name">{s.name}</div>
+                  <div className="skill-type">{s.type}</div>
+                </SpotlightCard>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {
     /* 
@@ -988,25 +1099,28 @@ function App() {
     // | $$$$$$$$| $$  \ $$| $$      | $$$$$$$$| $$  | $$ /$$$$$$| $$$$$$$$| $$ \  $$|  $$$$$$/| $$$$$$$$
     // |________/|__/  |__/|__/      |________/|__/  |__/|______/|________/|__/  \__/ \______/ |________/
       */}
-      <section id="experience" className="section" aria-label="Experience">
+      <motion.section
+        id="experience" className="section" aria-label="Experience"
+        initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.08 }} variants={stagger}
+      >
         <div className="container">
-          <p className="section-label">Career</p>
-          <h2 className="section-title">Experience</h2>
+          <motion.p className="section-label" variants={fadeUp}>Career</motion.p>
+          <SectionHeading text="Experience" />
           <div className="timeline">
             {timeline.map((t) => (
-              <div key={t.role} className="timeline-item">
+              <motion.div key={t.role} className="timeline-item" variants={fadeUp}>
                 <div className="timeline-dot" aria-hidden="true" />
                 <div className="timeline-date">{t.date}</div>
                 <div className="timeline-role">{t.role}</div>
                 <div className="timeline-company">{t.company}</div>
                 <p className="timeline-desc">{t.desc}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* 
+      {/*
       //   /$$$$$$  /$$$$$$$   /$$$$$$  /$$   /$$ /$$$$$$$$
       //  /$$__  $$| $$__  $$ /$$__  $$| $$  | $$|__  $$__/
       // | $$  \ $$| $$  \ $$| $$  \ $$| $$  | $$   | $$   
@@ -1016,27 +1130,28 @@ function App() {
       // | $$  | $$| $$$$$$$/|  $$$$$$/|  $$$$$$/   | $$   
       // |__/  |__/|_______/  \______/  \______/    |__/ 
       */}
-      <section className="section" aria-label="About">
+      <motion.section
+        className="section" aria-label="About"
+        initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.08 }} variants={stagger}
+      >
         <div className="container">
           <div className="about-grid">
-            <div className="portal-wrap">
+            <motion.div className="portal-wrap" variants={fadeUp}>
               <PortalGateway portalSrc={portal} />
-            </div>
+            </motion.div>
             <div>
-              <p className="section-label">About</p>
-              <h2 className="section-title">
-                Detail-oriented. Systematic. Creative.
-              </h2>
-              <p className="section-sub" style={{ maxWidth: '100%' }}>
+              <motion.p className="section-label" variants={fadeUp}>About</motion.p>
+              <SectionHeading text="Detail-oriented. Systematic. Creative." />
+              <motion.p className="section-sub" style={{ maxWidth: '100%' }} variants={fadeUp}>
                 I'm John Emman Lanusga – a Philippine-based QA Analyst with a passion for building
                 reliable software. As a Certified Salesforce Administrator and Test Analyst, I bridge
                 the gap between technical execution and business value, ensuring every release ships
                 with confidence.
-              </p>
+              </motion.p>
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* 
       //   /$$$$$$   /$$$$$$  /$$      /$$ /$$$$$$$$
@@ -1072,13 +1187,16 @@ function App() {
       // |  $$$$$$/|  $$$$$$/| $$ \  $$   | $$  | $$  | $$|  $$$$$$/   | $$   
       //  \______/  \______/ |__/  \__/   |__/  |__/  |__/ \______/    |__/        
       */}
-      <section id="contact" className="section" aria-label="Contact">
+      <motion.section
+        id="contact" className="section" aria-label="Contact"
+        initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.08 }} variants={stagger}
+      >
         <div className="container">
-          <p className="section-label">Get in Touch</p>
-          <h2 className="section-title">Let's work together.</h2>
+          <motion.p className="section-label" variants={fadeUp}>Get in Touch</motion.p>
+          <SectionHeading text="Let's work together." />
           <div className="contact-grid">
 
-            <div className="contact-card contact-card--cta">
+            <motion.div className="contact-card contact-card--cta" variants={fadeUp}>
               <div>
                 <h3 className="section-title">Open to new opportunities.</h3>
                 <p className="section-sub">
@@ -1088,9 +1206,9 @@ function App() {
               <a href="mailto:emmanlanusga@gmail.com" className="btn-white">
                 Say Hello →
               </a>
-            </div>
+            </motion.div>
 
-            <div className="contact-card">
+            <motion.div className="contact-card" variants={fadeUp}>
               <p className="section-label">Socials</p>
               <div className="social-row">
                 <a
@@ -1137,11 +1255,11 @@ function App() {
                   <span className="social-link-arrow" aria-hidden="true">↗</span>
                 </a>
               </div>
-            </div>
+            </motion.div>
 
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* 
       //  /$$$$$$$$ /$$$$$$   /$$$$$$  /$$$$$$$$ /$$$$$$$$ /$$$$$$$ 
