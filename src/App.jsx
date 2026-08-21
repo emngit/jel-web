@@ -40,9 +40,11 @@ import kadaTiponStart    from './assets/images/Kada Tipon/Kada-Tipon-Start.png';
 import kadaTiponHowTo   from './assets/images/Kada Tipon/Kada-Tipon-How-To.png';
 import kadaTiponPlaying  from './assets/images/Kada Tipon/Kada-Tipon-Playing.png';
 import kadaTiponPlaying1 from './assets/images/Kada Tipon/Kada-Tipon-Playing-1.png';
-import tiosLogo          from './assets/images/Tios/TIOS-SAMPLE-LOGO.jpg';
-import tiosLogoHrzl      from './assets/images/Tios/TIOS-SAMPLE-LOGO-hrzl.png';
-import tiosLogoHrzlWhite from './assets/images/Tios/TIOS-SAMPLE-LOGO-hrzl-white.png';
+import tiosLogo              from './assets/images/Tios/TIOS-SAMPLE-LOGO.jpg';
+import tiosLogoHrzl          from './assets/images/Tios/TIOS-SAMPLE-LOGO-hrzl.png';
+import tiosLogoHrzlWhite     from './assets/images/Tios/TIOS-SAMPLE-LOGO-hrzl-white.png';
+import tiosInitialPlan1      from './assets/images/Tios/Tios-initial-plan (1).jpg';
+import tiosInitialPlan2      from './assets/images/Tios/Tios-initial-plan (2).jpg';
 import spaceCat           from './assets/images/SPACE-CAT.png';
 import Stack from './Stack.jsx';
 import './App.css';
@@ -338,7 +340,7 @@ const projects = [
     ],
   },
   {
-    images: [],
+    images: [tiosLogo, tiosInitialPlan1, tiosInitialPlan2],
     isCustomVisual: true,
     logo: tiosLogo,
     tag: 'Fintech & Game (Brainstorming)',

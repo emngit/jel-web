@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import './ProjectPage.css';                      
+import { useState, useRef, useCallback, useEffect } from 'react';
+import './ProjectPage.css';
 
 //  /$$$$$$$$ /$$$$$$  /$$$$$$$   /$$$$$$ 
 // |__  $$__//$$__  $$| $$__  $$ /$$__  $$
@@ -70,6 +70,46 @@ export default function ProjectPage({ project, dark, onToggleDark, onBack }) {
   const [active, setActive] = useState(0);
   const [exiting, setExiting] = useState(false);
 
+  // ── Inline zoom/drag state ─────────────────────────────────────────────────
+  const [scale, setScale]   = useState(1);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const dragging  = useRef(false);
+  const dragStart = useRef({ x: 0, y: 0 });
+  const viewerRef = useRef(null);
+
+  const clampScale = (s) => Math.min(5, Math.max(0.25, s));
+  const zoom = useCallback((delta) => {
+    setScale((s) => clampScale(s + delta));
+  }, []);
+
+  // Reset zoom when switching images
+  const switchImage = useCallback((i) => {
+    setActive(i);
+    setScale(1);
+    setOffset({ x: 0, y: 0 });
+  }, []);
+
+  // Scroll-wheel zoom inside the viewer
+  useEffect(() => {
+    const el = viewerRef.current;
+    if (!el) return;
+    const handler = (e) => { e.preventDefault(); zoom(e.deltaY < 0 ? 0.25 : -0.25); };
+    el.addEventListener('wheel', handler, { passive: false });
+    return () => el.removeEventListener('wheel', handler);
+  }, [zoom]);
+
+  const onMouseDown = (e) => {
+    if (scale <= 1) return;
+    dragging.current  = true;
+    dragStart.current = { x: e.clientX - offset.x, y: e.clientY - offset.y };
+    e.preventDefault();
+  };
+  const onMouseMove = (e) => {
+    if (!dragging.current) return;
+    setOffset({ x: e.clientX - dragStart.current.x, y: e.clientY - dragStart.current.y });
+  };
+  const onMouseUp = () => { dragging.current = false; };
+
   const hasThumbs = images.length > 0;
   const activeSrc = images[active];
 
@@ -135,14 +175,39 @@ export default function ProjectPage({ project, dark, onToggleDark, onBack }) {
           <div className="pp-left">
 
             {/* Media Viewer */}
-            <div className="pp-media-viewer">
+            <div
+              className="pp-media-viewer"
+              ref={viewerRef}
+              onMouseDown={onMouseDown}
+              onMouseMove={onMouseMove}
+              onMouseUp={onMouseUp}
+              onMouseLeave={onMouseUp}
+              style={{ cursor: scale > 1 ? (dragging.current ? 'grabbing' : 'grab') : 'default' }}
+            >
               {hasThumbs ? (
-                <img
-                  key={activeSrc}
-                  src={activeSrc}
-                  alt={`${project.title} screenshot ${active + 1}`}
-                  className="pp-media-img"
-                />
+                <>
+                  <img
+                    key={activeSrc}
+                    src={activeSrc}
+                    alt={`${project.title} screenshot ${active + 1}`}
+                    className="pp-media-img"
+                    style={{
+                      transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
+                      transformOrigin: 'center center',
+                      transition: dragging.current ? 'none' : 'transform 0.12s ease',
+                    }}
+                    draggable={false}
+                  />
+                  {/* Zoom controls overlay */}
+                  <div className="pp-zoom-controls">
+                    <button className="pp-zoom-btn" onClick={() => zoom(0.25)} title="Zoom in">+</button>
+                    <span className="pp-zoom-level">{Math.round(scale * 100)}%</span>
+                    <button className="pp-zoom-btn" onClick={() => zoom(-0.25)} title="Zoom out">−</button>
+                    {scale !== 1 && (
+                      <button className="pp-zoom-btn pp-zoom-btn--reset" onClick={() => { setScale(1); setOffset({ x: 0, y: 0 }); }} title="Reset zoom">⊙</button>
+                    )}
+                  </div>
+                </>
               ) : project.logo ? (
                 <img
                   src={project.logo}
@@ -169,7 +234,7 @@ export default function ProjectPage({ project, dark, onToggleDark, onBack }) {
                   <button
                     key={i}
                     className={`pp-thumb${i === active ? ' pp-thumb--active' : ''}`}
-                    onClick={() => setActive(i)}
+                    onClick={() => switchImage(i)}
                     aria-label={`Screenshot ${i + 1}`}
                     role="listitem"
                   >
@@ -198,7 +263,7 @@ export default function ProjectPage({ project, dark, onToggleDark, onBack }) {
                 <span className="pp-cover-tag">{project.tag}</span>
               </div>
             </div>
-
+    
             {/* Description */}
             <div className="pp-info-section">
               <h2 className="pp-info-label">About this Project</h2>
