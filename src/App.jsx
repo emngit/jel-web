@@ -930,7 +930,7 @@ function App() {
               </div>
             </div>
 
-            <p className="hero-fullname">John Emman Lanusga</p>
+            {/* <p className="hero-fullname">John Emman Lanusga</p> */}
           </div>
 
         </div>
