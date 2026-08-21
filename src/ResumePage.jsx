@@ -285,19 +285,19 @@ export default function ResumePage({ onBack, dark, onToggleDark }) {
             alt="John Emman Lanusga"
             className="rp-hero-photo rp-hero-photo--base"
           />
-          {/* Hover: Surprised */}
+          {/* Hover (both modes): Surprised */}
           <img
             src={surprised}
             alt=""
             aria-hidden="true"
-            className={`rp-hero-photo rp-hero-photo--overlay rp-hero-photo--surprised${photoHovered && !dark ? ' rp-hero-photo--visible' : ''}`}
+            className={`rp-hero-photo rp-hero-photo--overlay rp-hero-photo--surprised${photoHovered ? ' rp-hero-photo--visible' : ''}`}
           />
-          {/* Dark mode: Sleepy */}
+          {/* Dark mode idle (no hover): Sleepy */}
           <img
             src={sleepy}
             alt=""
             aria-hidden="true"
-            className={`rp-hero-photo rp-hero-photo--overlay rp-hero-photo--sleepy${dark ? ' rp-hero-photo--visible' : ''}`}
+            className={`rp-hero-photo rp-hero-photo--overlay rp-hero-photo--sleepy${dark && !photoHovered ? ' rp-hero-photo--visible' : ''}`}
           />
         </motion.div>
 
