@@ -54,9 +54,6 @@ html { scroll-behavior: smooth; }
 [data-theme="dark"] .darkveil-bg {
   opacity: 1;
 }
-[data-theme="dark"] .darkveil-bg .darkveil-canvas {
-  filter: brightness(2.8) contrast(1.5) saturate(2.2) hue-rotate(0deg);
-}
 
 /* ─── Diagonal Wipe Transition ───────────────────────────── */
 /*

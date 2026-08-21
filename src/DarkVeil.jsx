@@ -18,6 +18,8 @@ uniform float uNoise;
 uniform float uScan;
 uniform float uScanFreq;
 uniform float uWarp;
+uniform vec3 uColor1;
+uniform vec3 uColor2;
 #define iTime uTime
 #define iResolution uResolution
 
@@ -68,12 +70,28 @@ void mainImage(out vec4 fragColor,in vec2 fragCoord){
 void main(){
     vec4 col;mainImage(col,gl_FragCoord.xy);
     col.rgb=hueShiftRGB(col.rgb,uHueShift);
+
+    /* Aurora: extract luminance, keep darks dark, tint brights with
+       a time-animated blend between color1 and color2             */
+    float lum=dot(col.rgb,vec3(0.299,0.587,0.114));
+    float t=sin(uTime*0.4)*0.5+0.5;          /* slow 0-1 oscillator  */
+    vec3 auroraColor=mix(uColor1,uColor2,t);  /* cycle between hues   */
+    /* multiply: dark pixels stay dark, bright pixels get the color   */
+    col.rgb=lum*auroraColor*2.0;
+
     float scanline_val=sin(gl_FragCoord.y*uScanFreq)*0.5+0.5;
     col.rgb*=1.-(scanline_val*scanline_val)*uScan;
     col.rgb+=(rand(gl_FragCoord.xy+uTime)-0.5)*uNoise;
     gl_FragColor=vec4(clamp(col.rgb,0.0,1.0),1.0);
 }
 `;
+
+function hexToVec3(hex) {
+  const r = parseInt(hex.slice(1,3),16)/255;
+  const g = parseInt(hex.slice(3,5),16)/255;
+  const b = parseInt(hex.slice(5,7),16)/255;
+  return [r, g, b];
+}
 
 export default function DarkVeil({
   hueShift = 0,
@@ -83,6 +101,8 @@ export default function DarkVeil({
   scanlineFrequency = 0,
   warpAmount = 0,
   resolutionScale = 1,
+  color1 = '#0D4A1A',
+  color2 = '#8DC63F',
 }) {
   const ref = useRef(null);
   useEffect(() => {
@@ -108,6 +128,8 @@ export default function DarkVeil({
         uScan:       { value: scanlineIntensity },
         uScanFreq:   { value: scanlineFrequency },
         uWarp:       { value: warpAmount },
+        uColor1:     { value: hexToVec3(color1) },
+        uColor2:     { value: hexToVec3(color2) },
       },
     });
 
@@ -133,6 +155,8 @@ export default function DarkVeil({
       program.uniforms.uScan.value     = scanlineIntensity;
       program.uniforms.uScanFreq.value = scanlineFrequency;
       program.uniforms.uWarp.value     = warpAmount;
+      program.uniforms.uColor1.value   = hexToVec3(color1);
+      program.uniforms.uColor2.value   = hexToVec3(color2);
       renderer.render({ scene: mesh });
       frame = requestAnimationFrame(loop);
     };
@@ -143,7 +167,7 @@ export default function DarkVeil({
       cancelAnimationFrame(frame);
       window.removeEventListener('resize', resize);
     };
-  }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale]);
+  }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale, color1, color2]);
 
   return <canvas ref={ref} className="darkveil-canvas" />;
 }

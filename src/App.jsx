@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import AdminPanel from './AdminPanel.jsx';
 import ProjectPage from './ProjectPage.jsx';
-import DarkVeil from './DarkVeil.jsx';
+import Aurora from './Aurora.jsx';
 import Particles from './Particles.jsx';
 import KairosChat from './KairosChat.jsx';
 import SpotlightCard from './SpotlightCard.jsx';
@@ -679,16 +679,13 @@ function App() {
   return (
     <div className="site-wrapper">
 
-      {/* ── DarkVeil WebGL background ── */}
+      {/* ── Aurora WebGL background ── */}
       <div className="darkveil-bg">
-        <DarkVeil
-          hueShift={105}
-          speed={0.35}
-          warpAmount={0.5}
-          noiseIntensity={0.04}
-          scanlineIntensity={0.12}
-          scanlineFrequency={800}
-          resolutionScale={0.6}
+        <Aurora
+          colorStops={['#1E6B1E', '#8DC63F', '#4DAB2A']}
+          amplitude={1.2}
+          blend={0.6}
+          speed={0.5}
         />
         <Particles
           particleColors={['#a78bfa', '#818cf8', '#ffffff']}
