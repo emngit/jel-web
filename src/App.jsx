@@ -45,6 +45,7 @@ import tiosLogoHrzl          from './assets/images/Tios/TIOS-SAMPLE-LOGO-hrzl.pn
 import tiosLogoHrzlWhite     from './assets/images/Tios/TIOS-SAMPLE-LOGO-hrzl-white.png';
 import tiosInitialPlan1      from './assets/images/Tios/Tios-initial-plan (1).jpg';
 import tiosInitialPlan2      from './assets/images/Tios/Tios-initial-plan (2).jpg';
+import tiosInitialPlan3      from './assets/images/Tios/Tios-initial-plan (3).jpg';
 import spaceCat           from './assets/images/SPACE-CAT.png';
 import Stack from './Stack.jsx';
 import './App.css';
@@ -340,7 +341,7 @@ const projects = [
     ],
   },
   {
-    images: [tiosLogo, tiosInitialPlan1, tiosInitialPlan2],
+    images: [tiosLogo, tiosInitialPlan1, tiosInitialPlan2, tiosInitialPlan3],
     isCustomVisual: true,
     logo: tiosLogo,
     tag: 'Fintech & Game (Brainstorming)',
