@@ -309,7 +309,7 @@ const projects = [
       {
         tab: 'Workforce Analytics',
         use: 'Monday.com Integration',
-        desc: 'Pulls headcount and task data from Monday.com boards to surface utilisation rates, bandwidth gaps, and team availability - presented as a dashboard for capacity planning.',
+        desc: 'Pulls headcount and task data from Monday.com boards to surface utilization rates, bandwidth gaps, and team availability - presented as a dashboard for capacity planning.',
       },
       {
         tab: 'AI Assistant',
@@ -384,6 +384,9 @@ const sketches = [
   { src: galleryImg15, title: 'Random #15' },
   { src: galleryImg16, title: 'Random #16' },
   { src: galleryImg17, title: 'Random #17' },
+  { src: tiosInitialPlan1, title: 'TIOS – Initial Plan #1' },
+  { src: tiosInitialPlan2, title: 'TIOS – Initial Plan #2' },
+  { src: tiosInitialPlan3, title: 'TIOS – Initial Plan #3' },
 ];
 
 //   /$$$$$$   /$$$$$$  /$$       /$$       /$$$$$$$$ /$$$$$$$  /$$     /$$        /$$$$$$  /$$$$$$$$  /$$$$$$  /$$$$$$$$ /$$$$$$  /$$$$$$  /$$   /$$
@@ -429,7 +432,9 @@ function GallerySection() {
             <p className="section-label">Creative</p>
             <SectionHeading text="Sketches / Gallery" />
             <p className="section-sub">
-              A personal collection of sketches, ideas, illustrations, and photography.
+              A personal collection of sketches, illustrations, photography, creative concepts, and a few random snapshots taken along the way. 
+              Each piece reflects a different stage of my growth, whether it's an idea I wanted to explore, a moment I wanted to capture, or simply something that caught my eye and felt worth remembering. 
+              Through these works, I continue to learn, experiment, and find inspiration in both the ordinary and the unexpected.
             </p>
             <p className="gallery-stack-hint">Drag or click a card to flip through</p>
           </div>
@@ -906,8 +911,8 @@ function App() {
             </h1>
 
             <p className="hero-sub">
-              Philippine-based QA Analyst specialising in Salesforce testing,
-              quality assurance, and user experience optimisation.
+              Philippine-based QA Analyst specializing in Salesforce testing,
+              quality assurance, and user experience optimization.
             </p>
 
             <div className="hero-actions">
@@ -1163,10 +1168,11 @@ function App() {
               <motion.p className="section-label" variants={fadeUp}>About</motion.p>
               <SectionHeading text="Detail-oriented. Systematic. Creative." />
               <motion.p className="section-sub" style={{ maxWidth: '100%' }} variants={fadeUp}>
-                I'm John Emman Lanusga – a Philippine-based QA Analyst with a passion for building
-                reliable software. As a Certified Salesforce Administrator and Test Analyst, I bridge
-                the gap between technical execution and business value, ensuring every release ships
-                with confidence.
+                  I'm John Emman Lanusga, a graduate of Ateneo de Naga University with a Bachelor of Science in Information Technology. 
+                  I am a Philippine-based QA Analyst with a passion for building reliable software. 
+                  In my role, I bridge the gap between technical execution and business value, helping ensure that every release is delivered with confidence and quality.
+                  Outside of IDE, I recharge through physical activities and travel, which help me refresh my mind and gain new perspectives. 
+                  I also enjoy graphic design, drawing, and brainstorming ideas for potential projects. These creative pursuits allow me to continuously learn, explore, and bring fresh ideas into both my professional and personal life.
               </motion.p>
             </div>
           </div>
