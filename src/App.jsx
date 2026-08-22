@@ -676,6 +676,15 @@ function App() {
             window.scrollTo({ top: savedScrollY.current, behavior: 'instant' });
           });
         }}
+        onDemo={(anchor) => {
+          setPage('home');
+          // Wait for home to mount then scroll to the anchor
+          setTimeout(() => {
+            const id = anchor.replace('#', '');
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 80);
+        }}
       />
     );
   }
@@ -689,22 +698,34 @@ function App() {
 
       {/* ── Aurora WebGL background ── */}
       <div className="darkveil-bg">
-        <Aurora
-          colorStops={['#1E6B1E', '#8DC63F', '#4DAB2A']}
-          amplitude={1.2}
-          blend={0.6}
-          speed={0.5}
-        />
+        {/* Light mode: blue "confidence" aurora */}
+        <div className="aurora-layer aurora-layer--light">
+          <Aurora
+            colorStops={['#0055CC', '#0078FF', '#38BDF8']}
+            amplitude={1.4}
+            blend={0.85}
+            speed={0.4}
+          />
+        </div>
+        {/* Dark mode: green aurora */}
+        <div className="aurora-layer aurora-layer--dark">
+          <Aurora
+            colorStops={['#1E6B1E', '#8DC63F', '#4DAB2A']}
+            amplitude={1.2}
+            blend={0.6}
+            speed={0.5}
+          />
+        </div>
         <Particles
           particleColors={['#a78bfa', '#818cf8', '#ffffff']}
-          particleCount={180}
+          particleCount={280}
           particleSpread={12}
           speed={0.08}
-          particleBaseSize={80}
+          particleBaseSize={120}
           moveParticlesOnHover={true}
-          particleHoverFactor={0.6}
+          particleHoverFactor={1.8}
           alphaParticles={true}
-          sizeRandomness={0.8}
+          sizeRandomness={0.6}
           disableRotation={false}
         />
       </div>
@@ -910,21 +931,6 @@ function App() {
               />
             </h1>
 
-            <p className="hero-sub">
-              Philippine-based QA Analyst specializing in Salesforce testing,
-              quality assurance, and user experience optimization.
-            </p>
-
-            <div className="hero-actions">
-              <a href="#work" className="btn-primary">View Projects →</a>
-              <a
-                href="#"
-                className="btn-secondary"
-                onClick={(e) => { e.preventDefault(); setPage('resume'); window.scrollTo({ top: 0, behavior: 'instant' }); }}
-              >
-                View Resume
-              </a>
-            </div>
           </div>
 
           {/* -- HERO RIGHT -- */}
@@ -955,7 +961,21 @@ function App() {
               </div>
             </div>
 
-            {/* <p className="hero-fullname">John Emman Lanusga</p> */}
+            <p className="hero-sub">
+              Philippine-based QA Analyst specializing in Salesforce testing,
+              quality assurance, and user experience optimization.
+            </p>
+
+            <div className="hero-actions">
+              <a href="#work" className="btn-primary">View Projects →</a>
+              <a
+                href="#"
+                className="btn-secondary"
+                onClick={(e) => { e.preventDefault(); setPage('resume'); window.scrollTo({ top: 0, behavior: 'instant' }); }}
+              >
+                View Resume
+              </a>
+            </div>
           </div>
 
         </div>
@@ -965,7 +985,7 @@ function App() {
         <div className="sv-strip">
           <ScrollVelocity
             texts={[
-              <>QA Analyst <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span> Automation <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span> Quality Assurance <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span> Jira <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span> Process Improvement <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span></>,
+              <>QA Analyst <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span> Automation <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span> Quality Assurance <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span> Process Improvement <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span></>,
             ]}
             velocity={60}
             numCopies={4}
@@ -986,47 +1006,74 @@ function App() {
       // |__/      |__/  |__/ \______/  \______/ |________/ \______/    |__/   \______/       
       */}
       <motion.section
-        id="work" className="section" aria-label="Featured Projects"
-        initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.08 }} variants={stagger}
+        id="work" className="section cs-section" aria-label="Featured Projects"
+        initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.05 }} variants={stagger}
       >
         <div className="container">
           <motion.p className="section-label" variants={fadeUp}>Featured Work</motion.p>
           <SectionHeading text="Projects & Outcomes" />
           <motion.p className="section-sub" variants={fadeUp}>
-            A selection of quality engineering work across Salesforce, API testing, and process improvement.
+            A selection of engineering work focused on business impact, outcomes, and storytelling.
           </motion.p>
-          <div className="projects-grid">
-            {projects.map((p) => (
-              <motion.article key={p.title} className="project-card" variants={fadeUp}>
-                <div className="project-thumb--screenshots">
-                  {p.isCustomVisual ? (
-                    <TiosShowcase dark={dark} />
-                  ) : (
-                    p.images.slice(0, 2).map((src, i) => (
-                      <img key={i} src={src} alt={`${p.title} screenshot ${i + 1}`} className="project-thumb-img" />
-                    ))
-                  )}
+
+          {/* ── FEATURED: Kairos ────────────────────────────── */}
+          <motion.div className="cs-featured-wrap" variants={fadeUp}>
+            <div
+              className="cs-featured-card"
+              onMouseMove={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                e.currentTarget.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+                e.currentTarget.style.setProperty('--my', `${e.clientY - rect.top}px`);
+              }}
+            >
+              {/* Browser mockup */}
+              <div className="cs-browser">
+                <div className="cs-browser-bar">
+                  <span className="cs-browser-dot cs-dot-red" />
+                  <span className="cs-browser-dot cs-dot-yellow" />
+                  <span className="cs-browser-dot cs-dot-green" />
+                  <span className="cs-browser-address">kairos.ibm-otc.internal</span>
                 </div>
-                <div className="project-body">
-                  <span className="project-tag">{p.tag}</span>
-                  <h3 className="project-title">{p.title}</h3>
-                  <p className="project-desc">{p.desc}</p>
-                  {p.tech && (
-                    <div className="project-tech">
-                      {p.tech.map((t) => (
-                        <span key={t.name} className="project-tech-badge">
-                          <img src={t.logo} alt="" className="project-tech-icon" />
-                          {t.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  <p className="project-outcome">✦ {p.outcome}</p>
+                <div className="cs-browser-screen">
+                  <img
+                    src={kairosPriority}
+                    alt="Kairos dashboard – Priority List"
+                    className="cs-browser-img cs-browser-img--primary"
+                  />
+                  <img
+                    src={kairosResolve360Stats}
+                    alt="Kairos – Resolve360 Analytics"
+                    className="cs-browser-img cs-browser-img--secondary"
+                  />
+                </div>
+              </div>
+
+              {/* Content below browser */}
+              <div className="cs-featured-body">
+                {/* Left: meta + description */}
+                <div className="cs-featured-info">
+                  <span className="cs-category-label">Internal Enterprise Platform</span>
+                  <h3 className="cs-featured-title">Kairos – Jira Copilot Assistant</h3>
+                  <p className="cs-featured-desc">
+                    AI-powered Jira workflow platform helping IBM OTC teams manage ticket
+                    prioritization, compliance workflows, workforce analytics, and RCA processes.
+                  </p>
+
+                  {/* Tech stack */}
+                  <div className="cs-tech-row">
+                    {projects[0].tech.map((t) => (
+                      <span key={t.name} className="cs-tech-pill">
+                        <img src={t.logo} alt="" className="cs-tech-pill-icon" />
+                        {t.name}
+                      </span>
+                    ))}
+                  </div>
+
                   <button
-                    className="project-view-btn"
+                    className="cs-cta-btn"
                     onClick={() => {
                       savedScrollY.current = window.scrollY;
-                      setSelectedProject(p);
+                      setSelectedProject(projects[0]);
                       setPage('project');
                       window.scrollTo({ top: 0, behavior: 'instant' });
                     }}
@@ -1034,9 +1081,154 @@ function App() {
                     View Details →
                   </button>
                 </div>
-              </motion.article>
-            ))}
-          </div>
+
+                {/* Right: impact panel */}
+                <div className="cs-impact-panel">
+                  <p className="cs-impact-header">Business Impact</p>
+                  <div className="cs-impact-grid">
+                    <div className="cs-impact-item">
+                      <strong className="cs-impact-num">3,800+</strong>
+                      <span className="cs-impact-label">Tickets Processed</span>
+                    </div>
+                    <div className="cs-impact-item">
+                      <strong className="cs-impact-num">2,927</strong>
+                      <span className="cs-impact-label">Resolutions Supported</span>
+                    </div>
+                    <div className="cs-impact-item">
+                      <strong className="cs-impact-num">77%</strong>
+                      <span className="cs-impact-label">Workflow Compliance</span>
+                    </div>
+                    <div className="cs-impact-item cs-impact-item--live">
+                      <strong className="cs-impact-num cs-impact-num--live">
+                        <span className="cs-live-dot" />Active
+                      </strong>
+                      <span className="cs-impact-label">IBM Internal Usage</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* ── SECONDARY: bento grid ──────────────────────── */}
+          <motion.div className="cs-bento-grid" variants={fadeUp}>
+
+            {/* Kada Tipon */}
+            <div
+              className="cs-bento-card cs-bento-card--game"
+              onMouseMove={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                e.currentTarget.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+                e.currentTarget.style.setProperty('--my', `${e.clientY - rect.top}px`);
+              }}
+            >
+              <div className="cs-bento-thumb">
+                <img src={kadaTiponStart} alt="Kada Tipon start screen" className="cs-bento-img" />
+                <img src={kadaTiponPlaying} alt="Kada Tipon gameplay" className="cs-bento-img cs-bento-img--overlay" />
+              </div>
+              <div className="cs-bento-body">
+                <span className="cs-category-label">Game Dev</span>
+                <h3 className="cs-bento-title">Kada Tipon Game</h3>
+                <p className="cs-bento-desc">
+                  A 2D runner where students collect coins while dodging expense obstacles—
+                  financial literacy through play.
+                </p>
+                <div className="cs-tech-row">
+                  {projects[1].tech.map((t) => (
+                    <span key={t.name} className="cs-tech-pill">
+                      <img src={t.logo} alt="" className="cs-tech-pill-icon" />
+                      {t.name}
+                    </span>
+                  ))}
+                </div>
+                <div className="cs-bento-footer">
+                  <span className="cs-outcome-badge">🏛 Presented at ADNU DCS - CS Week</span>
+                  <button
+                    className="cs-bento-btn"
+                    onClick={() => {
+                      savedScrollY.current = window.scrollY;
+                      setSelectedProject(projects[1]);
+                      setPage('project');
+                      window.scrollTo({ top: 0, behavior: 'instant' });
+                    }}
+                  >
+                    View Details →
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* TIOS */}
+            <div
+              className="cs-bento-card cs-bento-card--fintech"
+              onMouseMove={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                e.currentTarget.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+                e.currentTarget.style.setProperty('--my', `${e.clientY - rect.top}px`);
+              }}
+            >
+              <div className="cs-tios-visual">
+                <img src={dark ? tiosLogoHrzlWhite : tiosLogoHrzl} alt="TIOS logo" className="cs-tios-logo" />
+                <div className="cs-tios-roadmap">
+                  <div className="cs-roadmap-track">
+                    <div className="cs-roadmap-node cs-roadmap-node--on">
+                      <span className="cs-roadmap-icon">
+                        {/* Shield / foundation */}
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                      </span>
+                      <span>Foundation</span>
+                    </div>
+                    <div className="cs-roadmap-line" />
+                    <div className="cs-roadmap-node cs-roadmap-node--on">
+                      <span className="cs-roadmap-icon">
+                        {/* Trending up / invest */}
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                          <polyline points="17 6 23 6 23 12"/>
+                        </svg>
+                      </span>
+                      <span>Invest</span>
+                    </div>
+                    <div className="cs-roadmap-line" />
+                    <div className="cs-roadmap-node">
+                      <span className="cs-roadmap-icon">
+                        {/* Star / freedom */}
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                      </span>
+                      <span>Freedom</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="cs-bento-body">
+                <span className="cs-category-label cs-category-label--concept">Fintech & Game Concept</span>
+                <h3 className="cs-bento-title">TIOS - Track It. Own It. Save It.</h3>
+                <p className="cs-bento-desc">
+                  Gamified wealth-planning concept inspired by Rich Dad, Poor Dad - two
+                  financial paths, missions, and a growing world as your wealth builds.
+                </p>
+                <div className="cs-bento-footer">
+                  <span className="cs-outcome-badge cs-outcome-badge--concept">⚗ Brainstorming Concept</span>
+                  <button
+                    className="cs-bento-btn"
+                    onClick={() => {
+                      savedScrollY.current = window.scrollY;
+                      setSelectedProject(projects[2]);
+                      setPage('project');
+                      window.scrollTo({ top: 0, behavior: 'instant' });
+                    }}
+                  >
+                    View Details →
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </motion.div>
         </div>
       </motion.section>
 
@@ -1058,7 +1250,7 @@ function App() {
           <motion.p className="section-label" variants={fadeUp}>Capabilities</motion.p>
           <SectionHeading text="Skills & Tools" />
           <motion.p className="section-sub" variants={fadeUp}>
-            Core competencies spanning QA methodologies, Salesforce administration, and test tooling.
+            Core competencies spanning QA methodologies, Salesforce, test tooling, and developement.
           </motion.p>
           <div className="skills-grid">
             {skills.map((s) => (

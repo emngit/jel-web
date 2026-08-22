@@ -47,13 +47,32 @@ html { scroll-behavior: smooth; }
   position: fixed;
   inset: 0;
   z-index: -1;
-  opacity: 0;
-  transition: opacity 0.6s ease;
+  opacity: 1;
   pointer-events: none;
 }
-[data-theme="dark"] .darkveil-bg {
-  opacity: 1;
+
+/* Aurora layer base — fill the container */
+.aurora-layer {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.6s ease;
 }
+
+/* Light aurora: solid navy backdrop so the WebGL glow is visible */
+.aurora-layer--light {
+  opacity: 1;
+  background: #04101f;
+}
+
+/* Dark aurora: near-black backdrop so aurora + particles are visible */
+.aurora-layer--dark {
+  opacity: 0;
+  background: #080808;
+}
+
+/* Dark mode: swap which layer shows */
+[data-theme="dark"] .aurora-layer--light { opacity: 0; }
+[data-theme="dark"] .aurora-layer--dark  { opacity: 1; }
 
 /* ─── Diagonal Wipe Transition ───────────────────────────── */
 /*
@@ -231,14 +250,8 @@ html { scroll-behavior: smooth; }
 }
 html, body {
   min-height: 100%;
-  background-color: var(--bg);
-  background-image:
-    linear-gradient(var(--grid-major) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
-    linear-gradient(var(--grid-minor) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
-  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
-  background-attachment: fixed;
+  /* Transparent so the fixed aurora layer shows through in light mode */
+  background-color: transparent;
   color: var(--ink);
   font-family: var(--font);
   font-size: 15px;
@@ -259,13 +272,27 @@ img { display: block; max-width: 100%; }
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  /* Light mode: semi-transparent white so blue aurora bleeds through */
+  background-color: rgba(248, 248, 246, 0.82);
+  background-image:
+    linear-gradient(var(--grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid-minor) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  background-attachment: fixed;
+}
+
+/* Dark mode: semi-transparent so aurora glow + particles show through */
+[data-theme="dark"] .site-wrapper {
+  background-color: rgba(8, 8, 8, 0.72);
 }
 
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 3rem;
 }
 
 /* ─── Navbar ─────────────────────────────────────────────── */
@@ -284,10 +311,10 @@ img { display: block; max-width: 100%; }
 
 .masthead-inner {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   height: 64px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 3rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -384,9 +411,9 @@ img { display: block; max-width: 100%; }
 
 .hero-inner {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 5.5rem 2rem 4rem;
+  padding: 5.5rem 3rem 4rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
@@ -394,7 +421,7 @@ img { display: block; max-width: 100%; }
 }
 
 /* Left */
-.hero-left { display: flex; flex-direction: column; gap: 1.75rem; }
+.hero-left { display: flex; flex-direction: column; gap: 1.75rem; justify-self: end; }
 
 .hero-label {
   display: inline-flex;
@@ -506,7 +533,7 @@ img { display: block; max-width: 100%; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   gap: 1.5rem;
 }
 .hero-fullname {
@@ -1880,7 +1907,7 @@ img { display: block; max-width: 100%; }
   .hero-headline-confidence-wrap { align-self: center; }
   .hero-label        { align-self: center; }
   .hero-sub          { max-width: 100%; }
-  .hero-right        { order: -1; }
+  .hero-right        { order: -1; align-items: center; }
   .hero-visual       { max-width: 340px; }
   .badge--sf,
   .badge--test,
@@ -2779,5 +2806,772 @@ img { display: block; max-width: 100%; }
     padding: 0.2rem 0.45rem !important;
     flex-shrink: 0 !important;
     white-space: nowrap !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CASE STUDY — Premium SaaS project showcase
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Section wrapper ────────────────────────────────────────── */
+.cs-section {
+  background: transparent;
+}
+
+/* ── Featured card ──────────────────────────────────────────── */
+.cs-featured-wrap {
+  margin-top: 3rem;
+}
+
+.cs-featured-card {
+  position: relative;
+  background: #f7f8fa;
+  border: 1px solid rgba(17, 17, 17, 0.09);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.32s ease, box-shadow 0.32s ease, border-color 0.32s ease;
+
+  /* subtle grid texture */
+  background-image:
+    linear-gradient(rgba(17,17,17,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17,17,17,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-color: #f7f8fa;
+}
+
+/* Mouse-following blue glow */
+.cs-featured-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    500px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(0, 120, 255, 0.07) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Gradient border glow on hover */
+.cs-featured-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 21px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0,120,255,0), rgba(0,120,255,0.55), rgba(199,217,46,0.3), rgba(0,120,255,0));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cs-featured-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 60px rgba(0, 120, 255, 0.18), 0 24px 48px rgba(0,0,0,0.45);
+  border-color: rgba(0, 120, 255, 0.28);
+}
+
+.cs-featured-card:hover::after {
+  opacity: 1;
+}
+
+/* ── Browser mockup ─────────────────────────────────────────── */
+.cs-browser {
+  position: relative;
+  z-index: 2;
+  margin: 2rem 2rem 0;
+  border-radius: 12px 12px 0 0;
+  background: #e9eaec;
+  border: 1px solid rgba(17,17,17,0.12);
+  border-bottom: none;
+  overflow: hidden;
+}
+
+.cs-browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: #e2e3e6;
+  border-bottom: 1px solid rgba(17,17,17,0.09);
+}
+
+.cs-browser-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.cs-dot-red    { background: #ff5f57; }
+.cs-dot-yellow { background: #ffbd2e; }
+.cs-dot-green  { background: #28c840; }
+
+.cs-browser-address {
+  margin-left: 10px;
+  flex: 1;
+  height: 22px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 11px;
+  color: rgba(17,17,17,0.4);
+  font-family: monospace;
+  letter-spacing: 0.02em;
+}
+
+.cs-browser-screen {
+  position: relative;
+  width: 100%;
+  height: 340px;
+  overflow: hidden;
+  display: flex;
+}
+
+.cs-browser-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+}
+
+.cs-browser-img--secondary {
+  opacity: 0;
+  transform: scale(1.04);
+}
+
+.cs-featured-card:hover .cs-browser-img--primary {
+  opacity: 0;
+  transform: scale(1.04);
+}
+
+.cs-featured-card:hover .cs-browser-img--secondary {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ── Featured body (below browser) ─────────────────────────── */
+.cs-featured-body {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2.5rem;
+  padding: 2rem 2rem 2rem;
+  align-items: start;
+}
+
+/* ── Category label ─────────────────────────────────────────── */
+.cs-category-label {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0078ff;
+  background: rgba(0, 120, 255, 0.1);
+  border: 1px solid rgba(0, 120, 255, 0.22);
+  border-radius: 999px;
+  padding: 0.22rem 0.7rem;
+  margin-bottom: 0.85rem;
+}
+
+.cs-category-label--concept {
+  color: #c7d92e;
+  background: rgba(199, 217, 46, 0.1);
+  border-color: rgba(199, 217, 46, 0.22);
+}
+
+/* ── Featured title & desc ──────────────────────────────────── */
+.cs-featured-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #111111;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.cs-featured-desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(17,17,17,0.55);
+  max-width: 480px;
+  margin-bottom: 1.25rem;
+}
+
+/* ── Tech pills ─────────────────────────────────────────────── */
+.cs-tech-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.cs-tech-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(17,17,17,0.65);
+  background: rgba(17,17,17,0.05);
+  border: 1px solid rgba(17,17,17,0.1);
+  transition: background 0.2s, color 0.2s, transform 0.2s, border-color 0.2s;
+}
+
+.cs-tech-pill:hover {
+  background: rgba(0,120,255,0.08);
+  color: #0078ff;
+  border-color: rgba(0,120,255,0.25);
+  transform: translateY(-2px);
+}
+
+.cs-tech-pill-icon {
+  width: 13px;
+  height: 13px;
+  object-fit: contain;
+  filter: none;
+  opacity: 1;
+}
+
+/* ── CTA button ─────────────────────────────────────────────── */
+.cs-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.55rem 1.35rem;
+  background: #0078ff;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.18s, box-shadow 0.2s;
+  box-shadow: 0 0 0 0 rgba(0,120,255,0.4);
+}
+
+.cs-cta-btn:hover {
+  background: #1a8aff;
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px rgba(0,120,255,0.45);
+}
+
+/* ── Impact panel ───────────────────────────────────────────── */
+.cs-impact-panel {
+  background: rgba(17,17,17,0.03);
+  border: 1px solid rgba(17,17,17,0.09);
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  min-width: 220px;
+  backdrop-filter: blur(8px);
+}
+
+.cs-impact-header {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(17,17,17,0.4);
+  margin-bottom: 1rem;
+}
+
+.cs-impact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.cs-impact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.cs-impact-item--live {
+  position: relative;
+  padding-left: 0;
+}
+
+.cs-impact-num {
+  font-size: 20px;
+  font-weight: 800;
+  color: #111111;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.cs-impact-num--live {
+  color: #4ade80;
+  display: inline-flex;
+  align-items: center;
+}
+
+.cs-impact-label {
+  font-size: 10px;
+  color: rgba(17,17,17,0.45);
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.cs-live-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4ade80;
+  margin-right: 5px;
+  margin-bottom: 2px;
+  animation: cs-live-pulse 1.6s ease infinite;
+  vertical-align: middle;
+}
+
+@keyframes cs-live-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.55); }
+  50%       { box-shadow: 0 0 0 5px rgba(74,222,128,0); }
+}
+
+/* ── Bento grid (secondary projects) ───────────────────────── */
+.cs-bento-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+/* ── Bento card base ────────────────────────────────────────── */
+.cs-bento-card {
+  position: relative;
+  border-radius: 18px;
+  border: 1px solid rgba(17,17,17,0.09);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  background: #f7f8fa;
+}
+
+.cs-bento-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    340px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(0, 120, 255, 0.07) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cs-bento-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 19px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0,120,255,0), rgba(0,120,255,0.5), rgba(0,120,255,0));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cs-bento-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(0, 120, 255, 0.15), 0 16px 36px rgba(0,0,0,0.5);
+  border-color: rgba(0, 120, 255, 0.22);
+}
+
+.cs-bento-card:hover::after {
+  opacity: 1;
+}
+
+/* TIOS card gets the lime accent */
+.cs-bento-card--fintech::before {
+  background: radial-gradient(
+    340px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(199, 217, 46, 0.07) 0%,
+    transparent 70%
+  );
+}
+
+.cs-bento-card--fintech::after {
+  background: linear-gradient(135deg, rgba(199,217,46,0), rgba(199,217,46,0.45), rgba(199,217,46,0));
+}
+
+.cs-bento-card--fintech:hover {
+  border-color: rgba(199, 217, 46, 0.25);
+  box-shadow: 0 0 40px rgba(199,217,46,0.12), 0 16px 36px rgba(0,0,0,0.5);
+}
+
+/* ── Bento thumbnail area ───────────────────────────────────── */
+.cs-bento-thumb {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.cs-bento-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s ease;
+}
+
+.cs-bento-img--overlay {
+  opacity: 0;
+  transform: scale(1.06);
+}
+
+.cs-bento-card:hover .cs-bento-img:not(.cs-bento-img--overlay) {
+  opacity: 0;
+  transform: scale(1.04);
+}
+
+.cs-bento-card:hover .cs-bento-img--overlay {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ── TIOS visual block ──────────────────────────────────────── */
+.cs-tios-visual {
+  background: linear-gradient(155deg, #f0f4e8 0%, #e8f0d0 60%, #f0f4e8 100%);
+  padding: 1.75rem 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  min-height: 200px;
+  justify-content: center;
+}
+
+.cs-tios-logo {
+  height: 36px;
+  object-fit: contain;
+  filter: none;
+}
+
+.cs-tios-roadmap {
+  width: 100%;
+}
+
+.cs-roadmap-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.cs-roadmap-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: rgba(17,17,17,0.35);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+}
+
+.cs-roadmap-node--on {
+  color: #6b7c0e;
+}
+
+.cs-roadmap-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+}
+
+.cs-roadmap-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(17,17,17,0.12);
+  margin: 0 6px;
+  margin-bottom: 14px;
+  max-width: 48px;
+}
+
+/* ── Bento body ─────────────────────────────────────────────── */
+.cs-bento-body {
+  position: relative;
+  z-index: 2;
+  padding: 1.25rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1;
+}
+
+.cs-bento-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #111111;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.cs-bento-desc {
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: rgba(17,17,17,0.5);
+  margin: 0;
+  flex: 1;
+}
+
+.cs-bento-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* ── Outcome badge ──────────────────────────────────────────── */
+.cs-outcome-badge {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(17,17,17,0.5);
+  background: rgba(17,17,17,0.04);
+  border: 1px solid rgba(17,17,17,0.09);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+}
+
+.cs-outcome-badge--concept {
+  color: #c7d92e;
+  background: rgba(199,217,46,0.07);
+  border-color: rgba(199,217,46,0.18);
+}
+
+/* ── Bento CTA button ───────────────────────────────────────── */
+.cs-bento-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.3rem 0.85rem;
+  background: #0078ff;
+  border: 1px solid #0078ff;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cs-bento-btn:hover {
+  background: #1a8aff;
+  border-color: #1a8aff;
+  transform: translateY(-1px);
+  box-shadow: 0 0 16px rgba(0,120,255,0.4);
+}
+
+/* ── Dark mode overrides ────────────────────────────────────── */
+[data-theme="dark"] .cs-featured-card,
+[data-theme="dark"] .cs-bento-card {
+  background: #0d0d0d;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-color: #0d0d0d;
+  border-color: rgba(255,255,255,0.08);
+}
+
+[data-theme="dark"] .cs-featured-card::before,
+[data-theme="dark"] .cs-bento-card::before {
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(0, 120, 255, 0.10) 0%,
+    transparent 70%
+  );
+}
+
+[data-theme="dark"] .cs-featured-card:hover,
+[data-theme="dark"] .cs-bento-card:hover {
+  border-color: rgba(0,120,255,0.28);
+  box-shadow: 0 0 60px rgba(0,120,255,0.18), 0 24px 48px rgba(0,0,0,0.45);
+}
+
+[data-theme="dark"] .cs-bento-card--fintech:hover {
+  border-color: rgba(199,217,46,0.25);
+  box-shadow: 0 0 40px rgba(199,217,46,0.12), 0 16px 36px rgba(0,0,0,0.5);
+}
+
+[data-theme="dark"] .cs-browser {
+  background: #1a1a1a;
+  border-color: rgba(255,255,255,0.1);
+}
+
+[data-theme="dark"] .cs-browser-bar {
+  background: #1e1e1e;
+  border-color: rgba(255,255,255,0.07);
+}
+
+[data-theme="dark"] .cs-browser-address {
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.35);
+}
+
+[data-theme="dark"] .cs-featured-title,
+[data-theme="dark"] .cs-bento-title {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .cs-featured-desc,
+[data-theme="dark"] .cs-bento-desc {
+  color: rgba(255,255,255,0.55);
+}
+
+[data-theme="dark"] .cs-tech-pill {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.65);
+}
+
+[data-theme="dark"] .cs-tech-pill:hover {
+  background: rgba(0,120,255,0.12);
+  color: #fff;
+  border-color: rgba(0,120,255,0.35);
+}
+
+[data-theme="dark"] .cs-tech-pill-icon {
+  filter: brightness(0) invert(1);
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .cs-impact-panel {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.09);
+}
+
+[data-theme="dark"] .cs-impact-header {
+  color: rgba(255,255,255,0.35);
+}
+
+[data-theme="dark"] .cs-impact-num {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .cs-impact-label {
+  color: rgba(255,255,255,0.4);
+}
+
+[data-theme="dark"] .cs-outcome-badge {
+  color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.09);
+}
+
+
+[data-theme="dark"] .cs-tios-visual {
+  background: linear-gradient(155deg, #0f1010 0%, #111800 60%, #0e1408 100%);
+}
+
+[data-theme="dark"] .cs-tios-logo {
+  filter: drop-shadow(0 0 12px rgba(199,217,46,0.3));
+}
+
+[data-theme="dark"] .cs-roadmap-node {
+  color: rgba(255,255,255,0.3);
+}
+
+[data-theme="dark"] .cs-roadmap-node--on {
+  color: #c7d92e;
+}
+
+[data-theme="dark"] .cs-roadmap-line {
+  background: rgba(255,255,255,0.1);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .cs-featured-body {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .cs-impact-panel {
+    min-width: unset;
+  }
+
+  .cs-browser-screen {
+    height: 240px;
+  }
+
+  .cs-browser {
+    margin: 1.25rem 1.25rem 0;
+  }
+
+  .cs-featured-body {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .cs-featured-title {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 660px) {
+  .cs-bento-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-featured-body {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-browser-screen {
+    height: 180px;
+  }
+
+  .cs-browser {
+    margin: 1rem 1rem 0;
+  }
+
+  .cs-featured-body {
+    padding: 1.25rem 1rem;
+  }
+
+  .cs-bento-thumb {
+    height: 160px;
+  }
+
+  .cs-featured-title {
+    font-size: 20px;
   }
 }

@@ -65,7 +65,7 @@ const RELEASE_DATES = {
   'TIOS – Track It. Own It. Save It.':  'TBD (Concept)',
 };
 
-export default function ProjectPage({ project, dark, onToggleDark, onBack }) {
+  export default function ProjectPage({ project, dark, onToggleDark, onBack, onDemo }) {
   const images    = project.images ?? [];
   const [active, setActive] = useState(0);
   const [exiting, setExiting] = useState(false);
@@ -122,13 +122,11 @@ export default function ProjectPage({ project, dark, onToggleDark, onBack }) {
     if (!project.demoUrl) return;
     setExiting(true);
     setTimeout(() => {
-      onBack();
-      // After navigation lands on home, scroll to the anchor
-      requestAnimationFrame(() => {
-        const id = project.demoUrl.replace('#', '');
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
+      if (onDemo) {
+        onDemo(project.demoUrl);
+      } else {
+        onBack();
+      }
     }, 280);
   };
 
