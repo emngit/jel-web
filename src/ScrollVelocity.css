@@ -1,69 +1,108 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap');
 
+/* ── Strip container ───────────────────────────────────────────────────── */
 .sv-strip {
-  background: var(--ink);
-  color: var(--bg);
-  padding: 18px 0;
+  position: relative;
+  background: #090909;
+  border-top:    1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px 0;
   overflow: hidden;
   width: 100%;
+  /* Subtle frosted depth — lets the aurora bleed through very faintly */
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
+/* ── Parallax track — edge fade masks ─────────────────────────────────── */
 .parallax {
   position: relative;
   overflow: hidden;
   cursor: default;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 6%,
+    #000 94%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 6%,
+    #000 94%,
+    transparent 100%
+  );
 }
 
+/* ── Scroller text ─────────────────────────────────────────────────────── */
 .scroller {
   display: flex;
   align-items: center;
   white-space: nowrap;
   font-family: 'Space Grotesk', var(--font);
-  font-size: 1.5rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   line-height: 1;
-  /* ensure inline images align with text cap-height */
-  vertical-align: middle;
+  color: rgba(240, 240, 238, 0.82);
 }
 
 .scroller span {
   flex-shrink: 0;
 }
 
-/* Separator image between items */
+/* ── Keyword hover highlight ───────────────────────────────────────────── */
+.scroller > span:hover {
+  color: #ffffff;
+  transition: color 0.18s ease;
+}
+
+/* ── Separator glyph ───────────────────────────────────────────────────── */
 .sv-sep {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 0 0.5em;
+  margin: 0 0.75em;
   flex-shrink: 0;
+  color: rgba(165, 180, 252, 0.55);   /* indigo-300 at low opacity */
+  font-size: 0.55em;
+  line-height: 1;
   vertical-align: middle;
+  transition: color 0.18s ease, transform 0.18s ease;
+  user-select: none;
 }
 
+.sv-sep:hover {
+  color: rgba(56, 189, 248, 0.9);     /* sky-400 on hover */
+  transform: scale(1.4);
+}
+
+/* .sv-sep-img kept for backward compat — hidden by default now */
 .sv-sep-img {
-  display: block;
-  height: 1em;
-  width: auto;
-  object-fit: contain;
-  vertical-align: middle;
+  display: none;
 }
 
+/* ── Responsive ────────────────────────────────────────────────────────── */
 @media (max-width: 480px) {
-  .sv-strip {
-    padding: 14px 0;
-  }
-  .scroller {
-    font-size: 1.1rem;
-  }
+  .sv-strip  { padding: 11px 0; }
+  .scroller  { font-size: 0.68rem; letter-spacing: 0.08em; }
 }
 
 @media (min-width: 768px) {
-  .sv-strip {
-    padding: 20px 0;
-  }
-  .scroller {
-    font-size: 2rem;
+  .sv-strip  { padding: 16px 0; }
+  .scroller  { font-size: 0.82rem; }
+}
+
+@media (min-width: 1200px) {
+  .scroller  { font-size: 0.88rem; }
+}
+
+/* ── Reduced motion — pause the ticker ────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .parallax .scroller {
+    animation: none !important;
+    transform: none !important;
   }
 }

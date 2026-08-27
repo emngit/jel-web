@@ -46,7 +46,6 @@ import tiosLogoHrzlWhite     from './assets/images/Tios/TIOS-SAMPLE-LOGO-hrzl-wh
 import tiosInitialPlan1      from './assets/images/Tios/Tios-initial-plan (1).jpg';
 import tiosInitialPlan2      from './assets/images/Tios/Tios-initial-plan (2).jpg';
 import tiosInitialPlan3      from './assets/images/Tios/Tios-initial-plan (3).jpg';
-import spaceCat           from './assets/images/SPACE-CAT.png';
 import Stack from './Stack.jsx';
 import './App.css';
 import SplitText from './SplitText.jsx';
@@ -968,12 +967,12 @@ function App() {
         </div>
 
         {/* ── Marquee separator ─────────────────────────────────────── */}
-        <div className="sv-strip">
+        <div className="sv-strip" role="marquee" aria-label="Skills ticker">
           <ScrollVelocity
             texts={[
-              <>QA Analyst <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span> Automation <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span> Quality Assurance <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span> Process Improvement <span className="sv-sep"><img src={spaceCat} alt="" aria-hidden="true" className="sv-sep-img" /></span></>,
+              <>QA Analyst <span className="sv-sep" aria-hidden="true">▸</span> Automation <span className="sv-sep" aria-hidden="true">▸</span> Quality Assurance <span className="sv-sep" aria-hidden="true">▸</span> Process Improvement <span className="sv-sep" aria-hidden="true">▸</span> Salesforce Testing <span className="sv-sep" aria-hidden="true">▸</span> User Experience Testing <span className="sv-sep" aria-hidden="true">▸</span></>,
             ]}
-            velocity={60}
+            velocity={45}
             numCopies={4}
             parallaxClassName="parallax"
             scrollerClassName="scroller"
