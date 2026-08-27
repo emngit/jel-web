@@ -4,7 +4,7 @@
 .sv-strip {
   position: relative;
   background: #090909;
-  border-top:    1px solid rgba(255, 255, 255, 0.08);
+  border-top:    4px solid rgba(255, 255, 255, 0.32);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding: 14px 0;
   overflow: hidden;
