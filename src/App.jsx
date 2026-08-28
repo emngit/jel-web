@@ -723,7 +723,7 @@ function App() {
         .catch(() => {});
 
     ping(); // immediate first ping
-    const id = setInterval(ping, 20_000);
+    const id = setInterval(ping, 5_000);
     return () => clearInterval(id);
   }, []);
 

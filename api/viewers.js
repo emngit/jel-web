@@ -12,7 +12,7 @@
 
 const { Redis } = require('@upstash/redis');
 
-const TTL = 35; // seconds — slightly longer than the 20 s client heartbeat
+const TTL = 15; // seconds — slightly longer than the 5 s client heartbeat
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
