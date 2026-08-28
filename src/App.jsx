@@ -46,6 +46,7 @@ import tiosLogoHrzlWhite     from './assets/images/Tios/TIOS-SAMPLE-LOGO-hrzl-wh
 import tiosInitialPlan1      from './assets/images/Tios/Tios-initial-plan (1).jpg';
 import tiosInitialPlan2      from './assets/images/Tios/Tios-initial-plan (2).jpg';
 import tiosInitialPlan3      from './assets/images/Tios/Tios-initial-plan (3).jpg';
+import spaceship from './assets/images/spaceship.png';
 import Stack from './Stack.jsx';
 import './App.css';
 import SplitText from './SplitText.jsx';
@@ -930,6 +931,7 @@ function App() {
       // |__/  |__/|________/|__/  |__/ \______/       
       */}
       <section className="hero" aria-label="Introduction">
+
         <div className="hero-content">
         <div className="hero-inner">
 
@@ -1008,6 +1010,25 @@ function App() {
 
           {/* -- HERO RIGHT -- */}
           <div className="hero-right">
+
+            {/* ── Spaceship: starts in hero center gap, flies right into landing ── */}
+            <motion.div
+              className="hero-ship-wrap"
+              aria-hidden="true"
+              initial={{ x: -460, y: 20, rotate: -28, opacity: 0 }}
+              animate={{ x: 0,    y: 0,  rotate: -22, opacity: 1 }}
+              transition={{ duration: 2.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+            >
+              <img src={spaceship} alt="" className="hero-ship-img" draggable="false" />
+              {/* Trail points left — ship moves right */}
+              <motion.div
+                className="hero-ship-trail"
+                initial={{ opacity: 0.9, scaleX: 1 }}
+                animate={{ opacity: 0,   scaleX: 0.05 }}
+                transition={{ duration: 2.4, ease: 'easeOut', delay: 0.5 }}
+              />
+            </motion.div>
+
             <div
               className="hero-visual"
               onMouseEnter={() => setBadgeKey((k) => k + 1)}
