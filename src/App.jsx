@@ -715,7 +715,10 @@ function App() {
   }, []);
 
   // ── Dark mode + diagonal wipe ──────────────────────────────
-  const [dark, setDark]           = useState(false);
+  const [dark, setDark]           = useState(() => {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    return true;
+  });
   const [wipeState, setWipeState] = useState('hidden'); // 'hidden' | 'in' | 'out'
 
   const toggleDark = () => {
