@@ -599,6 +599,7 @@ function App() {
   const headlineAlign = isMobile ? 'center' : 'left';
   const [badgeKey, setBadgeKey] = useState(0);
   const [visitors, setVisitors] = useState(null);
+  const [liveViewers, setLiveViewers] = useState(null);
   const hoverCooldown           = useRef(false);
   const [showScrollUp, setShowScrollUp] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -705,6 +706,26 @@ function App() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // ── Live viewers (real — heartbeat to /api/viewers every 20 s) ─────────────
+  useEffect(() => {
+    // Stable session ID for this browser tab (survives refreshes, not new tabs)
+    let sid = sessionStorage.getItem('jel_sid');
+    if (!sid) {
+      sid = Math.random().toString(36).slice(2) + Date.now().toString(36);
+      sessionStorage.setItem('jel_sid', sid);
+    }
+
+    const ping = () =>
+      fetch(`/api/viewers?sid=${sid}`)
+        .then((r) => r.json())
+        .then((d) => { if (d.count !== null) setLiveViewers(d.count); })
+        .catch(() => {});
+
+    ping(); // immediate first ping
+    const id = setInterval(ping, 20_000);
+    return () => clearInterval(id);
+  }, []);
 
   // ── Visitor counter (proxied via /api/visitors to avoid CORS) ─────────────
   useEffect(() => {
@@ -1650,6 +1671,28 @@ function App() {
             <strong>{visitors.toLocaleString()} Visitors</strong>
           </p>
         )}
+        <div className="mastfoot-bottom">
+          {liveViewers !== null && (
+            <div className="mastfoot-live">
+              <span className="mastfoot-live-icons">
+                {Array.from({ length: Math.min(liveViewers, 3) }).map((_, i) => (
+                  <span key={i} className="mastfoot-live-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <circle cx="12" cy="8" r="4"/>
+                      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                    </svg>
+                  </span>
+                ))}
+                {liveViewers > 3 && (
+                  <span className="mastfoot-live-badge">+{liveViewers - 3}</span>
+                )}
+              </span>
+              <span className="mastfoot-live-dot" />
+              <span className="mastfoot-live-label">{liveViewers} people viewing now</span>
+            </div>
+          )}
+          <p className="mastfoot-copy">© 2026 John Emman Lanusga</p>
+        </div>
       </footer>
 
       {/* 
