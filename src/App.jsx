@@ -1015,6 +1015,7 @@ function App() {
             <motion.div
               className="hero-ship-wrap"
               aria-hidden="true"
+              style={{ zIndex: 0 }}
               initial={{ x: typeof window !== 'undefined' && window.innerWidth <= 900 ? 200 : -460, y: 20, rotate: -28, opacity: 0 }}
               animate={{ x: 0, y: 0, rotate: -22, opacity: 1 }}
               transition={{ duration: 2.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}

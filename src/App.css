@@ -549,6 +549,8 @@ img { display: block; max-width: 100%; }
   line-height: 1.7;
   color: var(--ink-muted);
   max-width: 440px;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
@@ -566,9 +568,21 @@ img { display: block; max-width: 100%; }
   background: var(--ink);
   border-radius: 999px;
   border: 2px solid var(--ink);
-  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 2px 12px rgba(17,17,17,0.18), 0 1px 3px rgba(17,17,17,0.12);
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
 }
-.btn-primary:hover { opacity: 0.82; transform: translateY(-2px); }
+.btn-primary:hover {
+  opacity: 0.88;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(17,17,17,0.28), 0 2px 6px rgba(17,17,17,0.14);
+}
+
+[data-theme="dark"] .btn-primary {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.45), 0 1px 3px rgba(0,0,0,0.3);
+}
+[data-theme="dark"] .btn-primary:hover {
+  box-shadow: 0 6px 28px rgba(0,0,0,0.6), 0 2px 6px rgba(0,0,0,0.35);
+}
 
 .btn-secondary {
   display: inline-flex;
@@ -580,12 +594,25 @@ img { display: block; max-width: 100%; }
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--ink);
-  background: transparent;
+  background: var(--bg);
   border-radius: 999px;
   border: 2px solid var(--border);
-  transition: border-color 0.2s, transform 0.2s, background 0.2s;
+  box-shadow: 0 2px 8px rgba(17,17,17,0.08), 0 1px 3px rgba(17,17,17,0.06);
+  transition: border-color 0.2s, transform 0.2s, background 0.2s, box-shadow 0.2s;
 }
-.btn-secondary:hover { border-color: var(--ink); background: rgba(17,17,17,0.03); transform: translateY(-2px); }
+.btn-secondary:hover {
+  border-color: var(--ink);
+  background: var(--bg);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(17,17,17,0.14), 0 2px 6px rgba(17,17,17,0.08);
+}
+
+[data-theme="dark"] .btn-secondary {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.25);
+}
+[data-theme="dark"] .btn-secondary:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.3);
+}
 
 /* Right */
 .hero-right {
@@ -601,7 +628,7 @@ img { display: block; max-width: 100%; }
 /* Every direct child except the ship sits above it */
 .hero-right > *:not(.hero-ship-wrap) {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 .hero-fullname {
   width: 100%;
