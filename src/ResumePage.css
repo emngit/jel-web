@@ -172,19 +172,21 @@
 .rp-hero-photo-wrap {
   flex-shrink: 0;
   position: relative;
-  width: 116px;
-  height: 116px;
+  width: 152px;
+  height: 152px;
 }
 
 .rp-hero-photo {
-  width: 116px;
-  height: 116px;
+  width: 152px;
+  height: 152px;
   border-radius: 50%;
   object-fit: cover;
   object-position: center top;
   border: 3px solid var(--rp-border);
   display: block;
-  transition: transform 0.35s ease, box-shadow 0.35s ease, opacity 0.35s ease;
+  transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Base photo sits underneath */
@@ -202,6 +204,11 @@
   pointer-events: none;
 }
 
+/* MIB sits highest so it wins cleanly over Sunglasses on hover */
+.rp-hero-photo--mib {
+  z-index: 3;
+}
+
 /* Visible state — smooth crossfade in */
 .rp-hero-photo--overlay.rp-hero-photo--visible {
   opacity: 1;
@@ -209,8 +216,8 @@
 
 /* Subtle scale on hover (applies to the whole wrap) */
 .rp-hero-photo-wrap:hover .rp-hero-photo {
-  transform: scale(1.04);
-  box-shadow: 0 0 0 4px rgba(127,140,152,0.18);
+  transform: scale(1.05);
+  box-shadow: 0 0 0 4px rgba(127,140,152,0.22);
 }
 
 .rp-hero-identity {

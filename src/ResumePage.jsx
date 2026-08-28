@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
-import badge    from './assets/images/BADGE.jpg';
-import surprised from './assets/images/Suprised.png';
-import sleepy    from './assets/images/Sleepy.png';
+import badge      from './assets/images/BADGE.jpg';
+import surprised  from './assets/images/Suprised.png';
+import sleepy     from './assets/images/Sleepy.png';
+import sunglasses from './assets/images/Sunglasses.png';
+import mib        from './assets/images/MIB.png';
 import logoDark  from './assets/images/My_LOGO-white.png';
 import logoLight from './assets/images/My_LOGO.png';
 import resumePdf from './assets/images/LANUSGA_JEL_CV.pdf';
@@ -279,26 +281,33 @@ export default function ResumePage({ onBack, dark, onToggleDark }) {
           onMouseEnter={() => setPhotoHovered(true)}
           onMouseLeave={() => setPhotoHovered(false)}
         >
-          {/* Base photo */}
-          <img
-            src={badge}
-            alt="John Emman Lanusga"
-            className="rp-hero-photo rp-hero-photo--base"
-          />
-          {/* Hover (both modes): Surprised */}
-          <img
-            src={surprised}
-            alt=""
-            aria-hidden="true"
-            className={`rp-hero-photo rp-hero-photo--overlay rp-hero-photo--surprised${photoHovered ? ' rp-hero-photo--visible' : ''}`}
-          />
-          {/* Dark mode idle (no hover): Sleepy */}
-          <img
-            src={sleepy}
-            alt=""
-            aria-hidden="true"
-            className={`rp-hero-photo rp-hero-photo--overlay rp-hero-photo--sleepy${dark && !photoHovered ? ' rp-hero-photo--visible' : ''}`}
-          />
+            {/* Base photo — always underneath */}
+            <img
+              src={badge}
+              alt="John Emman Lanusga"
+              className="rp-hero-photo rp-hero-photo--base"
+            />
+            {/* Light mode hover: Surprised */}
+            <img
+              src={surprised}
+              alt=""
+              aria-hidden="true"
+              className={`rp-hero-photo rp-hero-photo--overlay rp-hero-photo--surprised${!dark && photoHovered ? ' rp-hero-photo--visible' : ''}`}
+            />
+            {/* Dark mode idle: Sunglasses */}
+            <img
+              src={sunglasses}
+              alt=""
+              aria-hidden="true"
+              className={`rp-hero-photo rp-hero-photo--overlay rp-hero-photo--sunglasses${dark && !photoHovered ? ' rp-hero-photo--visible' : ''}`}
+            />
+            {/* Dark mode hover: MIB */}
+            <img
+              src={mib}
+              alt=""
+              aria-hidden="true"
+              className={`rp-hero-photo rp-hero-photo--overlay rp-hero-photo--mib${dark && photoHovered ? ' rp-hero-photo--visible' : ''}`}
+            />
         </motion.div>
 
         <motion.div className="rp-hero-identity" variants={fadeUp}>
