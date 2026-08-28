@@ -431,14 +431,26 @@ img { display: block; max-width: 100%; }
   70%        { transform: translateY(-5px)  rotate(-21.5deg); }
 }
 
-/* Mobile — smaller, same layering */
+/* Mobile — tucked further behind card, non-intrusive */
 @media (max-width: 900px) {
   .hero-ship-wrap {
-    width:  200px;
-    bottom: -20px;
-    right:  -20px;
+    width:  150px;
+    bottom: -30px;
+    right:  -15px;
   }
-  .hero-ship-trail { width: 300px; }
+  .hero-ship-img  { opacity: 0.38; }
+  .hero-ship-trail { width: 180px; }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .hero-ship-wrap {
+    width:  120px;
+    bottom: -24px;
+    right:  -10px;
+  }
+  .hero-ship-img  { opacity: 0.28; }
+  .hero-ship-trail { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

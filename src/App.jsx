@@ -1011,12 +1011,12 @@ function App() {
           {/* -- HERO RIGHT -- */}
           <div className="hero-right">
 
-            {/* ── Spaceship: starts in hero center gap, flies right into landing ── */}
+            {/* ── Spaceship: starts in hero center gap (desktop) / right edge (mobile) ── */}
             <motion.div
               className="hero-ship-wrap"
               aria-hidden="true"
-              initial={{ x: -460, y: 20, rotate: -28, opacity: 0 }}
-              animate={{ x: 0,    y: 0,  rotate: -22, opacity: 1 }}
+              initial={{ x: typeof window !== 'undefined' && window.innerWidth <= 900 ? 200 : -460, y: 20, rotate: -28, opacity: 0 }}
+              animate={{ x: 0, y: 0, rotate: -22, opacity: 1 }}
               transition={{ duration: 2.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
             >
               <img src={spaceship} alt="" className="hero-ship-img" draggable="false" />
