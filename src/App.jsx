@@ -510,6 +510,338 @@ function GallerySection() {
 // | $$  \ $$| $$  | $$| $$\  $ | $$| $$             /$$  \ $$| $$      | $$    $$   | $$     | $$  | $$  | $$| $$\  $$$
 // |  $$$$$$/| $$  | $$| $$ \/  | $$| $$$$$$$$      |  $$$$$$/| $$$$$$$$|  $$$$$$/   | $$    /$$$$$$|  $$$$$$/| $$ \  $$
 //  \______/ |__/  |__/|__/     |__/|________/       \______/ |________/ \______/    |__/   |______/ \______/ |__/  \__/
+// ─── Typing Test ─────────────────────────────────────────────────────────────
+const TYPING_WORDS = [
+  'function','const','return','import','export','default','async','await',
+  'useState','useEffect','useRef','component','interface','boolean','string',
+  'number','object','array','null','undefined','class','extends','implement',
+  'algorithm','variable','parameter','argument','iteration','recursion','loop',
+  'condition','exception','assertion','refactor','database','endpoint','server',
+  'request','response','payload','callback','promise','closure','prototype',
+  'debugging','testing','deployment','pipeline','repository','commit','branch',
+];
+
+const KB_ROWS = [
+  ['q','w','e','r','t','y','u','i','o','p'],
+  ['a','s','d','f','g','h','j','k','l'],
+  ['z','x','c','v','b','n','m'],
+];
+
+function TypingTest({ onClose } = {}) {
+  const DURATION   = 30;
+  const WORD_COUNT = 40;
+
+  const generateWords = useCallback(() => {
+    const out = [];
+    for (let i = 0; i < WORD_COUNT; i++)
+      out.push(TYPING_WORDS[Math.floor(Math.random() * TYPING_WORDS.length)]);
+    return out;
+  }, []);
+
+  const [words, setWords]               = useState(generateWords);
+  const [typed, setTyped]               = useState('');
+  const [wordIndex, setWordIndex]       = useState(0);
+  const [charIndex, setCharIndex]       = useState(0);
+  const [errors, setErrors]             = useState(0);
+  const [timeLeft, setTimeLeft]         = useState(DURATION);
+  const [started, setStarted]           = useState(false);
+  const [finished, setFinished]         = useState(false);
+  const [correctWords, setCorrectWords] = useState(0);
+  const [pressedKey, setPressedKey]     = useState('');
+  const submittedRef = useRef([]);
+  const inputRef     = useRef(null);
+  const timerRef     = useRef(null);
+  const wordsRef     = useRef(null);
+  const keyTimerRef  = useRef(null);
+  const audioCtxRef  = useRef(null);
+  const [soundOn, setSoundOn] = useState(true);
+
+  // ── Creamy mechanical keyboard click (Web Audio API) ──────────────────────
+  const playClick = useCallback((isSpace = false) => {
+    if (!soundOn) return;
+    try {
+      if (!audioCtxRef.current)
+        audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      const ctx = audioCtxRef.current;
+      if (ctx.state === 'suspended') ctx.resume();
+      const now = ctx.currentTime;
+      const osc1 = ctx.createOscillator(), gain1 = ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(isSpace ? 180 : 210 + Math.random() * 30, now);
+      osc1.frequency.exponentialRampToValueAtTime(isSpace ? 90 : 110, now + 0.055);
+      gain1.gain.setValueAtTime(0.38, now);
+      gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.07);
+      osc1.connect(gain1); gain1.connect(ctx.destination);
+      osc1.start(now); osc1.stop(now + 0.08);
+      const bufLen = Math.floor(ctx.sampleRate * 0.018);
+      const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < bufLen; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / bufLen);
+      const noise = ctx.createBufferSource(), gainN = ctx.createGain();
+      noise.buffer = buf;
+      gainN.gain.setValueAtTime(isSpace ? 0.18 : 0.13, now);
+      gainN.gain.exponentialRampToValueAtTime(0.0001, now + 0.018);
+      const lpf = ctx.createBiquadFilter();
+      lpf.type = 'lowpass'; lpf.frequency.value = isSpace ? 3200 : 4500;
+      noise.connect(lpf); lpf.connect(gainN); gainN.connect(ctx.destination);
+      noise.start(now); noise.stop(now + 0.018);
+      const osc2 = ctx.createOscillator(), gain2 = ctx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(isSpace ? 700 : 820 + Math.random() * 60, now + 0.012);
+      osc2.frequency.exponentialRampToValueAtTime(isSpace ? 400 : 500, now + 0.055);
+      gain2.gain.setValueAtTime(0.0001, now + 0.012);
+      gain2.gain.linearRampToValueAtTime(isSpace ? 0.09 : 0.07, now + 0.022);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+      osc2.connect(gain2); gain2.connect(ctx.destination);
+      osc2.start(now + 0.012); osc2.stop(now + 0.065);
+    } catch (_) {}
+  }, [soundOn]);
+
+  const reset = useCallback(() => {
+    clearInterval(timerRef.current);
+    setWords(generateWords());
+    setTyped(''); setWordIndex(0); setCharIndex(0);
+    setErrors(0); setTimeLeft(DURATION);
+    setStarted(false); setFinished(false); setCorrectWords(0);
+    submittedRef.current = [];
+    setTimeout(() => inputRef.current?.focus(), 50);
+  }, [generateWords]);
+
+  // auto-focus the capture input on mount (when modal opens)
+  useEffect(() => {
+    setTimeout(() => inputRef.current?.focus(), 80);
+  }, []);
+
+  // document-level Tab/Esc listener active when finished (input is disabled)
+  useEffect(() => {
+    if (!finished) return;
+    const onKey = (e) => {
+      if (e.key === 'Tab') { e.preventDefault(); reset(); }
+      if (e.key === 'Escape') { onClose?.(); }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [finished, reset, onClose]);
+
+  // scroll active word line into view
+  useEffect(() => {
+    if (!wordsRef.current) return;
+    const active = wordsRef.current.querySelector('.tt-word--active');
+    if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }, [wordIndex]);
+
+  // countdown
+  useEffect(() => {
+    if (!started || finished) return;
+    timerRef.current = setInterval(() => {
+      setTimeLeft((t) => {
+        if (t <= 1) { clearInterval(timerRef.current); setFinished(true); return 0; }
+        return t - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timerRef.current);
+  }, [started, finished]);
+
+  const handleKeyDown = (e) => {
+    if (finished) return;
+    // Tab = restart
+    if (e.key === 'Tab') { e.preventDefault(); reset(); return; }
+    // Escape handled by modal parent
+    if (e.key.length === 1 || e.key === 'Backspace') {
+      playClick(e.key === ' ');
+      // flash the key on the visual keyboard
+      const k = e.key === ' ' ? 'space' : e.key.toLowerCase();
+      setPressedKey(k);
+      clearTimeout(keyTimerRef.current);
+      keyTimerRef.current = setTimeout(() => setPressedKey(''), 120);
+    }
+    // Backspace on empty → step back to previous word
+    if (e.key === 'Backspace' && typed === '' && wordIndex > 0) {
+      const prev = wordIndex - 1;
+      const wasCorrect = submittedRef.current[prev];
+      submittedRef.current = submittedRef.current.slice(0, prev);
+      const prevWord = words[prev];
+      if (wasCorrect) setCorrectWords((c) => c - 1); else setErrors((er) => er - 1);
+      setWordIndex(prev); setTyped(prevWord); setCharIndex(prevWord.length);
+    }
+  };
+
+  const handleInput = (e) => {
+    if (finished) return;
+    const val = e.target.value;
+    if (!started && val.length > 0) setStarted(true);
+    if (val.endsWith(' ')) {
+      const attempt = val.trim();
+      const correct = attempt === words[wordIndex];
+      submittedRef.current[wordIndex] = correct;
+      if (correct) setCorrectWords((c) => c + 1); else setErrors((er) => er + 1);
+      setWordIndex((wi) => wi + 1); setCharIndex(0); setTyped('');
+      return;
+    }
+    setTyped(val); setCharIndex(val.length);
+  };
+
+  const wpm = Math.round((correctWords / DURATION) * 60);
+  const acc  = wordIndex === 0 ? 100 : Math.round((correctWords / wordIndex) * 100);
+
+  return (
+    <div className="tt-wrap" onClick={() => inputRef.current?.focus()}>
+      {/* ── hidden capture input ── */}
+      <input
+        ref={inputRef}
+        className="tt-capture"
+        value={typed}
+        onKeyDown={handleKeyDown}
+        onChange={handleInput}
+        autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false"
+        aria-label="Typing test input"
+        disabled={finished}
+        tabIndex={0}
+      />
+
+      {finished ? (
+        /* ── Results ── */
+        <div className="tt-result">
+          <div className="tt-result-row">
+            <div className="tt-result-stat">
+              <span className="tt-result-num">{wpm}</span>
+              <span className="tt-result-label">WPM</span>
+            </div>
+            <div className="tt-result-stat">
+              <span className="tt-result-num">{acc}<span className="tt-result-unit">%</span></span>
+              <span className="tt-result-label">Accuracy</span>
+            </div>
+            <div className="tt-result-stat">
+              <span className="tt-result-num">{correctWords}</span>
+              <span className="tt-result-label">Correct</span>
+            </div>
+            <div className="tt-result-stat">
+              <span className="tt-result-num tt-result-num--err">{errors}</span>
+              <span className="tt-result-label">Errors</span>
+            </div>
+          </div>
+          <button className="tt-btn" onClick={reset}>Try Again →</button>
+          {/* ── Shortcut bar (same as playing state) ── */}
+          <div className="tt-shortcuts">
+            <span className="tt-shortcut"><kbd>tab</kbd> restart</span>
+            <button className="tt-shortcut tt-shortcut--btn" onClick={reset}>
+              <kbd>restart</kbd>
+            </button>
+            <span className="tt-shortcut">
+              <button
+                className="tt-sound-inline"
+                onClick={(e) => { e.stopPropagation(); setSoundOn((s) => !s); }}
+                title={soundOn ? 'Mute' : 'Unmute'}
+              >
+                {soundOn ? (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
+                  </svg>
+                )}
+                <kbd>{soundOn ? 'sound on' : 'sound off'}</kbd>
+              </button>
+            </span>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* ── Stats row ── */}
+          <div className="tt-stats-center">
+            <div className="tt-sc-stat">
+              <span className="tt-sc-num">{started ? wpm : '0'}</span>
+              <span className="tt-sc-label">WPM</span>
+            </div>
+            <div className="tt-sc-stat tt-sc-stat--mid">
+              <span className="tt-sc-num tt-sc-num--large">{started ? acc : '100'}<span className="tt-sc-unit">%</span></span>
+              <span className="tt-sc-label">ACC</span>
+            </div>
+            <div className="tt-sc-stat">
+              <span className="tt-sc-num" style={{ color: timeLeft <= 5 ? '#ef4444' : undefined }}>
+                {timeLeft}<span className="tt-sc-unit" style={{ color: timeLeft <= 5 ? '#ef4444' : undefined }}> s</span>
+              </span>
+              <span className="tt-sc-label">TIME</span>
+            </div>
+          </div>
+
+          {/* ── Word display ── */}
+          <div className="tt-words" ref={wordsRef}>
+            {words.map((word, wi) => {
+              const isActive = wi === wordIndex;
+              const isDone   = wi < wordIndex;
+              const wasCorrect = submittedRef.current[wi];
+              let cls = 'tt-word';
+              if (isActive) cls += ' tt-word--active';
+              if (isDone)   cls += wasCorrect ? ' tt-word--done' : ' tt-word--err';
+              return (
+                <span key={wi} className={cls}>
+                  {word.split('').map((ch, ci) => {
+                    let cCls = 'tt-char';
+                    if (isActive) {
+                      if (ci < charIndex)
+                        cCls += typed[ci] === ch ? ' tt-char--correct' : ' tt-char--wrong';
+                      else if (ci === charIndex)
+                        cCls += ' tt-char--cursor';
+                    }
+                    return <span key={ci} className={cCls}>{ch}</span>;
+                  })}
+                </span>
+              );
+            })}
+          </div>
+
+          {/* ── QWERTY keyboard ── */}
+          <div className="tt-kb" aria-hidden="true">
+            {KB_ROWS.map((row, ri) => (
+              <div key={ri} className="tt-kb-row">
+                {row.map((k) => (
+                  <span key={k} className={`tt-key${pressedKey === k ? ' tt-key--pressed' : ''}`}>{k}</span>
+                ))}
+              </div>
+            ))}
+            <div className="tt-kb-row">
+              <span className={`tt-key tt-key--space${pressedKey === 'space' ? ' tt-key--pressed' : ''}`}>SPACE</span>
+            </div>
+          </div>
+
+          {/* ── Shortcut bar ── */}
+          <div className="tt-shortcuts">
+            <span className="tt-shortcut"><kbd>tab</kbd> restart</span>
+            <button className="tt-shortcut tt-shortcut--btn" onClick={reset}>
+              <kbd>restart</kbd>
+            </button>
+            <span className="tt-shortcut">
+              <button
+                className="tt-sound-inline"
+                onClick={(e) => { e.stopPropagation(); setSoundOn((s) => !s); }}
+                title={soundOn ? 'Mute' : 'Unmute'}
+              >
+                {soundOn ? (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
+                  </svg>
+                )}
+                <kbd>{soundOn ? 'sound on' : 'sound off'}</kbd>
+              </button>
+            </span>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 function GameSection() {
   const [muted, setMuted] = useState(true);
 
@@ -606,6 +938,7 @@ function App() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [projectsView, setProjectsView] = useState('grid'); // 'grid' | 'list'
   const [resourcesView, setResourcesView] = useState('grid'); // 'grid' | 'list'
+  const [typingOpen, setTypingOpen]       = useState(false);
   const savedScrollY = useRef(0);
 
   // ── Contact modal ───────────────────────────────────────────────────────
@@ -1642,6 +1975,30 @@ function App() {
                   </div>
                 </a>
               ))}
+              {/* ── Typing Test list item ── */}
+              <button
+                className="lr-list-item lr-list-item--typing"
+                style={{ '--lr-accent': '#7c3aed' }}
+                onClick={() => setTypingOpen(true)}
+                aria-label="Typing Speed Test — open to play"
+              >
+                <div className="lr-list-icon" style={{ color: '#7c3aed' }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                    <path d="M6 9h.01M9 9h.01M12 9h.01M15 9h.01M18 9h.01M6 12h.01M9 12h.01M12 12h.01M15 12h.01M18 12h.01M6 15h6"/>
+                  </svg>
+                </div>
+                <div className="lr-list-body">
+                  <div className="lr-list-meta">
+                    <span className="lr-tech-badge" style={{ '--lr-badge-color': '#7c3aed' }}>Built-in Tool</span>
+                  </div>
+                  <h3 className="lr-list-name">Typing Speed Test</h3>
+                  <p className="lr-list-desc">Test and improve your typing speed with programming vocabulary.</p>
+                </div>
+                <div className="lr-list-action">
+                  <span className="lr-visit lr-visit--play">Play now →</span>
+                </div>
+              </button>
             </motion.div>
           )}
 
@@ -1761,6 +2118,31 @@ function App() {
                 </div>
               </motion.a>
             ))}
+            {/* ── Typing Test grid card ── */}
+            <motion.button
+              className="lr-card lr-card--typing"
+              style={{ '--lr-accent': '#7c3aed' }}
+              variants={fadeUp}
+              onClick={() => setTypingOpen(true)}
+              aria-label="Typing Speed Test — open to play"
+            >
+              <div className="lr-card-top">
+                <div className="lr-icon" style={{ color: '#7c3aed' }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                    <path d="M6 9h.01M9 9h.01M12 9h.01M15 9h.01M18 9h.01M6 12h.01M9 12h.01M12 12h.01M15 12h.01M18 12h.01M6 15h6"/>
+                  </svg>
+                </div>
+                <span className="lr-tech-badge" style={{ '--lr-badge-color': '#7c3aed' }}>Built-in Tool</span>
+              </div>
+              <div className="lr-card-body">
+                <h3 className="lr-name">Typing Speed Test</h3>
+                <p className="lr-desc">Test and improve your typing speed with programming vocabulary. WPM, accuracy, and mechanical keyboard sounds.</p>
+              </div>
+              <div className="lr-card-footer">
+                <span className="lr-visit lr-visit--play">Play now →</span>
+              </div>
+            </motion.button>
           </motion.div>}
 
           <motion.p className="lr-personal-note" variants={fadeUp}>
@@ -2100,6 +2482,43 @@ function App() {
                   </div>
                 </form>
               )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Typing Test Modal ── */}
+      <AnimatePresence>
+        {typingOpen && (
+          <motion.div
+            className="tt-modal-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            onClick={(e) => { if (e.target === e.currentTarget) setTypingOpen(false); }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Typing Speed Test"
+          >
+            <motion.div
+              className="tt-modal-panel"
+              initial={{ opacity: 0, y: 32, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0,  scale: 1    }}
+              exit={{    opacity: 0, y: 20,  scale: 0.97 }}
+              transition={{ duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
+              onKeyDown={(e) => { if (e.key === 'Escape') setTypingOpen(false); }}
+            >
+              <button
+                className="tt-modal-close"
+                onClick={() => setTypingOpen(false)}
+                aria-label="Close typing test"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+              <TypingTest onClose={() => setTypingOpen(false)} />
             </motion.div>
           </motion.div>
         )}
