@@ -12,9 +12,10 @@ import './ProjectPage.css';
 // ─── Key Features: Tabs (web) ─────────────────────────────────────────────────
 function FeatureTabs({ features }) {
   const [active, setActive] = useState(0);
+  const [sidebar, setSidebar] = useState(false);
   const f = features[active];
   return (
-    <div className="pp-feat-tabs">
+    <div className={`pp-feat-tabs${sidebar ? ' pp-feat-tabs--sidebar' : ''}`}>
       <div className="pp-feat-tab-bar" role="tablist">
         {features.map((feat, i) => (
           <button
@@ -27,6 +28,14 @@ function FeatureTabs({ features }) {
             {feat.tab}
           </button>
         ))}
+        <button
+          className="pp-feat-tab-layout-toggle"
+          onClick={() => setSidebar((s) => !s)}
+          title={sidebar ? 'Switch to horizontal tabs' : 'Switch to sidebar'}
+          aria-label={sidebar ? 'Switch to horizontal tabs' : 'Switch to sidebar'}
+        >
+          {sidebar ? '▤' : '▥'}
+        </button>
       </div>
       <div className="pp-feat-tab-body" role="tabpanel">
         <span className="pp-feat-use">{f.use}</span>

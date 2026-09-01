@@ -604,6 +604,8 @@ function App() {
   const [showScrollUp, setShowScrollUp] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [projectsView, setProjectsView] = useState('grid'); // 'grid' | 'list'
+  const [resourcesView, setResourcesView] = useState('grid'); // 'grid' | 'list'
   const savedScrollY = useRef(0);
 
   // ── Contact modal ───────────────────────────────────────────────────────
@@ -875,6 +877,7 @@ function App() {
               {/* <li><a href="#certs">Certifications</a></li> */}
               <li><a href="#experience" onClick={() => setMenuOpen(false)}>Experience</a></li>
               <li><a href="#gallery" onClick={() => setMenuOpen(false)}>Gallery</a></li>
+              <li><a href="#resources" onClick={() => setMenuOpen(false)}>Resources</a></li>
               <li><a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a></li>
               <li>
                 <a
@@ -932,6 +935,7 @@ function App() {
             <a href="#skills"     className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Skills</a>
             <a href="#experience" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Experience</a>
             <a href="#gallery"    className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Gallery</a>
+            <a href="#resources"  className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Resources</a>
             <a href="#contact"    className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Contact</a>
             <a
               href="#"
@@ -1130,13 +1134,69 @@ function App() {
       >
         <div className="container">
           <motion.p className="section-label" variants={fadeUp}>Featured Work</motion.p>
-          <SectionHeading text="Projects & Outcomes" />
+          <div className="cs-heading-row">
+            <SectionHeading text="Projects & Outcomes" />
+            <motion.button
+              variants={fadeUp}
+              className="cs-view-toggle"
+              onClick={() => setProjectsView((v) => v === 'grid' ? 'list' : 'grid')}
+              title={projectsView === 'grid' ? 'Switch to list view' : 'Switch to grid view'}
+              aria-label={projectsView === 'grid' ? 'Switch to list view' : 'Switch to grid view'}
+            >
+              {projectsView === 'grid' ? '▤' : '▥'}
+            </motion.button>
+          </div>
           <motion.p className="section-sub" variants={fadeUp}>
             A selection of engineering work focused on business impact, outcomes, and storytelling.
           </motion.p>
 
+          {/* ── LIST VIEW ───────────────────────────────────── */}
+          {projectsView === 'list' && (
+            <motion.div className="cs-list-view" variants={fadeUp} initial={false}>
+              {projects.map((proj, i) => (
+                <div key={proj.title} className="cs-list-item">
+                  <div className="cs-list-thumb">
+                    {proj.images?.[0]
+                      ? <img src={proj.images[0]} alt={proj.title} className="cs-list-thumb-img" />
+                      : proj.logo
+                        ? <img src={proj.logo} alt={proj.title} className="cs-list-thumb-img cs-list-thumb-img--logo" />
+                        : <div className="cs-list-thumb-placeholder">{proj.tag}</div>
+                    }
+                  </div>
+                  <div className="cs-list-body">
+                    <span className="cs-category-label">{proj.tag}</span>
+                    <h3 className="cs-list-title">{proj.title}</h3>
+                    <p className="cs-list-desc">{proj.desc}</p>
+                    <div className="cs-tech-row">
+                      {proj.tech?.map((t) => (
+                        <span key={t.name} className="cs-tech-pill">
+                          <img src={t.logo} alt="" className="cs-tech-pill-icon" />
+                          {t.name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="cs-list-action">
+                    <span className="cs-list-outcome">{proj.outcome}</span>
+                    <button
+                      className="cs-bento-btn"
+                      onClick={() => {
+                        savedScrollY.current = window.scrollY;
+                        setSelectedProject(proj);
+                        setPage('project');
+                        window.scrollTo({ top: 0, behavior: 'instant' });
+                      }}
+                    >
+                      View Details →
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          )}
+
           {/* ── FEATURED: Kairos ────────────────────────────── */}
-          <motion.div className="cs-featured-wrap" variants={fadeUp}>
+          {projectsView === 'grid' && <motion.div className="cs-featured-wrap" variants={fadeUp} initial={false}>
             <div
               className="cs-featured-card"
               onMouseMove={(e) => {
@@ -1227,10 +1287,10 @@ function App() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </motion.div>}
 
           {/* ── SECONDARY: bento grid ──────────────────────── */}
-          <motion.div className="cs-bento-grid" variants={fadeUp}>
+          {projectsView === 'grid' && <motion.div className="cs-bento-grid" variants={fadeUp} initial={false}>
 
             {/* Kada Tipon */}
             <div
@@ -1347,7 +1407,7 @@ function App() {
               </div>
             </div>
 
-          </motion.div>
+          </motion.div>}
         </div>
       </motion.section>
 
@@ -1513,6 +1573,203 @@ function App() {
       //  \______/ |__/  |__/|________/|________/|________/|__/  |__/    |__/       
       */}
       <GallerySection />
+
+      {/*
+      //  /$$$$$$$  /$$$$$$$$  /$$$$$$   /$$$$$$  /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$$  /$$$$$$
+      // | $$__  $$| $$_____/ /$$__  $$ /$$__  $$| $$  | $$| $$__  $$ /$$__  $$| $$_____/ /$$__  $$
+      // | $$  \ $$| $$      | $$  \__/| $$  \ $$| $$  | $$| $$  \ $$| $$  \__/| $$      | $$  \__/
+      // | $$$$$$$/| $$$$$   |  $$$$$$ | $$  | $$| $$  | $$| $$$$$$$/| $$      | $$$$$   |  $$$$$$ 
+      // | $$__  $$| $$__/    \____  $$| $$  | $$| $$  | $$| $$__  $$| $$      | $$__/    \____  $$
+      // | $$  \ $$| $$       /$$  \ $$| $$  | $$| $$  | $$| $$  \ $$| $$    $$| $$       /$$  \ $$
+      // | $$  | $$| $$$$$$$$|  $$$$$$/|  $$$$$$/|  $$$$$$/| $$  | $$|  $$$$$$/| $$$$$$$$|  $$$$$$/
+      // |__/  |__/|________/ \______/  \______/  \______/ |__/  |__/ \______/ |________/ \______/ 
+      */}
+      <motion.section
+        id="resources" className="section" aria-label="Recommended Learning Resources"
+        initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.06 }} variants={stagger}
+      >
+        <div className="container">
+          <motion.p className="section-label" variants={fadeUp}>Curated List</motion.p>
+          <div className="cs-heading-row">
+            <SectionHeading text="Recommended Learning Resources" />
+            <motion.button
+              variants={fadeUp}
+              className="cs-view-toggle"
+              onClick={() => setResourcesView((v) => v === 'grid' ? 'list' : 'grid')}
+              title={resourcesView === 'grid' ? 'Switch to list view' : 'Switch to grid view'}
+              aria-label={resourcesView === 'grid' ? 'Switch to list view' : 'Switch to grid view'}
+            >
+              {resourcesView === 'grid' ? '▤' : '▥'}
+            </motion.button>
+          </div>
+          <motion.p className="section-sub" style={{ maxWidth: '680px' }} variants={fadeUp}>
+            A hand-picked list of platforms and resources I keep coming back to for learning, practicing, and improving programming skills in a more interactive and enjoyable way.
+          </motion.p>
+
+          {/* ── LIST VIEW ── */}
+          {resourcesView === 'list' && (
+            <motion.div className="lr-list-view" variants={fadeUp} initial="hidden" animate="visible">
+              {[
+                { tech: 'C++', name: 'Codewars', desc: 'Practice algorithms, data structures, and problem-solving through coding challenges and coding kata.', url: 'https://www.codewars.com', color: '#b1361e', icon: (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>) },
+                { tech: 'SQL', name: 'SQL Island', desc: 'Learn SQL by solving interactive database puzzles in a fun, story-driven environment.', url: 'https://sql-island.informatik.uni-kl.de', color: '#336791', icon: (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>) },
+                { tech: 'C#', name: 'CodinGame', desc: 'Improve programming skills through game-based challenges, puzzles, and real coding scenarios.', url: 'https://www.codingame.com', color: '#f2bb13', icon: (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>) },
+                { tech: 'Python', name: 'CheckiO', desc: 'Learn Python through interactive missions that focus on problem-solving and practical coding techniques.', url: 'https://checkio.org', color: '#3776ab', icon: (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2a5 5 0 0 1 5 5v2H7V7a5 5 0 0 1 5-5z"/><path d="M7 9v8a5 5 0 0 0 10 0V9"/><line x1="9" y1="6" x2="9" y2="6.01"/><line x1="15" y1="16" x2="15" y2="16.01"/></svg>) },
+                { tech: 'JavaScript', name: 'JavaScript30', desc: 'Build 30 projects using vanilla JavaScript without relying on frameworks.', url: 'https://javascript30.com', color: '#c9a800', icon: (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M10 17V10m4 7c0 0 0-3-3-3"/></svg>) },
+                { tech: 'Git & Version Control', name: 'Learn Git Branching', desc: 'Master Git visually through an interactive branching simulator.', url: 'https://learngitbranching.js.org', color: '#f05032', icon: (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>) },
+                { tech: 'General Problem Solving', name: 'LeetCode', desc: 'Strengthen coding interview skills and algorithmic thinking through structured challenges.', url: 'https://leetcode.com', color: '#ffa116', icon: (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M17.5 14h-3m0 3.5h3m-3-7h3"/></svg>) },
+              ].map((r) => (
+                <a
+                  key={r.name}
+                  href={r.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="lr-list-item"
+                  style={{ '--lr-accent': r.color }}
+                  aria-label={`${r.name} — ${r.tech}`}
+                >
+                  <div className="lr-list-icon" style={{ color: r.color }}>
+                    {r.icon}
+                  </div>
+                  <div className="lr-list-body">
+                    <div className="lr-list-meta">
+                      <span className="lr-tech-badge" style={{ '--lr-badge-color': r.color }}>{r.tech}</span>
+                    </div>
+                    <h3 className="lr-list-name">{r.name}</h3>
+                    <p className="lr-list-desc">{r.desc}</p>
+                  </div>
+                  <div className="lr-list-action">
+                    <span className="lr-visit">Visit →</span>
+                  </div>
+                </a>
+              ))}
+            </motion.div>
+          )}
+
+          {/* ── GRID VIEW ── */}
+          {resourcesView === 'grid' && <motion.div className="lr-grid" variants={stagger} initial="hidden" animate="visible">
+            {[
+              {
+                tech: 'C++',
+                name: 'Codewars',
+                desc: 'Practice algorithms, data structures, and problem-solving through coding challenges and coding kata.',
+                url: 'https://www.codewars.com',
+                color: '#b1361e',
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+                  </svg>
+                ),
+              },
+              {
+                tech: 'SQL',
+                name: 'SQL Island',
+                desc: 'Learn SQL by solving interactive database puzzles in a fun, story-driven environment.',
+                url: 'https://sql-island.informatik.uni-kl.de',
+                color: '#336791',
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                  </svg>
+                ),
+              },
+              {
+                tech: 'C#',
+                name: 'CodinGame',
+                desc: 'Improve programming skills through game-based challenges, puzzles, and real coding scenarios.',
+                url: 'https://www.codingame.com',
+                color: '#f2bb13',
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+                  </svg>
+                ),
+              },
+              {
+                tech: 'Python',
+                name: 'CheckiO',
+                desc: 'Learn Python through interactive missions that focus on problem-solving and practical coding techniques.',
+                url: 'https://checkio.org',
+                color: '#3776ab',
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M12 2a5 5 0 0 1 5 5v2H7V7a5 5 0 0 1 5-5z"/><path d="M7 9v8a5 5 0 0 0 10 0V9"/>
+                    <line x1="9" y1="6" x2="9" y2="6.01"/><line x1="15" y1="16" x2="15" y2="16.01"/>
+                  </svg>
+                ),
+              },
+              {
+                tech: 'JavaScript',
+                name: 'JavaScript30',
+                desc: 'Build 30 projects using vanilla JavaScript without relying on frameworks.',
+                url: 'https://javascript30.com',
+                color: '#c9a800',
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M10 17V10m4 7c0 0 0-3-3-3"/>
+                  </svg>
+                ),
+              },
+              {
+                tech: 'Git & Version Control',
+                name: 'Learn Git Branching',
+                desc: 'Master Git visually through an interactive branching simulator.',
+                url: 'https://learngitbranching.js.org',
+                color: '#f05032',
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
+                    <path d="M18 9a9 9 0 0 1-9 9"/>
+                  </svg>
+                ),
+              },
+              {
+                tech: 'General Problem Solving',
+                name: 'LeetCode',
+                desc: 'Strengthen coding interview skills and algorithmic thinking through structured challenges.',
+                url: 'https://leetcode.com',
+                color: '#ffa116',
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/><path d="M17.5 14h-3m0 3.5h3m-3-7h3"/>
+                  </svg>
+                ),
+              },
+            ].map((r) => (
+              <motion.a
+                key={r.name}
+                href={r.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="lr-card"
+                style={{ '--lr-accent': r.color }}
+                variants={fadeUp}
+                aria-label={`${r.name} — ${r.tech}`}
+              >
+                <div className="lr-card-top">
+                  <div className="lr-icon" style={{ color: r.color }}>
+                    {r.icon}
+                  </div>
+                  <span className="lr-tech-badge" style={{ '--lr-badge-color': r.color }}>{r.tech}</span>
+                </div>
+                <div className="lr-card-body">
+                  <h3 className="lr-name">{r.name}</h3>
+                  <p className="lr-desc">{r.desc}</p>
+                </div>
+                <div className="lr-card-footer">
+                  <span className="lr-visit">Visit resource →</span>
+                </div>
+              </motion.a>
+            ))}
+          </motion.div>}
+
+          <motion.p className="lr-personal-note" variants={fadeUp}>
+            These are some of the resources that helped shape my learning journey. I often recommend them to students, aspiring developers, and anyone looking for a more hands-on way to learn programming.
+          </motion.p>
+        </div>
+      </motion.section>
+
+
 
       {/* 
       //   /$$$$$$   /$$$$$$  /$$   /$$ /$$$$$$$$ /$$$$$$   /$$$$$$  /$$$$$$$$

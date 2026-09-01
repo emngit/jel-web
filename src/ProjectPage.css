@@ -605,11 +605,68 @@
   gap: 0;
 }
 
+/* Sidebar variant */
+.pp-feat-tabs--sidebar {
+  flex-direction: row;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.pp-feat-tabs--sidebar .pp-feat-tab-bar {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  width: 150px;
+  margin-bottom: 0;
+  gap: 4px;
+}
+
+.pp-feat-tabs--sidebar .pp-feat-tab {
+  width: 100%;
+  text-align: left;
+  border-radius: var(--radius-sm);
+  white-space: normal;
+}
+
+.pp-feat-tabs--sidebar .pp-feat-tab-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.pp-feat-tabs--sidebar .pp-feat-tab-layout-toggle {
+  margin-top: auto;
+}
+
 .pp-feat-tab-bar {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   margin-bottom: 14px;
+}
+
+/* Layout toggle button — sits at the end of the tab bar */
+.pp-feat-tab-layout-toggle {
+  margin-left: auto;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  font-size: 14px;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.pp-feat-tab-layout-toggle:hover {
+  border-color: var(--ink-muted);
+  color: var(--ink);
+  background: rgba(17, 17, 17, 0.04);
+}
+
+[data-theme="dark"] .pp-feat-tab-layout-toggle:hover {
+  background: rgba(240, 240, 238, 0.06);
 }
 
 .pp-feat-tab {
