@@ -2137,7 +2137,7 @@ function App() {
               </div>
               <div className="lr-card-body">
                 <h3 className="lr-name">Typing Speed Test</h3>
-                <p className="lr-desc">Test and improve your typing speed with programming vocabulary. WPM, accuracy, and mechanical keyboard sounds.</p>
+                <p className="lr-desc">Test and improve your typing speed with programming vocabulary.</p>
               </div>
               <div className="lr-card-footer">
                 <span className="lr-visit lr-visit--play">Play now →</span>
