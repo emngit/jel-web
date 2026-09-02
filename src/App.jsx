@@ -176,7 +176,7 @@ const companies = [
         date: 'Sep 2026 – Present',
         role: 'Automation',
         bullets: [
-          'Responsible for driving operational process improvements and automating manual processes to increase efficiency and reduce operational overhead across business units.',
+          'Responsible for driving operational process improvements and automating manual processes to increase efficiency.',
           'Identifies automation opportunities through workflow analysis and leads manual-to-digital transition initiatives.',
           'Develops and maintains automation pipelines that eliminate repetitive tasks and streamline operations.',
           'Collaborates with cross-functional teams to align automation deliverables with business and client objectives.',
@@ -1565,8 +1565,7 @@ function App() {
             </div>
 
             <p className="hero-sub">
-              Philippine-based QA Analyst specializing in Salesforce testing,
-              quality assurance, and user experience optimization.
+              Philippine-based QA &amp; Automation professional focused on process improvement, operational efficiency, and quality delivery.
             </p>
 
             <div className="hero-actions">
