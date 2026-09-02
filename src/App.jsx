@@ -6,7 +6,6 @@ import Aurora from './Aurora.jsx';
 import Particles from './Particles.jsx';
 import KairosChat from './KairosChat.jsx';
 import SpotlightCard from './SpotlightCard.jsx';
-import galleryImg1  from './assets/images/Gallery/Random (1).jpeg';
 import galleryImg2  from './assets/images/Gallery/Random (1).jpg';
 import galleryImg3  from './assets/images/Gallery/Random (1).png';
 import galleryImg4  from './assets/images/Gallery/Random (2).jpg';
@@ -19,7 +18,6 @@ import galleryImg10 from './assets/images/Gallery/Random (8).jpg';
 import galleryImg11 from './assets/images/Gallery/Random (9).jpg';
 import galleryImg12 from './assets/images/Gallery/Random (10).jpg';
 import galleryImg13 from './assets/images/Gallery/Random (11).jpg';
-import galleryImg14 from './assets/images/Gallery/Random (12).jpg';
 import galleryImg15 from './assets/images/Gallery/Random (13).jpg';
 import galleryImg16 from './assets/images/Gallery/Random (14).jpg';
 import galleryImg17 from './assets/images/Gallery/Random (15).jpg';
@@ -30,6 +28,7 @@ import logoFaceWhite from './assets/images/My_LOGO_FINAL-for_DECALS-white-contra
 import portal from './assets/images/PORTAL.png';
 import resume from './assets/images/LANUSGA_JEL_CV.pdf';
 import PortalGateway from './PortalGateway.jsx';
+import PixelPortrait from './PixelPortrait.jsx';
 import kairosPriority        from './assets/images/Kairos/JIRA-Priority.png';
 import kairosLogin           from './assets/images/Kairos/Login-Page.png';
 import kairosResolve360AI    from './assets/images/Kairos/Resolve360-AI-Investigation.jpeg';
@@ -67,45 +66,67 @@ const SI  = (slug, color) => `https://cdn.simpleicons.org/${slug}/${color}`;
 const DVI = (name, variant = 'original') =>
   `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${name}/${name}-${variant}.svg`;
 
-const skills = [
-  { img: DVI('salesforce'),                   name: 'Salesforce',           type: 'Platform' },
-  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>`,
-    name: 'Manual Testing', type: 'QA' },
-  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>`,
-    name: 'Test Case Planning', type: 'QA' },
-  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
-    name: 'Defect Management', type: 'QA' },
-  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>`,
-    name: 'Regression Testing', type: 'QA' },
-  { img: SI('jira', '0052CC'),                name: 'Jira',                 type: 'Tool' },
-  { img: SI('javascript', 'F7DF1E'),          name: 'JavaScript',           type: 'Language' },
-  { img: SI('python', '3776AB'),              name: 'Python',               type: 'Language' },
-  { img: DVI('java'),                         name: 'Java',                 type: 'Language' },
-  { img: DVI('salesforce'),                   name: 'Apex (Salesforce)',    type: 'Language' },
-  { img: SI('html5', 'E34F26'),               name: 'HTML / CSS',           type: 'Web' },
-  { img: SI('php', '777BB4'),                 name: 'PHP',                  type: 'Language' },
-  { img: SI('nodedotjs', '339933'),           name: 'Node.js',              type: 'Runtime' },
-  { img: SI('cplusplus', '00599C'),           name: 'C++',                  type: 'Language' },
-  { img: DVI('mysql'),                        name: 'MySQL / SQL',          type: 'Database' },
-  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#E97627" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
-    name: 'Data Visualization', type: 'Data' },
-  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/></svg>`,
-    name: 'ER Modeling', type: 'Data' },
-  { img: SI('git', 'F05032'),                 name: 'Git',                  type: 'Version Control' },
-  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`,
-    name: 'Agile / SDLC', type: 'Methodology' },
-  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#0f62fe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`,
-    name: 'Order To Cash (OTC)', type: 'Operations' },
-  { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
-    name: 'Process Management', type: 'Operations' },
-  { img: SI('vuedotjs', '41B883'),            name: 'Vue.js',               type: 'Framework' },
-  { img: SI('react', '61DAFB'),               name: 'React',                type: 'Framework' },
-  { img: SI('postgresql', '336791'),          name: 'PostgreSQL',           type: 'Database' },
-  { img: SI('sqlite', '003B57'),              name: 'SQLite',               type: 'Database' },
-  { img: DVI('illustrator'),                  name: 'Adobe Illustrator',    type: 'Creative' },
-  { img: DVI('photoshop'),                    name: 'Adobe Photoshop',      type: 'Creative' },
-  { img: DVI('premierepro'),                  name: 'Adobe Premiere',       type: 'Creative' },
+const skillCategories = [
+  {
+    id: 'qa',
+    label: 'QA & Testing',
+    accent: '#4ade80',
+    skills: [
+      { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>`, name: 'Manual Testing',       type: 'QA',          level: 'Expert',       details: ['Test Execution', 'Functional Validation', 'UAT Support'] },
+      { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>`, name: 'Regression Testing',    type: 'QA',          level: 'Expert',       details: ['Retesting', 'Impact Analysis', 'Coverage Validation'] },
+      { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>`, name: 'Test Case Planning',    type: 'QA',          level: 'Expert',       details: ['Test Strategy', 'Scenario Design', 'Edge Case Coverage'] },
+      { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`, name: 'Defect Management',     type: 'QA',          level: 'Expert',       details: ['Bug Reporting', 'Root Cause Analysis', 'Triage & Prioritization'] },
+      { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`, name: 'Agile / SDLC',          type: 'Methodology', level: 'Advanced',     details: ['Sprint Ceremonies', 'Backlog Grooming', 'Release Coordination'] },
+      { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`, name: 'Process Management',    type: 'Operations',  level: 'Advanced',     details: ['SOP Documentation', 'Quality Gates', 'Cross-team Coordination'] },
+    ],
+  },
+  {
+    id: 'dev',
+    label: 'Development',
+    accent: '#60a5fa',
+    skills: [
+      { img: SI('javascript', 'F7DF1E'),   name: 'JavaScript',        type: 'Language',        level: 'Advanced',     details: ['ES6+', 'REST APIs', 'Frontend Logic'] },
+      { img: SI('python', '3776AB'),       name: 'Python',            type: 'Language',        level: 'Advanced',     details: ['Automation Scripts', 'Data Processing', 'Backend Utilities'] },
+      { img: DVI('java'),                  name: 'Java',              type: 'Language',        level: 'Intermediate', details: ['OOP Principles', 'Collections API', 'Spring Basics'] },
+      { img: SI('html5', 'E34F26'),        name: 'HTML / CSS',        type: 'Web',             level: 'Advanced',     details: ['Semantic Markup', 'Flexbox & Grid', 'Responsive Design'] },
+      { img: SI('php', '777BB4'),          name: 'PHP',               type: 'Language',        level: 'Intermediate', details: ['Server-side Logic', 'MySQL Integration', 'REST Endpoints'] },
+      { img: SI('nodedotjs', '339933'),    name: 'Node.js',           type: 'Runtime',         level: 'Intermediate', details: ['Express APIs', 'Async Patterns', 'NPM Ecosystem'] },
+      { img: SI('cplusplus', '00599C'),    name: 'C++',               type: 'Language',        level: 'Intermediate', details: ['OOP & Templates', 'STL Containers', 'Memory Management'] },
+      { img: SI('react', '61DAFB'),        name: 'React',             type: 'Framework',       level: 'Advanced',     details: ['Hooks & Context', 'Component Design', 'Framer Motion'] },
+      { img: SI('vuedotjs', '41B883'),     name: 'Vue.js',            type: 'Framework',       level: 'Intermediate', details: ['Composition API', 'Vuex State', 'SFC Architecture'] },
+    ],
+  },
+  {
+    id: 'tools',
+    label: 'Platforms & Tools',
+    accent: '#f59e0b',
+    skills: [
+      { img: DVI('salesforce'),            name: 'Salesforce',        type: 'Platform',        level: 'Advanced',     details: ['CRM Administration', 'Apex Development', 'SOQL & Reports'] },
+      { img: SI('jira', '0052CC'),         name: 'Jira',              type: 'Tool',            level: 'Expert',       details: ['JQL & Reports', 'Defect Tracking', 'Agile Workflows'] },
+      { img: SI('git', 'F05032'),          name: 'Git',               type: 'Version Control', level: 'Advanced',     details: ['Branch Strategies', 'PR Reviews', 'Conflict Resolution'] },
+      { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#0f62fe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`, name: 'Order To Cash (OTC)', type: 'Operations',      level: 'Advanced',     details: ['Order Lifecycle', 'Billing Validation', 'CRM Integration'] },
+      { svg: `<svg viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg"><path d="M50 300c27.614 0 50-22.386 50-50v-50H50c-27.614 0-50 22.386-50 50s22.386 50 50 50z" fill="#0ACF83"/><path d="M0 150c0-27.614 22.386-50 50-50h50v100H50c-27.614 0-50-22.386-50-50z" fill="#A259FF"/><path d="M0 50C0 22.386 22.386 0 50 0h50v100H50C22.386 100 0 77.614 0 50z" fill="#F24E1E"/><path d="M100 0h50c27.614 0 50 22.386 50 50s-22.386 50-50 50h-50V0z" fill="#FF7262"/><path d="M200 150c0 27.614-22.386 50-50 50s-50-22.386-50-50 22.386-50 50-50 50 22.386 50 50z" fill="#1ABCFE"/></svg>`, name: 'Figma', type: 'Design Tool', level: 'Intermediate', details: ['UI/UX Prototyping', 'Component Libraries', 'Design Handoff'] },
+      { img: DVI('illustrator'),           name: 'Adobe Illustrator', type: 'Creative',        level: 'Intermediate', details: ['Vector Graphics', 'Brand Assets', 'UI Mockups'] },
+      { img: DVI('photoshop'),             name: 'Adobe Photoshop',   type: 'Creative',        level: 'Intermediate', details: ['Photo Editing', 'UI Compositing', 'Asset Export'] },
+      { svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#00005B"/><text x="50" y="72" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="58" fill="#9999FF" text-anchor="middle" letter-spacing="-2">Pr</text></svg>`, name: 'Adobe Premiere', type: 'Creative', level: 'Intermediate', details: ['Video Editing', 'Color Grading', 'Motion Titles'] },
+    ],
+  },
+  {
+    id: 'data',
+    label: 'Database & Data',
+    accent: '#94a3b8',
+    skills: [
+      { img: DVI('mysql'),                 name: 'MySQL / SQL',       type: 'Database',        level: 'Advanced',     details: ['Complex Queries', 'Schema Design', 'Stored Procedures'] },
+      { img: SI('postgresql', '336791'),   name: 'PostgreSQL',        type: 'Database',        level: 'Advanced',     details: ['JSONB Columns', 'Index Optimization', 'Window Functions'] },
+      { img: SI('sqlite', '003B57'),       name: 'SQLite',            type: 'Database',        level: 'Intermediate', details: ['Embedded DB', 'Lightweight Queries', 'Local Persistence'] },
+      { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/></svg>`, name: 'ER Modeling',          type: 'Data',            level: 'Advanced',     details: ['Entity Relationships', 'Normalization', 'Data Architecture'] },
+      { svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#E97627" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`, name: 'Data Visualization',   type: 'Data',            level: 'Intermediate', details: ['Chart Libraries', 'Dashboard Design', 'Insight Reporting'] },
+    ],
+  },
 ];
+
+// flat list kept for any code that still references `skills`
+const skills = skillCategories.flatMap((c) => c.skills);
 
 const certs = [
   {
@@ -116,36 +137,155 @@ const certs = [
   },
 ];
 
-const timeline = [
+// Helper to calculate duration between start (YYYY-MM) and end (YYYY-MM or null for Present)
+function formatDuration(startStr, endStr = null) {
+  const [sY, sM] = startStr.split('-').map(Number);
+  const now = new Date();
+  let eY, eM;
+  if (!endStr) {
+    eY = now.getFullYear();
+    eM = now.getMonth() + 1;
+  } else {
+    [eY, eM] = endStr.split('-').map(Number);
+  }
+
+  let totalMonths = (eY - sY) * 12 + (eM - sM) + 1; // inclusive
+  if (totalMonths < 1) totalMonths = 1;
+
+  const yrs = Math.floor(totalMonths / 12);
+  const mos = totalMonths % 12;
+
+  const parts = [];
+  if (yrs > 0) parts.push(`${yrs} yr${yrs > 1 ? 's' : ''}`);
+  if (mos > 0) parts.push(`${mos} mo${mos > 1 ? 's' : ''}`);
+  return parts.length > 0 ? parts.join(' ') : '1 mo';
+}
+
+const companies = [
   {
-    date: 'July 2025 – Present',
-    role: 'Process Delivery Specialist – Order To Cash',
-    company: 'IBM · 4F Jose Tan Bun Keng Bldg, Naga City',
-    desc: "Responsible for executing daily process transactions and driving process and operational improvements that meet both client and IBM requirements. Applies skills in business operations, process management, compliance, and best-practice tools to support clients' core processes.",
+    name: 'IBM',
+    abbr: 'IBM',
+    type: 'Full-Time',
+    startDate: '2025-07', // Total company start
+    endDate: null,        // Present (dynamically calculated)
+    location: 'Naga City, Philippines',
+    roles: [
+      {
+        startDate: '2026-09',
+        endDate: null, // Present (dynamically calculated)
+        date: 'Sep 2026 – Present',
+        role: 'Automation',
+        bullets: [
+          'Responsible for driving operational process improvements and automating manual processes to increase efficiency and reduce operational overhead across business units.',
+          'Identifies automation opportunities through workflow analysis and leads manual-to-digital transition initiatives.',
+          'Develops and maintains automation pipelines that eliminate repetitive tasks and streamline operations.',
+          'Collaborates with cross-functional teams to align automation deliverables with business and client objectives.',
+        ],
+        highlights: ['Process Automation', 'Operational Improvements', 'Workflow Optimization', 'Manual-to-Digital Transition'],
+      },
+      {
+        startDate: '2025-07',
+        endDate: '2026-08',
+        date: 'Jul 2025 – Aug 2026',
+        role: 'Process Delivery Specialist – Order To Cash',
+        bullets: [
+          'Responsible for executing daily process transactions and driving process and operational improvements that meet both client and IBM requirements.',
+          "Applies skills in business operations, process management, compliance, and best-practice tools to support clients' core processes.",
+          'Collaborated with cross-functional teams to identify and eliminate workflow inefficiencies.',
+        ],
+        highlights: ['Order-to-Cash Operations', 'Process Compliance', 'Client/Customer Support'],
+      },
+    ],
   },
   {
-    date: 'November 2024 – July 2025',
-    role: 'Advisor I',
-    company: 'Concentrix · Ninoy and Cory Avenue, Naga City',
-    desc: 'Responsible for managing insurance policies, claims, benefits, and customer service through the Salesforce platform.',
+    name: 'Concentrix',
+    abbr: 'CNX',
+    type: 'Full-Time',
+    startDate: '2024-11',
+    endDate: '2025-07',
+    location: 'Naga City, Philippines',
+    roles: [
+      {
+        startDate: '2024-11',
+        endDate: '2025-07',
+        date: 'Nov 2024 – Jul 2025',
+        role: 'Advisor I',
+        bullets: [
+          'Responsible for managing insurance policies, claims, benefits, and customer service through the Salesforce platform.',
+          'Delivered high-quality customer support across insurance product lines.',
+          'Maintained detailed case records and followed escalation protocols for claims assistance and stakeholder communication.',
+        ],
+        highlights: ['Insurance Case Management', 'Customer Support', 'Claims Assistance', 'Stakeholder Communication'],
+      },
+    ],
   },
   {
-    date: 'June 2022 – July 2024',
-    role: 'Application Development Associate',
-    company: 'Accenture · Mandaluyong, Cybergate',
-    desc: 'In charge of maintaining and enhancing client Salesforce applications through Salesforce Configuration & Setup, Object Manager, Lightning App Builder, Manual Test Execution, Defect Management (JIRA), and Test Case Planning using Agile methodologies.',
+    name: 'Accenture',
+    abbr: 'ACN',
+    type: 'Full-Time',
+    startDate: '2022-06',
+    endDate: '2024-07',
+    location: 'Mandaluyong, Cybergate',
+    roles: [
+      {
+        startDate: '2022-06',
+        endDate: '2024-07',
+        date: 'Jun 2022 – Jul 2024',
+        role: 'Application Development Associate',
+        bullets: [
+          'In charge of maintaining and enhancing client Salesforce applications through Salesforce Configuration & Setup, Object Manager, and Lightning App Builder.',
+          'Performed manual test execution, defect management via JIRA, and test case planning using Agile methodologies.',
+          'Executed manual test cases, managed defects in Jira, and authored regression test plans.',
+          'Supported user acceptance testing (UAT) and provided post-release user support.',
+          'Collaborated within Agile sprints using Jira, contributing to sprint planning and retrospectives.',
+        ],
+        highlights: ['Application Development', 'Quality Assurance', 'Agile Delivery', 'Defect Resolution'],
+      },
+    ],
   },
   {
-    date: 'December 2021 – April 2022',
-    role: 'Digital Marketing Administrator',
-    company: 'Hyundai Alabang (Naga) · Del Rosario, Naga City',
-    desc: 'Handled digital marketing and advertising using Adobe Illustrator, Photoshop, and Premiere. In charge of sales marketing and promoting various products, services, units, and limited-time offers.',
+    name: 'Hyundai Alabang (Naga)',
+    abbr: 'HYD',
+    type: 'Full-Time',
+    startDate: '2021-12',
+    endDate: '2022-04',
+    location: 'Del Rosario, Naga City',
+    roles: [
+      {
+        startDate: '2021-12',
+        endDate: '2022-04',
+        date: 'Dec 2021 – Apr 2022',
+        role: 'Digital Marketing Administrator',
+        bullets: [
+          'Handled digital marketing and advertising using Adobe Illustrator, Photoshop, and Premiere.',
+          'In charge of sales marketing and promoting various products, services, units, and limited-time offers.',
+          'Coordinated with the sales team to align digital content with monthly targets and brand promotion goals.',
+        ],
+        highlights: ['Campaign Management', 'Digital Content Creation', 'Brand Promotion', 'Sales Support'],
+      },
+    ],
   },
   {
-    date: 'January 2020 – March 2020',
-    role: 'Junior Web Developer (Internship)',
-    company: '3GX Computers & Solutions · Naga City',
-    desc: "Maintained, documented, and resolved issues within the BullGuardPH application — the Philippines' official antivirus distributor. Utilized Laravel Framework with AJAX, plugins, and Git.",
+    name: '3GX Computers & Solutions',
+    abbr: '3GX',
+    type: 'Internship',
+    startDate: '2020-01',
+    endDate: '2020-03',
+    location: 'Naga City',
+    roles: [
+      {
+        startDate: '2020-01',
+        endDate: '2020-03',
+        date: 'Jan 2020 – Mar 2020',
+        role: 'Junior Web Developer (Internship)',
+        bullets: [
+          "Maintained, documented, and resolved issues within the BullGuardPH application — the Philippines' official antivirus distributor.",
+          'Utilized Laravel Framework with AJAX, plugins, and Git for web application maintenance and bug tracking.',
+          'Implemented AJAX-driven UI enhancements, integrated third-party plugins, and maintained version control using Git.',
+        ],
+        highlights: ['Web Application Maintenance', 'Bug Tracking & Resolution', 'Documentation', 'Frontend Development'],
+      },
+    ],
   },
 ];
 
@@ -367,7 +507,6 @@ const projects = [
 // |  $$$$$$/| $$  | $$| $$$$$$$$| $$$$$$$$| $$$$$$$$| $$  | $$    | $$          | $$$$$$$/| $$  | $$   | $$  | $$  | $$
 //  \______/ |__/  |__/|________/|________/|________/|__/  |__/    |__/          |_______/ |__/  |__/   |__/  |__/  |__/
 const sketches = [
-  { src: galleryImg1,  title: 'Random #1' },
   { src: galleryImg2,  title: 'Random #2' },
   { src: galleryImg3,  title: 'Random #3' },
   { src: galleryImg4,  title: 'Random #4' },
@@ -380,7 +519,6 @@ const sketches = [
   { src: galleryImg11, title: 'Random #11' },
   { src: galleryImg12, title: 'Random #12' },
   { src: galleryImg13, title: 'Random #13' },
-  { src: galleryImg14, title: 'Random #14' },
   { src: galleryImg15, title: 'Random #15' },
   { src: galleryImg16, title: 'Random #16' },
   { src: galleryImg17, title: 'Random #17' },
@@ -915,6 +1053,15 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.09 } },
 };
 
+
+const TERM_ASCII = [
+  '_ _     __  ______                              ',
+  '( | )   / / / ____/___ ___  ____ ___  ____ _____ ',
+  '|/|/_  / / / __/ / __ \u0060__ \\/ __ \u0060__ \\/ __ \u0060/ __ \\',
+  '  / /_/ / / /___/ / / / / / / / / / / /_/ / / / /',
+  '  \\____(_)_____/_/ /_/ /_/_/ /_/ /_/\\__,_/_/ /_/ ',
+].join('\n');
+
 function App() {
   const [page, setPage]         = useState(
     () => new URLSearchParams(window.location.search).has('admin') ? 'admin' : 'home'
@@ -1209,7 +1356,7 @@ function App() {
               <li><a href="#skills" onClick={() => setMenuOpen(false)}>Skills</a></li>
               {/* <li><a href="#certs">Certifications</a></li> */}
               <li><a href="#experience" onClick={() => setMenuOpen(false)}>Experience</a></li>
-              <li><a href="#gallery" onClick={() => setMenuOpen(false)}>Gallery</a></li>
+              <li><a href="#about" onClick={() => setMenuOpen(false)}>About</a></li>
               <li><a href="#resources" onClick={() => setMenuOpen(false)}>Resources</a></li>
               <li><a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a></li>
               <li>
@@ -1267,7 +1414,7 @@ function App() {
             <a href="#work"       className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Work</a>
             <a href="#skills"     className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Skills</a>
             <a href="#experience" className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Experience</a>
-            <a href="#gallery"    className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Gallery</a>
+            <a href="#about"    className="mobile-menu-link" onClick={() => setMenuOpen(false)}>About</a>
             <a href="#resources"  className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Resources</a>
             <a href="#contact"    className="mobile-menu-link" onClick={() => setMenuOpen(false)}>Contact</a>
             <a
@@ -1756,26 +1903,78 @@ function App() {
       */}
       <motion.section
         id="skills" className="section" aria-label="Skills and Tools"
-        initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.08 }} variants={stagger}
+        initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.05 }} variants={stagger}
       >
         <div className="container">
           <motion.p className="section-label" variants={fadeUp}>Capabilities</motion.p>
           <SectionHeading text="Skills & Tools" />
           <motion.p className="section-sub" variants={fadeUp}>
-            Core competencies spanning QA methodologies, Salesforce, test tooling, and developement.
+            Core competencies spanning QA methodologies, Salesforce, test tooling, and development.
           </motion.p>
-          <div className="skills-grid">
-            {skills.map((s) => (
-              <motion.div key={s.name} variants={fadeUp}>
-                <SpotlightCard className="skill-card" spotlightColor="var(--skill-spotlight)">
-                  <div className="skill-icon" aria-label={s.name}>
-                    {s.img
-                      ? <img src={s.img} alt={s.name} width="32" height="32" loading="lazy" />
-                      : <span dangerouslySetInnerHTML={{ __html: s.svg }} />}
-                  </div>
-                  <div className="skill-name">{s.name}</div>
-                  <div className="skill-type">{s.type}</div>
-                </SpotlightCard>
+
+          <div className="skills-categories">
+            {skillCategories.map((cat) => (
+              <motion.div
+                key={cat.id}
+                className="skills-category"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.1 }}
+                variants={stagger}
+              >
+                {/* ── Category heading ── */}
+                <motion.div className="skills-cat-heading" variants={fadeUp} style={{ '--cat-accent': cat.accent }}>
+                  <span className="skills-cat-line" style={{ background: cat.accent }} />
+                  <span className="skills-cat-label">{cat.label}</span>
+                </motion.div>
+
+                {/* ── Card grid ── */}
+                <div className="skills-grid">
+                  {cat.skills.map((s) => (
+                    <motion.div key={s.name} variants={fadeUp}>
+                      <SpotlightCard
+                        className="skill-card"
+                        spotlightColor={`${cat.accent}22`}
+                        style={{ '--accent': cat.accent }}
+                      >
+                        {/* Glow border overlay */}
+                        <span className="skill-card-glow" style={{ '--accent': cat.accent }} />
+
+                        {/* Default visible content */}
+                        <div className="skill-card-default">
+                          <div className="skill-icon" aria-label={s.name}>
+                            {s.img
+                              ? <img src={s.img} alt={s.name} width="32" height="32" loading="lazy" />
+                              : <span dangerouslySetInnerHTML={{ __html: s.svg }} />}
+                          </div>
+                          <div className="skill-name">{s.name}</div>
+                          <div className="skill-type">{s.type}</div>
+                        </div>
+
+                        {/* Hover-revealed details */}
+                        <div className="skill-card-hover">
+                          <div className="skill-hover-icon" aria-hidden="true">
+                            {s.img
+                              ? <img src={s.img} alt="" width="28" height="28" loading="lazy" />
+                              : <span dangerouslySetInnerHTML={{ __html: s.svg }} />}
+                          </div>
+                          <div className="skill-hover-name">{s.name}</div>
+                          <ul className="skill-hover-details">
+                            {s.details.map((d) => (
+                              <li key={d}>{d}</li>
+                            ))}
+                          </ul>
+                          <span
+                            className={`skill-level-badge skill-level-badge--${s.level.toLowerCase()}`}
+                            style={{ '--accent': cat.accent }}
+                          >
+                            {s.level}
+                          </span>
+                        </div>
+                      </SpotlightCard>
+                    </motion.div>
+                  ))}
+                </div>
               </motion.div>
             ))}
           </div>
@@ -1835,14 +2034,76 @@ function App() {
         <div className="container">
           <motion.p className="section-label" variants={fadeUp}>Career</motion.p>
           <SectionHeading text="Experience" />
-          <div className="timeline">
-            {timeline.map((t) => (
-              <motion.div key={t.role} className="timeline-item" variants={fadeUp}>
-                <div className="timeline-dot" aria-hidden="true" />
-                <div className="timeline-date">{t.date}</div>
-                <div className="timeline-role">{t.role}</div>
-                <div className="timeline-company">{t.company}</div>
-                <p className="timeline-desc">{t.desc}</p>
+          <div className="exp-timeline">
+            {companies.map((co) => (
+              <motion.div key={co.name} className="exp-company" variants={fadeUp}>
+                {/* ── Company row: badge + name ── */}
+                {/* ── Company outer marker & header ── */}
+                <div className="exp-company-header">
+                  <div className="exp-company-node">
+                    {co.abbr && <span className="exp-company-badge">{co.abbr}</span>}
+                    <div className="exp-company-dot" aria-hidden="true" />
+                  </div>
+                  <div className="exp-company-meta">
+                    <h3 className="exp-company-name">{co.name}</h3>
+                    {co.type && (
+                      <span className="exp-company-type-duration">
+                        {co.type} · {formatDuration(co.startDate, co.endDate)}
+                      </span>
+                    )}
+                    <span className="exp-company-sub">{co.location}</span>
+                  </div>
+                </div>
+
+                {/* ── Nested roles (inner timeline) ── */}
+                <div className="exp-roles-container">
+                  <div className="exp-roles-track" aria-hidden="true" />
+                  <div className="exp-roles-list">
+                    {co.roles.map((r, ri) => (
+                      <div
+                        key={r.role}
+                        className={`exp-role${ri === co.roles.length - 1 ? ' exp-role--last' : ''}`}
+                      >
+                        <div className="exp-role-dot" aria-hidden="true">
+                          <span className="exp-role-dot-inner" />
+                        </div>
+
+                        <div className="exp-role-content">
+                          <div className="exp-role-header">
+                            <h4 className="exp-role-title">{r.role}</h4>
+                            <span className="exp-role-date">
+                              {r.date} · {formatDuration(r.startDate, r.endDate)}
+                            </span>
+                          </div>
+
+                          <div className="exp-role-body">
+                            <div className="exp-role-main">
+                              {r.bullets ? (
+                                <ul className="exp-role-bullets">
+                                  {r.bullets.map((b, bi) => (
+                                    <li key={bi}>{b}</li>
+                                  ))}
+                                </ul>
+                              ) : (
+                                <p className="exp-role-desc">{r.desc}</p>
+                              )}
+                            </div>
+                            {r.highlights && (
+                              <div className="exp-highlights">
+                                <p className="exp-highlights-label">Highlights</p>
+                                <ul className="exp-highlights-list">
+                                  {r.highlights.map((h) => (
+                                    <li key={h}>{h}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -1860,52 +2121,65 @@ function App() {
       // |__/  |__/|_______/  \______/  \______/    |__/ 
       */}
       <motion.section
+        id="about"
         className="section" aria-label="About"
         initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.08 }} variants={stagger}
       >
         <div className="container">
           <div className="about-grid">
-            <motion.div className="portal-wrap" variants={fadeUp}>
-              <PortalGateway portalSrc={portal} />
+            <motion.div className="about-pixel-wrap" variants={fadeUp}>
+              <PixelPortrait gridSize={200} />
+              <div className="term-card" aria-label="System profile panel">
+                <div className="term-card__scanlines" aria-hidden="true" />
+                <div className="term-card__prompt">
+                  <span className="term-card__gt">&gt;</span>
+                  <span className="term-card__cmd">whoami</span>
+                  <span className="term-card__cursor" aria-hidden="true">_</span>
+                </div>
+                <pre className="term-card__ascii" aria-label="J. Emman Lanusga">{TERM_ASCII}</pre>
+              </div>
             </motion.div>
-            <div>
+            <div className="about-text">
               <motion.p className="section-label" variants={fadeUp}>About</motion.p>
               <SectionHeading text="Detail-oriented. Systematic. Creative." />
               <motion.p className="section-sub" style={{ maxWidth: '100%' }} variants={fadeUp}>
-                  I'm John Emman Lanusga, a graduate of Ateneo de Naga University with a Bachelor of Science in Information Technology. 
-                  I am a Philippine-based QA Analyst with a passion for building reliable software. 
+                  I'm John Emman Lanusga, a graduate of Ateneo de Naga University with a Bachelor of Science in Information Technology.
+                  I am a Philippine-based QA Analyst with a passion for building reliable software.
                   In my role, I bridge the gap between technical execution and business value, helping ensure that every release is delivered with confidence and quality.
-                  Outside of IDE, I recharge through physical activities and travel, which help me refresh my mind and gain new perspectives. 
+                  Outside of IDE, I recharge through physical activities and travel, which help me refresh my mind and gain new perspectives.
                   I also enjoy graphic design, drawing, and brainstorming ideas for potential projects. These creative pursuits allow me to continuously learn, explore, and bring fresh ideas into both my professional and personal life.
               </motion.p>
             </div>
+            <motion.div className="portal-wrap" variants={fadeUp}>
+              <PortalGateway portalSrc={portal} />
+            </motion.div>
           </div>
         </div>
       </motion.section>
 
-      {/* 
-      //   /$$$$$$   /$$$$$$  /$$      /$$ /$$$$$$$$
-      //  /$$__  $$ /$$__  $$| $$$    /$$$| $$_____/
-      // | $$  \__/| $$  \ $$| $$$$  /$$$$| $$      
-      // | $$ /$$$$| $$$$$$$$| $$ $$/$$ $$| $$$$$   
-      // | $$|_  $$| $$__  $$| $$  $$$| $$| $$__/   
-      // | $$  \ $$| $$  | $$| $$\  $ | $$| $$      
-      // |  $$$$$$/| $$  | $$| $$ \/  | $$| $$$$$$$$
-      //  \______/ |__/  |__/|__/     |__/|________/      
-      */}
-      <GameSection />
-
-      {/* 
+      {/*
       //   /$$$$$$   /$$$$$$  /$$       /$$       /$$$$$$$$ /$$$$$$$  /$$     /$$
       //  /$$__  $$ /$$__  $$| $$      | $$      | $$_____/| $$__  $$|  $$   /$$/
-      // | $$  \__/| $$  \ $$| $$      | $$      | $$      | $$  \ $$ \  $$ /$$/ 
-      // | $$ /$$$$| $$$$$$$$| $$      | $$      | $$$$$   | $$$$$$$/  \  $$$$/  
-      // | $$|_  $$| $$__  $$| $$      | $$      | $$__/   | $$__  $$   \  $$/   
-      // | $$  \ $$| $$  | $$| $$      | $$      | $$      | $$  \ $$    | $$    
-      // |  $$$$$$/| $$  | $$| $$$$$$$$| $$$$$$$$| $$$$$$$$| $$  | $$    | $$    
-      //  \______/ |__/  |__/|________/|________/|________/|__/  |__/    |__/       
+      // | $$  \__/| $$  \ $$| $$      | $$      | $$      | $$  \ $$ \  $$ /$$/
+      // | $$ /$$$$| $$$$$$$$| $$      | $$      | $$$$$   | $$$$$$$/  \  $$$$/
+      // | $$|_  $$| $$__  $$| $$      | $$      | $$__/   | $$__  $$   \  $$/
+      // | $$  \ $$| $$  | $$| $$      | $$      | $$      | $$  \ $$    | $$
+      // |  $$$$$$/| $$  | $$| $$$$$$$$| $$$$$$$$| $$$$$$$$| $$  | $$    | $$
+      //  \______/ |__/  |__/|________/|________/|________/|__/  |__/    |__/
       */}
       <GallerySection />
+
+      {/*
+      //   /$$$$$$   /$$$$$$  /$$      /$$ /$$$$$$$$
+      //  /$$__  $$ /$$__  $$| $$$    /$$$| $$_____/
+      // | $$  \__/| $$  \ $$| $$$$  /$$$$| $$
+      // | $$ /$$$$| $$$$$$$$| $$ $$/$$ $$| $$$$$
+      // | $$|_  $$| $$__  $$| $$  $$$| $$| $$__/
+      // | $$  \ $$| $$  | $$| $$\  $ | $$| $$
+      // |  $$$$$$/| $$  | $$| $$ \/  | $$| $$$$$$$$
+      //  \______/ |__/  |__/|__/     |__/|________/
+      */}
+      <GameSection />
 
       {/*
       //  /$$$$$$$  /$$$$$$$$  /$$$$$$   /$$$$$$  /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$$  /$$$$$$
