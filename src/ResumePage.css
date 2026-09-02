@@ -460,6 +460,14 @@
   min-width: 0;
 }
 
+.rp-job-company-name {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--rp-ink);
+  margin: 0 0 3px;
+  line-height: 1.3;
+}
+
 .rp-job-role {
   font-size: 15.5px;
   font-weight: 600;
@@ -509,6 +517,77 @@
   position: absolute;
   left: 0;
   color: var(--rp-sep);
+}
+
+/* ── Nested roles inside a company ── */
+.rp-roles-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  padding-left: 4px;
+}
+
+.rp-role-item {
+  display: flex;
+  gap: 12px;
+  padding-bottom: 20px;
+}
+
+.rp-role-item:last-child { padding-bottom: 0; }
+
+/* The vertical connector + sub-dot on the left of each role */
+.rp-role-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 16px;
+  padding-top: 3px;
+}
+
+.rp-role-line {
+  width: 1px;
+  flex: 1;
+  background: var(--rp-border);
+  min-height: 8px;
+}
+
+.rp-role-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid var(--rp-ink-muted);
+  background: var(--rp-bg);
+  flex-shrink: 0;
+  margin-bottom: 6px;
+}
+
+.rp-role-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.rp-role-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.rp-role-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--rp-ink);
+  line-height: 1.3;
+}
+
+.rp-role-period {
+  font-size: 11.5px;
+  color: var(--rp-ink-faint);
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ── Education ── */

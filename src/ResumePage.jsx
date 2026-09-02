@@ -24,64 +24,103 @@ const experience = [
   {
     company: 'IBM',
     logo: 'IBM',
-    role: 'Process Delivery Specialist — Order to Cash',
+    type: 'Full-Time',
     period: 'July 2025 – Present',
     location: 'Naga City, Philippines',
-    bullets: [
-      'Execute daily Order-to-Cash process transactions with accuracy and SLA compliance.',
-      'Drive process and operational improvements that align with client requirements and IBM standards.',
-      'Apply best-practice tools for business operations, compliance, and process management.',
-      'Collaborate with cross-functional teams to identify and eliminate workflow inefficiencies.',
+    roles: [
+      {
+        role: 'Automation',
+        period: 'Sep 2026 – Present',
+        bullets: [
+          'Responsible for driving operational process improvements and automating manual processes to increase efficiency.',
+          'Identifies automation opportunities through workflow analysis and leads manual-to-digital transition initiatives.',
+          'Develops and maintains automation pipelines that eliminate repetitive tasks and streamline operations.',
+          'Collaborates with cross-functional teams to align automation deliverables with business and client objectives.',
+        ],
+      },
+      {
+        role: 'Process Delivery Specialist – Order To Cash',
+        period: 'Jul 2025 – Aug 2026',
+        bullets: [
+          'Responsible for executing daily process transactions and driving process and operational improvements that meet both client and IBM requirements.',
+          'Applies skills in business operations, process management, compliance, and best-practice tools to support clients\' core processes.',
+          'Collaborated with cross-functional teams to identify and eliminate workflow inefficiencies.',
+        ],
+      },
     ],
   },
   {
     company: 'Concentrix',
     logo: 'CNX',
-    role: 'Advisor I',
+    type: 'Full-Time',
     period: 'November 2024 – July 2025',
     location: 'Naga City, Philippines',
-    bullets: [
-      'Managed insurance policies, claims, and benefits through the Salesforce CRM platform.',
-      'Delivered high-quality customer support across insurance product lines.',
-      'Maintained detailed case records and followed escalation protocols.',
+    roles: [
+      {
+        role: 'Advisor I',
+        period: 'Nov 2024 – Jul 2025',
+        bullets: [
+          'Responsible for managing insurance policies, claims, benefits, and customer service through the Salesforce platform.',
+          'Delivered high-quality customer support across insurance product lines.',
+          'Maintained detailed case records and followed escalation protocols for claims assistance and stakeholder communication.',
+        ],
+      },
     ],
   },
   {
     company: 'Accenture',
     logo: 'ACN',
-    role: 'Application Development Associate',
+    type: 'Full-Time',
     period: 'June 2022 – July 2024',
-    location: 'Mandaluyong, Metro Manila',
-    bullets: [
-      'Maintained and enhanced client Salesforce applications via Configuration & Setup and Object Manager.',
-      'Built and deployed features using Lightning App Builder and Lightning Components.',
-      'Executed manual test cases, managed defects in Jira, and authored regression test plans.',
-      'Supported user acceptance testing (UAT) and provided post-release user support.',
-      'Collaborated within Agile sprints using Jira, contributing to sprint planning and retrospectives.',
+    location: 'Mandaluyong, Cybergate',
+    roles: [
+      {
+        role: 'Application Development Associate',
+        period: 'Jun 2022 – Jul 2024',
+        bullets: [
+          'In charge of maintaining and enhancing client Salesforce applications through Salesforce Configuration & Setup, Object Manager, and Lightning App Builder.',
+          'Performed manual test execution, defect management via JIRA, and test case planning using Agile methodologies.',
+          'Executed manual test cases, managed defects in Jira, and authored regression test plans.',
+          'Supported user acceptance testing (UAT) and provided post-release user support.',
+          'Collaborated within Agile sprints using Jira, contributing to sprint planning and retrospectives.',
+        ],
+      },
     ],
   },
   {
-    company: 'Hyundai Alabang',
+    company: 'Hyundai Alabang (Naga)',
     logo: 'HYD',
-    role: 'Digital Marketing Administrator',
+    type: 'Full-Time',
     period: 'December 2021 – April 2022',
-    location: 'Naga City, Philippines',
-    bullets: [
-      'Designed marketing campaigns and promotional materials using Adobe Illustrator, Photoshop, and Premiere.',
-      'Managed digital advertising and social media promotion for vehicle units and limited-time offers.',
-      'Coordinated with the sales team to align digital content with monthly targets.',
+    location: 'Del Rosario, Naga City',
+    roles: [
+      {
+        role: 'Digital Marketing Administrator',
+        period: 'Dec 2021 – Apr 2022',
+        bullets: [
+          'Handled digital marketing and advertising using Adobe Illustrator, Photoshop, and Premiere.',
+          'In charge of sales marketing and promoting various products, services, units, and limited-time offers.',
+          'Coordinated with the sales team to align digital content with monthly targets and brand promotion goals.',
+        ],
+      },
     ],
   },
   {
     company: '3GX Computers & Solutions',
     logo: '3GX',
-    role: 'Junior Web Developer — Internship',
+    type: 'Internship',
     period: 'January 2020 – March 2020',
     location: 'Naga City, Philippines',
-    bullets: [
-      'Maintained and documented the BullGuardPH antivirus web application built on Laravel.',
-      'Implemented AJAX-driven UI enhancements and integrated third-party plugins.',
-      'Resolved application issues, tracked bugs, and maintained version control using Git.',
+    roles: [
+      {
+        role: 'Junior Web Developer (Internship)',
+        period: 'Jan 2020 – Mar 2020',
+        bullets: [
+          "Maintained, documented, and resolved issues within the BullGuardPH application — the Philippines' official antivirus distributor.",
+          'Utilized Laravel Framework with AJAX, plugins, and Git for web application maintenance and bug tracking.',
+          'Implemented AJAX-driven UI enhancements, integrated third-party plugins, and maintained version control using Git.',
+        ],
+      },
     ],
   },
 ];
@@ -121,7 +160,13 @@ const skillCategories = [
   },
 ];
 
-const certifications = [];
+const certifications = [
+  {
+    title: 'Salesforce Certified Administrator (SCA)',
+    issuer: 'Salesforce',
+    year: 'June 2024',
+  },
+];
 
 /*
 //   /$$$$$$  /$$   /$$ /$$$$$$ /$$      /$$  /$$$$$$  /$$$$$$$$ /$$$$$$  /$$$$$$  /$$   /$$  /$$$$$$
@@ -363,12 +408,10 @@ export default function ResumePage({ onBack, dark, onToggleDark }) {
           <SectionHeader label="Overview" title="Professional Summary" />
           <motion.div className="rp-summary-card" variants={fadeUp}>
             <p className="rp-summary-text">
-              Detail-oriented QA Analyst with hands-on experience in Salesforce administration, manual testing,
-              defect management, and Order-to-Cash process optimization. As a Certified Salesforce Administrator,
-              I bridge the gap between technical execution and business value — ensuring every release ships with
-              confidence through structured testing methodologies, cross-functional collaboration, and a commitment
-              to continuous improvement. Currently contributing to enterprise-scale operations at IBM while
-              maintaining a track record of delivering high-quality software experiences.
+              Results-driven professional with experience spanning Salesforce administration, QA, Order-to-Cash
+              process delivery, and business process automation. In my role, I bridge
+              technical execution and business value - delivering process improvements, automation solutions, and
+              structured testing methodologies that drive efficiency across enterprise operations.
             </p>
           </motion.div>
         </Section>
@@ -392,23 +435,41 @@ export default function ResumePage({ onBack, dark, onToggleDark }) {
                   <div className="rp-timeline-dot" />
                 </div>
                 <div className="rp-timeline-body">
+                  {/* ── Company header ── */}
                   <div className="rp-job-header">
                     <div className="rp-job-logo" aria-hidden="true">{job.logo}</div>
                     <div className="rp-job-meta">
-                      <h3 className="rp-job-role">{job.role}</h3>
+                      <h3 className="rp-job-company-name">{job.company}</h3>
                       <div className="rp-job-company">
-                        <strong>{job.company}</strong>
+                        <span>{job.type}</span>
                         <span className="rp-job-sep">·</span>
                         <span>{job.location}</span>
                       </div>
                     </div>
                     <span className="rp-job-period">{job.period}</span>
                   </div>
-                  <ul className="rp-job-bullets">
-                    {job.bullets.map((b, j) => (
-                      <li key={j}>{b}</li>
+                  {/* ── Nested roles ── */}
+                  <div className="rp-roles-list">
+                    {job.roles.map((r, j) => (
+                      <div key={j} className="rp-role-item">
+                        <div className="rp-role-connector" aria-hidden="true">
+                          <div className="rp-role-line" />
+                          <div className="rp-role-dot" />
+                        </div>
+                        <div className="rp-role-body">
+                          <div className="rp-role-header">
+                            <span className="rp-role-title">{r.role}</span>
+                            <span className="rp-role-period">{r.period}</span>
+                          </div>
+                          <ul className="rp-job-bullets">
+                            {r.bullets.map((b, k) => (
+                              <li key={k}>{b}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -488,20 +549,20 @@ export default function ResumePage({ onBack, dark, onToggleDark }) {
           <div className="rp-certs-grid">
             {certifications.map((cert, i) => (
               <motion.div key={i} className="rp-cert-card" variants={fadeUp}>
-                <div className="rp-cert-badge" aria-hidden="true">
+                {/* <div className="rp-cert-badge" aria-hidden="true">
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-                </div>
-                <div className="rp-cert-body">
+                </div> */}
+                {/* <div className="rp-cert-body">
                   <div className="rp-cert-name">{cert.name}</div>
                   <div className="rp-cert-meta">
                     <span className="rp-cert-issuer">{cert.issuer}</span>
                     <span className="rp-cert-date">{cert.date}</span>
                     <span className="rp-cert-credential">#{cert.credential}</span>
                   </div>
-                </div>
-                <div className="rp-cert-verified" aria-label="Verified">
+                </div> */}
+                {/* <div className="rp-cert-verified" aria-label="Verified">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
+                </div> */}
               </motion.div>
             ))}
           </div>
