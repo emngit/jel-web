@@ -26,7 +26,6 @@ import logoWhite from './assets/images/My_LOGO-white.png';
 import logoFace from './assets/images/My_LOGO_FINAL-for_DECALS.png';
 import logoFaceWhite from './assets/images/My_LOGO_FINAL-for_DECALS-white-contrast.png';
 import portal from './assets/images/PORTAL.png';
-import resume from './assets/images/LANUSGA_JEL_CV.pdf';
 import PortalGateway from './PortalGateway.jsx';
 import PixelPortrait from './PixelPortrait.jsx';
 import kairosPriority        from './assets/images/Kairos/JIRA-Priority.png';
