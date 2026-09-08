@@ -8,6 +8,7 @@ import mib        from './assets/images/MIB.png';
 import logoDark  from './assets/images/My_LOGO-white.png';
 import logoLight from './assets/images/My_LOGO.png';
 import resumePdf from './assets/images/LANUSGA_JEL_CV.pdf';
+import resumeDocx from './assets/images/developer-resume-template.docx';
 import './ResumePage.css';
 
 /*
@@ -381,9 +382,9 @@ export default function ResumePage({ onBack, dark, onToggleDark }) {
           </div>
 
           <div className="rp-hero-actions">
-            <a href={resumePdf} download="Resume 2026 - John Emman Lanusga.pdf" className="rp-btn-primary">
+            <a href={resumeDocx} download="Resume 2026 - John Emman Lanusga.docx" className="rp-btn-primary">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Download Resume PDF
+              Download Resume
             </a>
             <button className="rp-btn-secondary" onClick={onBack}>
               ← Back to Portfolio
@@ -587,12 +588,12 @@ export default function ResumePage({ onBack, dark, onToggleDark }) {
               </p>
             </div>
             <a
-              href={resumePdf}
-              download="Resume 2026 - John Emman Lanusga.pdf"
+              href={resumeDocx}
+              download="Resume 2026 - John Emman Lanusga.docx"
               className="rp-btn-primary rp-btn-large"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Download PDF Resume
+              Download Resume
             </a>
           </motion.div>
         </Section>
