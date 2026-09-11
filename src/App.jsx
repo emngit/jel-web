@@ -28,12 +28,14 @@ import logoFaceWhite from './assets/images/My_LOGO_FINAL-for_DECALS-white-contra
 import portal from './assets/images/PORTAL.png';
 import PortalGateway from './PortalGateway.jsx';
 import PixelPortrait from './PixelPortrait.jsx';
-import kairosPriority        from './assets/images/Kairos/JIRA-Priority.png';
-import kairosLogin           from './assets/images/Kairos/Login-Page.png';
-import kairosResolve360AI    from './assets/images/Kairos/Resolve360-AI-Investigation.jpeg';
-import kairosResolve360RCA   from './assets/images/Kairos/Resolve360-AI-RCA-Check-Apply.jpeg';
-import kairosResolve360Stats from './assets/images/Kairos/Resolve360-Analytics.png';
-import kairosResolve360CAPA  from './assets/images/Kairos/Resolve360-Auto-CAPA-Assignment.jpeg';
+import kairosPriority        from './assets/images/Kairos/Kairos-Priority-List.png';
+import kairosLogin           from './assets/images/Kairos/Kairos-Login-Page.png';
+import kairosEscalationAI    from './assets/images/Kairos/Kairos-Escalation-AI-Investigation.png';
+import kairosEscalationApply from './assets/images/Kairos/Kairos-Escalation-AI-Apply.png';
+import kairosEscalationStats from './assets/images/Kairos/Kairos-Escalation-Analytics.png';
+import kairosWorkforce       from './assets/images/Kairos/Kairos-Workforce.png';
+import kairosStarryBG        from './assets/images/Kairos/Kairos-Starry-Mode-BG.png';
+import kairosEasterEgg       from './assets/images/Kairos/Kairos-Easter-Egg.png';
 import kadaTiponStart    from './assets/images/Kada Tipon/Kada-Tipon-Start.png';
 import kadaTiponHowTo   from './assets/images/Kada Tipon/Kada-Tipon-How-To.png';
 import kadaTiponPlaying  from './assets/images/Kada Tipon/Kada-Tipon-Playing.png';
@@ -415,7 +417,16 @@ function TiosShowcase({ dark }) {
 
 const projects = [
   {
-    images: [kairosPriority, kairosLogin, kairosResolve360AI, kairosResolve360RCA, kairosResolve360Stats, kairosResolve360CAPA],
+    images: [
+      kairosPriority,
+      kairosLogin,
+      kairosEscalationAI,
+      kairosEscalationApply,
+      kairosEscalationStats,
+      kairosWorkforce,
+      kairosStarryBG,
+      kairosEasterEgg,
+    ],
     tag: 'Full-Stack App',
     title: 'Kairos – Jira Copilot Assistant',
     desc: 'Internal IBM OTC team tool built with Vue.js 3 + FastAPI. Features a JIRA Standardizer, live Priority List enrichment, Resolve360 quality/RCA workflow (two-stage Compliance → EM approval), Monday.com workforce analytics, and an AI chat assistant powered by GitHub Copilot and IBM ICA.',
@@ -1693,12 +1704,12 @@ function App() {
                 </div>
                 <div className="cs-browser-screen">
                   <img
-                    src={kairosPriority}
-                    alt="Kairos dashboard – Priority List"
+                    src={kairosLogin}
+                    alt="Kairos Login – Login Page"
                     className="cs-browser-img cs-browser-img--primary"
                   />
                   <img
-                    src={kairosResolve360Stats}
+                    src={kairosEscalationStats}
                     alt="Kairos – Resolve360 Analytics"
                     className="cs-browser-img cs-browser-img--secondary"
                   />
