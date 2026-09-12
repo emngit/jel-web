@@ -704,90 +704,401 @@
   background: var(--rp-bg-subtle);
 }
 
-/* ── Certifications ── */
-.rp-certs-grid {
+/* ── Certifications (Stacked Tilted Cards) ── */
+.rp-stacked-certs-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 2rem 0.5rem;
+  overflow: visible;
+}
+
+.rp-stacked-cert-card {
+  position: relative;
+  width: 255px;
+  min-height: 200px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  padding: 22px 18px 18px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  transform: rotate(var(--cert-rot, 0deg));
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  overflow: hidden;
+}
+
+.rp-stacked-cert-card:hover {
+  border-color: rgba(0, 120, 255, 0.4);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.12), 0 0 24px rgba(0, 120, 255, 0.16);
+}
+
+.rp-stacked-cert-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+}
+
+/* Logo Box */
+.rp-stacked-cert-logo-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  padding: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.rp-stacked-cert-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.rp-stacked-cert-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.35;
+  margin: 0 0 4px 0;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rp-stacked-cert-issuer {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* Bottom Verify Button */
+.rp-stacked-cert-verify {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #64748b;
+  text-decoration: none;
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 6px;
+  position: relative;
+  z-index: 10;
+  cursor: pointer;
+  background: transparent;
+  transition: color 0.2s, background 0.2s, transform 0.2s;
+}
+
+.rp-stacked-cert-card:hover .rp-stacked-cert-verify {
+  color: #0070f3;
+  background: rgba(0, 120, 255, 0.08);
+}
+
+.rp-stacked-cert-verify:hover {
+  color: #ffffff !important;
+  background: #0070f3 !important;
+  transform: translateY(-1px);
+}
+
+/* ── Dark Theme (scoped under .rp-wrapper[data-theme="dark"] or [data-theme="dark"]) ── */
+.rp-wrapper[data-theme="dark"] .rp-stacked-cert-card,
+[data-theme="dark"] .rp-stacked-cert-card {
+  background: #13181f;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+.rp-wrapper[data-theme="dark"] .rp-stacked-cert-card:hover,
+[data-theme="dark"] .rp-stacked-cert-card:hover {
+  border-color: rgba(0, 120, 255, 0.45);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7), 0 0 28px rgba(0, 120, 255, 0.2);
+}
+
+.rp-wrapper[data-theme="dark"] .rp-stacked-cert-logo-wrap,
+[data-theme="dark"] .rp-stacked-cert-logo-wrap {
+  background: #1c222c;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.rp-wrapper[data-theme="dark"] .rp-stacked-cert-title,
+[data-theme="dark"] .rp-stacked-cert-title {
+  color: #f0f6fc;
+}
+
+.rp-wrapper[data-theme="dark"] .rp-stacked-cert-issuer,
+[data-theme="dark"] .rp-stacked-cert-issuer {
+  color: #8b949e;
+}
+
+.rp-wrapper[data-theme="dark"] .rp-stacked-cert-verify,
+[data-theme="dark"] .rp-stacked-cert-verify {
+  color: #8b949e;
+}
+
+.rp-wrapper[data-theme="dark"] .rp-stacked-cert-card:hover .rp-stacked-cert-verify,
+[data-theme="dark"] .rp-stacked-cert-card:hover .rp-stacked-cert-verify {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+}
+
+/* ── Certificate Verification Modal ── */
+.rp-cert-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.rp-cert-modal-container {
+  width: 100%;
+  max-width: 860px;
+  max-height: 90vh;
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.rp-cert-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.rp-cert-modal-head-left {
+  display: flex;
+  align-items: center;
   gap: 12px;
 }
 
-.rp-cert-card {
-  border: 1px solid var(--rp-border);
-  border-radius: 12px;
-  padding: 20px 24px;
-  background: var(--rp-bg-card);
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  transition: border-color 0.2s, background 0.2s;
-}
-
-.rp-cert-card:hover {
-  border-color: var(--rp-border-hover);
-  background: var(--rp-bg-subtle);
-}
-
-.rp-cert-badge {
-  width: 44px;
-  height: 44px;
+.rp-cert-modal-logo {
+  width: 40px;
+  height: 40px;
   border-radius: 10px;
-  background: var(--rp-ink);
-  color: var(--rp-bg);
+  background: #f4f5f8;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 6px;
   flex-shrink: 0;
 }
 
-.rp-cert-body {
-  flex: 1;
-  min-width: 0;
+.rp-cert-modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
 }
 
-.rp-cert-name {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--rp-ink);
-  margin-bottom: 4px;
-}
-
-.rp-cert-meta {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.rp-cert-issuer {
-  font-size: 13px;
-  color: var(--rp-ink-muted);
+.rp-cert-modal-subtitle {
+  font-size: 12px;
+  color: #64748b;
   font-weight: 500;
 }
 
-.rp-cert-date {
-  font-size: 12px;
-  color: var(--rp-ink-faint);
-}
-
-.rp-cert-credential {
-  font-size: 11.5px;
-  color: var(--rp-ink-faint);
-  background: var(--rp-highlight);
-  border-radius: 6px;
-  padding: 2px 8px;
-  font-family: ui-monospace, monospace;
-}
-
-.rp-cert-verified {
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--rp-verified-bg);
-  border: 1px solid var(--rp-verified-bd);
+.rp-cert-modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+
+.rp-cert-modal-close:hover {
+  background: #e2e8f0;
+  color: #111827;
+}
+
+.rp-cert-modal-body {
+  flex: 1;
+  min-height: 480px;
+  max-height: 60vh;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.rp-cert-modal-iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 480px;
+  border: none;
+  display: block;
+}
+
+.rp-cert-modal-empty {
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.rp-cert-modal-empty-logo {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1rem;
+}
+
+.rp-cert-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  background: #ffffff;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.rp-cert-modal-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #16a34a;
+}
+
+.rp-cert-modal-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #16a34a;
+  display: inline-block;
+}
+
+.rp-cert-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rp-cert-modal-btn {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: transform 0.15s, opacity 0.15s;
+}
+
+.rp-cert-modal-btn--primary {
+  background: #0070f3;
+  color: #ffffff;
+}
+
+.rp-cert-modal-btn--primary:hover {
+  background: #005bb5;
+  transform: translateY(-1px);
+}
+
+.rp-cert-modal-btn--secondary {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.rp-cert-modal-btn--secondary:hover {
+  background: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+/* Modal Dark Mode Theme */
+.rp-wrapper[data-theme="dark"] .rp-cert-modal-container,
+[data-theme="dark"] .rp-cert-modal-container {
+  background: #13181f;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
+}
+
+.rp-wrapper[data-theme="dark"] .rp-cert-modal-header,
+[data-theme="dark"] .rp-cert-modal-header,
+.rp-wrapper[data-theme="dark"] .rp-cert-modal-footer,
+[data-theme="dark"] .rp-cert-modal-footer {
+  border-color: #21262d;
+  background: #13181f;
+}
+
+.rp-wrapper[data-theme="dark"] .rp-cert-modal-title,
+[data-theme="dark"] .rp-cert-modal-title {
+  color: #f0f6fc;
+}
+
+.rp-wrapper[data-theme="dark"] .rp-cert-modal-subtitle,
+[data-theme="dark"] .rp-cert-modal-subtitle {
+  color: #8b949e;
+}
+
+.rp-wrapper[data-theme="dark"] .rp-cert-modal-logo,
+[data-theme="dark"] .rp-cert-modal-logo {
+  background: #1c222c;
+}
+
+.rp-wrapper[data-theme="dark"] .rp-cert-modal-close,
+[data-theme="dark"] .rp-cert-modal-close {
+  background: #21262d;
+  color: #8b949e;
+}
+
+.rp-wrapper[data-theme="dark"] .rp-cert-modal-close:hover,
+[data-theme="dark"] .rp-cert-modal-close:hover {
+  background: #30363d;
+  color: #f0f6fc;
+}
+
+.rp-wrapper[data-theme="dark"] .rp-cert-modal-body,
+[data-theme="dark"] .rp-cert-modal-body {
+  background: #0d1117;
+}
+
+.rp-wrapper[data-theme="dark"] .rp-cert-modal-btn--secondary,
+[data-theme="dark"] .rp-cert-modal-btn--secondary {
+  background: #21262d;
+  color: #c9d1d9;
+}
+
+.rp-wrapper[data-theme="dark"] .rp-cert-modal-btn--secondary:hover,
+[data-theme="dark"] .rp-cert-modal-btn--secondary:hover {
+  background: #30363d;
 }
 
 /* ── Download CTA ── */

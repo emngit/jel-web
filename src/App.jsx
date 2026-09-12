@@ -1759,12 +1759,12 @@ function App() {
                       <span className="cs-impact-label">Tickets Processed</span>
                     </div>
                     <div className="cs-impact-item">
-                      <strong className="cs-impact-num">2,927</strong>
+                      <strong className="cs-impact-num">3,000+</strong>
                       <span className="cs-impact-label">Resolutions Supported</span>
                     </div>
                     <div className="cs-impact-item">
-                      <strong className="cs-impact-num">77%</strong>
-                      <span className="cs-impact-label">Workflow Compliance</span>
+                      <strong className="cs-impact-num">3.6</strong>
+                      <span className="cs-impact-label">FTE Savings</span>
                     </div>
                     <div className="cs-impact-item cs-impact-item--live">
                       <strong className="cs-impact-num cs-impact-num--live">

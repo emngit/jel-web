@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
+import { Ibm, Salesforce } from '@thesvg/react';
 import badge      from './assets/images/BADGE.jpg';
 import surprised  from './assets/images/Suprised.png';
 import sleepy     from './assets/images/Sleepy.png';
@@ -7,6 +8,14 @@ import sunglasses from './assets/images/Sunglasses.png';
 import mib        from './assets/images/MIB.png';
 import logoDark  from './assets/images/My_LOGO-white.png';
 import logoLight from './assets/images/My_LOGO.png';
+
+// PDF Certificate imports using Vite explicit url import
+import pdfWatsonxChallenge from './assets/images/Certifications/2026 IBMer Watsonx Challenge Education.pdf?url';
+import pdfDataAnalytics    from './assets/images/Certifications/Data Analytics for Machine Learning.pdf?url';
+import pdfOrderToCash      from './assets/images/Certifications/Finance & Accounting - Order To Cash Delivery and Improvement.pdf?url';
+import pdfAutomationPrac   from './assets/images/Certifications/IBM Automation Practitioner.pdf?url';
+import pdfBobIntermediate  from './assets/images/Certifications/IBM Bob Intermediate.pdf?url';
+
 import './ResumePage.css';
 
 /*
@@ -161,9 +170,55 @@ const skillCategories = [
 
 const certifications = [
   {
-    title: 'Salesforce Certified Administrator (SCA)',
-    issuer: 'Salesforce',
+    title: 'IBM Bob Intermediate',
+    issuer: 'IBM',
+    issuerType: 'ibm',
+    year: 'July 2026',
+    verifyUrl: 'https://www.credly.com/go/f95FVcWM',
+    pdfFile: pdfBobIntermediate,
+    rotate: -3.2,
+  },
+  {
+    title: 'Data Analytics for Machine Learning',
+    issuer: 'IBM SKILLSBUILD',
+    issuerType: 'ibm',
+    year: 'July 2026',
+    verifyUrl: 'https://www.credly.com/badges/8aaf9636-724e-4afa-bdc6-c6688f0c1003',
+    pdfFile: pdfDataAnalytics,
+    rotate: 1.8,
+  },
+  {
+    title: 'Order To Cash Delivery & Improvement',
+    issuer: 'IBM FINANCE',
+    issuerType: 'ibm',
+    year: 'July 2026',
+    verifyUrl: 'https://www.credly.com/badges/3020725d-ff83-42a4-9f05-9221b311b83c',
+    pdfFile: pdfOrderToCash,
+    rotate: -1.5,
+  },
+  {
+    title: 'IBM Automation Practitioner',
+    issuer: 'IBM LEARNING',
+    issuerType: 'ibm',
+    year: '2026',
+    pdfFile: pdfAutomationPrac,
+    rotate: 3.0,
+  },
+  {
+    title: '2026 IBMer Watsonx Challenge',
+    issuer: 'IBM WATSONX',
+    issuerType: 'ibm',
+    year: '2026',
+    pdfFile: pdfWatsonxChallenge,
+    rotate: -2.6,
+  },
+  {
+    title: 'Salesforce Certified Administrator',
+    issuer: 'SALESFORCE',
+    issuerType: 'salesforce',
     year: 'June 2024',
+    verifyUrl: 'https://trailblazer.me',
+    rotate: 2.2,
   },
 ];
 
@@ -235,6 +290,7 @@ export default function ResumePage({ onBack, dark, onToggleDark }) {
   const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 30 });
   const [scrolled, setScrolled] = useState(false);
   const [photoHovered, setPhotoHovered] = useState(false);
+  const [selectedCert, setSelectedCert] = useState(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -545,23 +601,40 @@ export default function ResumePage({ onBack, dark, onToggleDark }) {
         */}
         <Section id="certifications">
           <SectionHeader label="Credentials" title="Certifications" />
-          <div className="rp-certs-grid">
+          <div className="rp-stacked-certs-grid">
             {certifications.map((cert, i) => (
-              <motion.div key={i} className="rp-cert-card" variants={fadeUp}>
-                {/* <div className="rp-cert-badge" aria-hidden="true">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-                </div> */}
-                {/* <div className="rp-cert-body">
-                  <div className="rp-cert-name">{cert.name}</div>
-                  <div className="rp-cert-meta">
-                    <span className="rp-cert-issuer">{cert.issuer}</span>
-                    <span className="rp-cert-date">{cert.date}</span>
-                    <span className="rp-cert-credential">#{cert.credential}</span>
+              <motion.div
+                key={i}
+                className="rp-stacked-cert-card"
+                style={{ '--cert-rot': `${cert.rotate || 0}deg` }}
+                variants={fadeUp}
+                whileHover={{ scale: 1.05, rotate: 0, zIndex: 10 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+                onClick={() => setSelectedCert(cert)}
+              >
+                <div className="rp-stacked-cert-content">
+                  <div className="rp-stacked-cert-logo-wrap">
+                    {cert.issuerType === 'salesforce' ? (
+                      <Salesforce className="rp-stacked-cert-svg" />
+                    ) : (
+                      <Ibm className="rp-stacked-cert-svg" />
+                    )}
                   </div>
-                </div> */}
-                {/* <div className="rp-cert-verified" aria-label="Verified">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                </div> */}
+
+                  <h4 className="rp-stacked-cert-title">{cert.title}</h4>
+                  <span className="rp-stacked-cert-issuer">{cert.issuer}</span>
+
+                  <button
+                    type="button"
+                    className="rp-stacked-cert-verify"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedCert(cert);
+                    }}
+                  >
+                    ⟨ VERIFY ⟩
+                  </button>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -614,6 +687,103 @@ export default function ResumePage({ onBack, dark, onToggleDark }) {
           <a href="mailto:emmanlanusga@gmail.com">emmanlanusga@gmail.com</a>
         </p>
       </footer>
+
+      {/* ── Certificate Verification Modal ── */}
+      <AnimatePresence>
+        {selectedCert && (
+          <motion.div
+            className="rp-cert-modal-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedCert(null)}
+          >
+            <motion.div
+              className="rp-cert-modal-container"
+              initial={{ scale: 0.92, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.92, opacity: 0, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="rp-cert-modal-header">
+                <div className="rp-cert-modal-head-left">
+                  <div className="rp-cert-modal-logo">
+                    {selectedCert.issuerType === 'salesforce' ? (
+                      <Salesforce className="rp-stacked-cert-svg" />
+                    ) : (
+                      <Ibm className="rp-stacked-cert-svg" />
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="rp-cert-modal-title">{selectedCert.title}</h3>
+                    <span className="rp-cert-modal-subtitle">{selectedCert.issuer} · {selectedCert.year}</span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="rp-cert-modal-close"
+                  onClick={() => setSelectedCert(null)}
+                  aria-label="Close modal"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Centered PDF Display */}
+              <div className="rp-cert-modal-body">
+                {selectedCert.pdfFile ? (
+                  <iframe
+                    src={`${selectedCert.pdfFile}#toolbar=0&navpanes=0&scrollbar=1&view=Fit`}
+                    title={selectedCert.title}
+                    className="rp-cert-modal-iframe"
+                  />
+                ) : (
+                  <div className="rp-cert-modal-empty">
+                    <div className="rp-cert-modal-empty-logo">
+                      {selectedCert.issuerType === 'salesforce' ? <Salesforce /> : <Ibm />}
+                    </div>
+                    <h4>{selectedCert.title}</h4>
+                    <p>Issued by {selectedCert.issuer} ({selectedCert.year})</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Footer with action button */}
+              <div className="rp-cert-modal-footer">
+                <span className="rp-cert-modal-status">
+                  <span className="rp-cert-modal-dot" /> Verified Credential
+                </span>
+
+                <div className="rp-cert-modal-actions">
+                  {selectedCert.verifyUrl && (
+                    <a
+                      href={selectedCert.verifyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rp-cert-modal-btn rp-cert-modal-btn--primary"
+                    >
+                      Open Verification Link ↗
+                    </a>
+                  )}
+                  {selectedCert.pdfFile && (
+                    <a
+                      href={selectedCert.pdfFile}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rp-cert-modal-btn rp-cert-modal-btn--secondary"
+                    >
+                      View Original PDF ↗
+                    </a>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   );
